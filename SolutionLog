@@ -1,0 +1,26 @@
+1. Return strange error, run every behaviour individually ok.
+
+A: Does the error stack trace contains "should_not"? I had cases before, application helper has method
+    alias should_not_allow do_not_allow
+   When RSpec runs, it thinks 'should_not_allow' as a behaviour. Deleted that alias fixed the problem
+
+2. 
+
+
+#TODO 
+# Assertion:
+# - disabled
+
+# 	assertFormNotPresent()
+# 	assertFormNotPresent(formName)
+# 	assertFormPresent()
+# 	assertFormPresent(formName)
+# 	assertFramePresent(frameName)
+# 	assertLinkNotPresentWithImage(imageFileName)
+# 	assertLinkPresentWithImage(imageFileName)
+#     assertSubmitButtonPresent(buttonName)
+#     assertSubmitButtonPresent(buttonName, expectedValue)
+#     assertSubmitButtonNotPresent(buttonName)
+#  	assertWindowPresent(windowName)
+#  	assertWindowPresentWithTitle(windowTitle)
+#     assertOptionsEqual

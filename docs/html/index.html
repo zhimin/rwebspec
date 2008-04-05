@@ -1,0 +1,129 @@
+<html>
+    <head>
+        <title>rWebUnit </title>
+    </head>
+    <body>
+        <p></p>
+
+        <table class="bodyTable">
+            <tr class="a">
+                <th>Watir Test</th>
+                <th>rWebUnit Test</th>
+            </tr>
+            <tr class="b">
+                <td valign="top" nowrap="nowrap">
+                    <div class="source">
+                        <pre>
+require 'watir'
+require 'test/unit'
+
+class WatirSearchExample < Test::Unit::TestCase
+
+  def test_search
+    ie= Watir::IE.new
+    ie.goto("http://www.google.com")
+    ie.text_field( :name, "q"). set("httpunit")
+    ie.button( :name, "btnG"). click
+    ie.link( :text, "HttpUnit Home"). click
+    assert_equal("HttpUnit Home", ie.document.title)
+    assert( ie.contains_text("User' s Manual"))
+  end
+
+end
+                        </pre>
+                    </div>
+                </td>
+                <td valign="top" nowrap="nowrap">
+                    <div class="source">
+                        <pre>
+
+require 'rwebunit'
+
+class RWebUnitSearchExample < RWebUnit::WebTestCase
+
+  def test_search()
+    getTestContext().base_url="http://www.google.com"
+    beginAt("/")
+    setFormElement("q", "httpunit")
+    clickButtonWithValue("Google Search")
+    clickLinkWithText("HttpUnit Home")
+    assertTitleEquals("HttpUnit Home")
+    assertLinkPresentWithText("User' s Manual")
+  end
+
+end
+                        </pre>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table class="bodyTable">
+            <tr class="a">
+                <th>jWebUnit TestCase</th>
+                <th>rWebUnit TestCase</th>
+            </tr>
+            <tr class="b">
+                <td valign="top" nowrap="nowrap">
+                    <div class="source">
+                        <pre>
+import net.sourceforge.jwebunit.WebTestCase;
+
+public class JWebUnitSearchExample extends WebTestCase {
+
+   public JWebUnitSearchExample(String name) {
+      super(name);
+   }
+
+   public void setUp() {
+      getTestContext().setBaseUrl("http://www.google.com");
+   }
+
+   public void testSearch() {
+      beginAt("/");
+      setFormElement("q", "httpunit");
+      submit("btnG");
+      clickLinkWithText("HttpUnit");
+      assertTitleEquals("HttpUnit");
+      assertLinkPresentWithText("User's Manual");
+   }
+}
+                        </pre>
+                    </div>
+                </td>
+
+                <td valign="top" nowrap="nowrap">
+
+                    <div class="source">
+                        <pre>
+require 'rwebunit'
+
+class RWebUnitSearchExample < RWebUnit::WebTestCase
+
+  def initialize(name)
+    super(name)
+  end
+
+  def setup
+    getTestContext().setBaseUrl("http:// www.google.com")
+  end
+
+  def test_search
+    beginAt("/")
+    setFormElement("q", "httpunit")
+    submit("btnG")
+    clickLinkWithText("HttpUnit Home")
+    assertTitleEquals("HttpUnit Home")
+    assertLinkPresentWithText("User' s Manual")
+  end
+end
+                        </pre>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+
+
+    </body>
+</html>

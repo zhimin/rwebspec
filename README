@@ -1,0 +1,30 @@
+rWebUnit is a ruby version of thoughtwork's open source jWebUnit, which 'facilitates creation of
+acceptance tests for web applications'.
+
+rWebUnit wraps the popular web testing framework: WATIR  (jWebUnit depends on HttpUnit).
+Because underlying technologies are different (HttpUnit simulates a browser, Watir drives IE), rWebUnit does
+not support full jWebUnit API.  
+
+For example, 
+  jWebUnit: checkCheckBox("name", "new_value") can set new value for a checkbox, but rWebUnit/Watir can't.
+On the other hand, HttpUnit has limited support of Javascript, You don't need to worry about it in Watir.
+
+Here are reasons you might want to try rWebUnit instead of using Watir directly.
+
+  * already familar with jWebUnit framework (arguably, more readable tests)
+  * want to use WebTest - Page framework to design your tests (look at sample\kongming_webtest.rb)
+  * want to use a high level of API beyond specific framework: WATIR
+  * utilize common test methods included in rWebUnit (like getToday ...)
+  
+TODO:
+====
+  * file upload (waiting for Watir 2.0?)
+  * script to convert jWebUnit -> rWebUnit, and vice versa.
+  
+FAQ:
+===
+1. How can I run rWebUnit tests without showing IE window?
+
+A: This is really a WATIR question. Append '-b' option your command.
+   Example: ruby hide_webtest.rb -b
+  

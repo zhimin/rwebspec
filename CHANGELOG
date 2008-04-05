@@ -1,0 +1,136 @@
+CHANGELOG
+=========
+== 0.8.7
+  - support delay between operations (must be click_... type operation) for iTest2
+
+== 0.8.6
+  - Add dependency on activesupport 2.0.x, xml_simple to support 1.days.ago
+  - RSpec Helper, overwrite rspec patch  
+
+== 0.8.5
+ - click button with image
+ - better handling new pop up window
+ - fixes links_with_text
+
+== 0.8.4
+ - better support for iTest
+ - for firefox support, don't do slow typing, just set text in textfield
+
+== 0.8.2
+ - fixed assert_link_not_present has .Text
+ 
+== 0.8.1 
+ - fixed attach_browser issue
+
+== 0.8 (2008-01-18)
+ - change click_link to click_link_with_text, to for id click, use click_link_with_id
+ - change click_button to click_button_with_text, to for id click, use click_button_with_id
+ 
+== 0.7.2 (2007-12-31)
+ - Change dependency from Watir => Watir or FireWatir
+   Now can run on Mac or Linux
+ - Fixes: shall_not_allow syntax error
+
+== 0.7.1 (2007-12-24)
+ - Fixes error when firefox is not available
+
+== 0.7 (2007-12-18)
+ - support Firefox using FireWatir
+
+== 0.6.9
+ - add shall_not_allow
+ - more watir wrapper methods
+
+== 0.6.4 (2007-11-30)
+ - updated rwebunit 0.6.4
+ - support javascript window
+ - support watir td, tr...
+
+== 0.6.0 (2007-11-18)
+ - support watir convenient methods
+
+== 0.5.4 (2007-11-12)
+ - fixed element_by_id 
+
+== 0.5.3 (2007-11-07)
+ - fixed ajax_wait_element with web_tester changes
+ - added wait_for_element
+ 
+== 0.5.2 (2007-09-27)
+ - added element_text
+ 
+== 0.5.1 (2007-09-21)
+ - add wrap of Watir methods, such as buttons, button(...)
+ - expose Watir low level methods to test/spec through Driver.rb
+ - removed old way using array and comparision to access individual control
+ - renamed html_title to page_title
+ - add method contains_text
+ - make faster checkbox operations
+ - make faster radio operations
+ - added radio operation in driver.rb
+ - renamed ajax_wait_for_element 
+ - added some comments
+
+== 0.5.0
+ - Support Watir 1.5.2
+ 
+== 0.4.5
+  - support checkboxes with same name
+
+== 0.4.2
+
+New Features
+  - Drop support for java syntax methods
+  - remove assert helper methods in web_tester
+  - improve support for RSpecs
+
+== 0.4.0 (2007-05-29)
+
+New features
+  - Support RSpec
+  
+== 0.3.1 (2007-04-18)
+
+Bug fix reelase
+
+== 0.3.0 (2007-02-16)
+
+New features
+  - Deprecated Java like method name, use ruby naming convention instead, beginAt => begin_at
+  - More ajax related calls: ajax_wait_for_element_show, ajax_wait_for_element_hide, assert_position_in_list
+
+== 0.2.0 (2006-11-28)
+
+New features:
+  - wait_ajax_udpate(elem_id, seconds) - use indicator image id to determine whether the ajax request is completed or not
+  - browser_opened?
+
+A number of general fixes and code improvements.
+
+== 0.1.1
+
+New jWebUnit API methods implemented:
+  assertOptionEquals(selectName, optionLabel)
+  assertOptionValueEquals(selectName, optionValue)
+  assertCheckboxNotSelected(checkBoxName)
+  assertCheckboxSelected(checkBoxName)
+  assertLinkPresentWithExactText(linkText)
+  assertLinkNotPresentWithExactText(linkText)
+  assertRadioOptionNotPresent(radioGroup, radioOption)
+  assertRadioOptionPresent(radioGroup, radioOption)
+  assertRadioOptionSelected(radioGroup, radioOption)
+  assertRadioOptionNotSelected(radioGroup, radioOption)
+  assertTextInTable(tableId, text)
+  assertTextNotInTable(tableId, text)
+
+API methods modified:
+  assertLinkPresentWithText(linkText):
+  assertLinkNotPresentWithText(linkText):
+
+New rWebUnit API :
+  clickRadioOption(radioGroup, radioOption): this method is protected in jWebUnit
+
+== 0.1.0
+
+* Initial release.
+* Most common web actions and assertions implemented.
