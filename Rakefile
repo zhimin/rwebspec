@@ -38,12 +38,12 @@ spec = Gem::Specification.new do |s|
   s.name = "rwebunit"
   s.version = "0.8.7"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
-# s.description = ""
+# s.description = "rWebUnit"
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.net"
   s.homepage= "http://code.google.com/p/rwebunit/"
-#  s.rubyforge_project = ""
+#  s.rubyforge_project = "rWebUnit"
 
   s.has_rdoc    = true
   s.requirements << 'none'
