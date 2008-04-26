@@ -42,6 +42,7 @@ module RWebUnit
 
       options = default_options.merge options
       options[:firefox] = true if "Firefox" == ENV['ITEST_BROWSER']
+      (ENV['ITEST_HIDE_BROWSER'] == "true") ? $HIDE_IE = true : $HIDE_IE = false
 
       uri = URI.parse(base_url)
       uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"

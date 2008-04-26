@@ -58,7 +58,7 @@ module RWebUnit
         options[:speed] == 'slow' ? @@browser.set_slow_speed : @@browser.set_fast_speed
 
         @@browser.activeObjectHighLightColor = options[:highlight_colour]
-        @@browser.visible = options[:visible]
+        @@browser.visible = options[:visible] unless $HIDE_IE
         @@browser.close_others if options[:close_others]
       else
         raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"

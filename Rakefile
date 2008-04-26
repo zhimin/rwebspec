@@ -36,14 +36,14 @@ Rake::RDocTask.new { |rdoc|
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebunit"
-  s.version = "0.8.7"
+  s.version = "0.8.8"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
-# s.description = "rWebUnit"
+# s.description = ""
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.net"
   s.homepage= "http://code.google.com/p/rwebunit/"
-#  s.rubyforge_project = "rWebUnit"
+#  s.rubyforge_project = ""
 
   s.has_rdoc    = true
   s.requirements << 'none'
