@@ -32,7 +32,7 @@ module Watir
       sleep 1.0 # replace with polling for window count to be zero?
     end
   end
-end  
+end
 
 module RWebUnit
 
@@ -44,7 +44,7 @@ module RWebUnit
     attr_accessor :test_context
 
     def initialize(base_url = nil, options = {})
-      default_options = {:speed => "fast",
+      default_options = {:speed => "zippy",
         :visible => true,
         :highlight_colour => 'yellow',
       :close_others => true}
@@ -55,18 +55,18 @@ module RWebUnit
         @@browser = FireWatir::Firefox.start(base_url)
       elsif $watir_loaded
         @@browser = Watir::IE.new
-        options[:speed] == 'slow' ? @@browser.set_slow_speed : @@browser.set_fast_speed
 
+        if ENV['ITEST_EMULATE_TYPING'] == "true" &&  ENV['ITEST_TYPING_SPEED'] then
+          @@browser.set_slow_speed if ENV['ITEST_TYPING_SPEED'] == 'slow'
+          @@browser.set_fast_speed if ENV['ITEST_TYPING_SPEED'] == 'fast'
+        else
+          @@browser.speed = :zippy
+        end
         @@browser.activeObjectHighLightColor = options[:highlight_colour]
         @@browser.visible = options[:visible] unless $HIDE_IE
         @@browser.close_others if options[:close_others]
       else
         raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
-      end
-
-      if ENV['ITEST_TYPING_SPEED'] then
-        @@browser.set_slow_speed if ENV['ITEST_TYPING_SPEED'] == 'slow'
-        @@browser.set_fast_speed if ENV['ITEST_TYPING_SPEED'] == 'fast'
       end
 
     end
@@ -434,7 +434,7 @@ module RWebUnit
         raise "not implemented yet"
       end
     end
-    
+
     # Attach a Watir::IE instance to a popup window.
     #
     # Typical usage
@@ -452,7 +452,7 @@ module RWebUnit
         end
       end
     end
-      
+
     # ---
     # For deubgging
     # ---

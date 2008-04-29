@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+== 0.8.9
+  - support Watir 1.5.4 zippy mode, set it as default
 
 == 0.8.8
   - support iTest hiding browse option
