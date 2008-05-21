@@ -36,14 +36,14 @@ Rake::RDocTask.new { |rdoc|
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebunit"
-  s.version = "0.8.9"
+  s.version = "0.9"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
 # s.description = ""
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.net"
   s.homepage= "http://code.google.com/p/rwebunit/"
-#  s.rubyforge_project = ""
+  s.rubyforge_project = "rwebunit"
 
   s.has_rdoc    = true
   s.requirements << 'none'
@@ -56,8 +56,8 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   s.files = s.files + Dir.glob( "sample/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   s.files = s.files + Dir.glob( "docs/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-
-#  s.add_dependency("watir", ">= 1.5.3")
+  s.add_dependency(%q<rspec>, [">= 1.1.2", "< 1.1.3"])
+#  s.add_dependency("watir", ">= 1.5.4")
 #  s.add_dependency("firewatir", ">= 1.1")
 end
 

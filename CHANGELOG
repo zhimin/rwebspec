@@ -1,5 +1,16 @@
 CHANGELOG
 =========
+
+== 0.9 (2008-05-21)
+  - support new syntax
+       spec "" do
+		  scenario "1" do
+		  end
+		
+		  story "2" do
+		  end
+       end
+
 == 0.8.9
   - support Watir 1.5.4 zippy mode, set it as default
 

@@ -12,6 +12,8 @@ rescue LoadError => no_as1_err
 end
 require 'active_support/core_ext'
 
+require 'spec'
+
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebunit/test_utils"
 require File.dirname(__FILE__) + "/rwebunit/web_page"
@@ -22,5 +24,6 @@ require File.dirname(__FILE__) + "/rwebunit/web_tester"
 require File.dirname(__FILE__) + "/rwebunit/test_context"
 require File.dirname(__FILE__) + "/rwebunit/driver"
 require File.dirname(__FILE__) + "/rwebunit/rspec_helper"
+require File.dirname(__FILE__) + "/rspec_extensions"
 
 
