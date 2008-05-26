@@ -4,6 +4,7 @@
 #***********************************************************
 require File.join(File.dirname(__FILE__), 'assert')
 require File.join(File.dirname(__FILE__), 'driver')
+require 'fileutils'
 
 module RWebUnit
 
@@ -23,7 +24,7 @@ module RWebUnit
 
     include RWebUnit::Assert
     include RWebUnit::Driver
-    
+
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
     attr_accessor :browser, :page_text
@@ -32,10 +33,11 @@ module RWebUnit
       @web_tester = web_tester
       @page_text = page_text
       begin
+        snapshot if ENV['ITEST_DUMP_PAGE'] == 'true'
         delay = ENV['ITEST_PAGE_DELAY'].to_i
         sleep(delay)
       rescue => e
-      end      
+      end
       assert_on_page
     end
 
@@ -77,6 +79,20 @@ module RWebUnit
       return found
     end
     alias include contains?
+
+
+    def	snapshot
+      if ENV['ITEST_DUMP_DIR']
+        spec_run_id = ENV['ITEST_RUNNING_SPEC_ID'] || "unknown"
+        spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
+        spec_run_dir = File.join(ENV['ITEST_DUMP_DIR'], spec_run_dir_name)
+        Dir.mkdir(spec_run_dir) unless File.exists?(spec_run_dir)
+        file_name = Time.now.strftime("%m%d%H%M%S") + "_" + self.class.name.gsub("", "") + ".html"
+        file = File.join(ENV['ITEST_DUMP_DIR'], spec_run_dir_name, file_name)
+        page_source = browser.page_source
+        File.new(file, "w").puts source
+      end
+    end
 
   end
 

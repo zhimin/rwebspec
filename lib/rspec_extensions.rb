@@ -3,6 +3,7 @@ module Spec
     module Main
     
       alias :spec :describe
+      alias :specification :describe
           
     end
   end
@@ -36,6 +37,7 @@ module Spec
       
       line.gsub!(/(^\s*)context([\s*|\(]['|"|A-Z])/, '\1describe\2')
       line.gsub!(/(^\s*)spec([\s*|\(]['|"|A-Z])/, '\1describe\2') #new
+      line.gsub!(/(^\s*)specification([\s*|\(]['|"|A-Z])/, '\1describe\2') #new
       line.gsub!(/(^\s*)specify([\s*|\(]['|"|A-Z])/, '\1it\2')
       line.gsub!(/(^\s*)scenario([\s*|\(]['|"|A-Z])/, '\1it\2')  #new
       line.gsub!(/(^\s*)story([\s*|\(]['|"|A-Z])/, '\1it\2')  #new

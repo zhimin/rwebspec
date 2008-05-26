@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+
+== 0.9.1 (2008-05-26)
+ - support storing page source during execution
+
 == 0.9 (2008-05-21)
   - support new syntax
        spec "" do
