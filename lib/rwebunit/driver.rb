@@ -119,12 +119,12 @@ module RWebUnit
       @web_tester.cell(*args);
     end
     alias td cell
-    
+
     def checkbox(*args)
       @web_tester.checkbox(*args);
     end
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
-    
+
     def div(*args)
       @web_tester.div(*args);
     end
@@ -174,7 +174,7 @@ module RWebUnit
       @web_tester.row(*args);
     end
     alias tr row
-    
+
     def radio(*args)
       @web_tester.radio(*args);
     end
@@ -406,8 +406,16 @@ module RWebUnit
       @web_tester.dump_response(stream)
     end
 
+    def save_current_page(to_dir = "C:\\temp")
+      Dir.mkdir(to_dir) unless File.exists?(to_dir)
+      file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
+      file = File.join(to_dir, file_name)
+      File.new(file, "w").puts page_source
+    end
+
     def click_popup_window(button, waitTime= 9, user_input=nil )
       @web_tester.start_clicker(button, waitTime, user_input)
+      sleep 0.5
     end
 
     def operation_delay
