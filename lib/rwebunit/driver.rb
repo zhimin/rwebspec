@@ -31,16 +31,16 @@ module RWebUnit
       yield page
     end
 
-    def test_context
-      @web_tester.test_context
+    def context
+      @web_tester.context
     end
 
     def begin_at(url)
       @web_tester.begin_at(url)
     end
 
-    def ie;
-      @web_tester.ie;
+    def ie
+      @web_tester.ie
     end
 
     def close_browser
@@ -48,22 +48,31 @@ module RWebUnit
     end
     alias close_ie close_browser
 
+    [:go_back, :go_forward, :refresh].each do |method|
+      define_method(method) do
+        @web_tester.send(method)
+      end
+    end
+    alias refresh_page refresh
+
+=begin    
     # browser navigation
-    def go_back;
-      @web_tester.go_back;
+    def go_back
+      @web_tester.go_back
     end
-    def go_forward;
-      @web_tester.go_forward;
+    
+    def go_forward
+      @web_tester.go_forward
     end
+    def refresh;
+      @web_tester.refresh;
+    end
+=end
 
     def goto_page(page)
       operation_delay
       @web_tester.goto_page(page);
     end
-    def refresh;
-      @web_tester.refresh;
-    end
-    alias refresh_page refresh
 
     def attach_browser(how, what)
       WebTester.attach_browser(how, what)
@@ -109,12 +118,25 @@ module RWebUnit
     # table 	<table> tags, including row and cell methods for accessing nested elements
     # text_field 	<input> tags with the type=text (single-line), type=textarea (multi-line), and type=password
     # p 	<p> (paragraph) tags, because
+    [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
+      define_method method do |*args|
+        @web_tester.send(method, *args)
+      end
+    end
+    alias td cell
+    alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
+    alias tr row
+
+
+=begin    
     def area(*args)
       @web_tester.area(*args);
     end
+    
     def button(*args)
       @web_tester.button(*args);
     end
+    
     def cell(*args)
       @web_tester.cell(*args);
     end
@@ -200,34 +222,41 @@ module RWebUnit
     def label(*args)
       @web_tester.label(*args);
     end
+=end
 
     def contains_text(text)
       @web_tester.contains_text(text);
     end
 
-
-    def images;
-      @web_tester.images;
-    end
-    def links;
-      @web_tester.links;
-    end
-    def buttons;
-      @web_tester.buttons;
-    end
-    def select_lists;
-      @web_tester.select_lists;
-    end
-    def checkboxes;
-      @web_tester.checkboxes;
-    end
-    def radios;
-      @web_tester.radios;
-    end
-    def text_fields;
-      @web_tester.text_fields;
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
+      define_method method do
+        @web_tester.send(method)
+      end
     end
 
+=begin    
+    def images
+      @web_tester.images
+    end
+    def links
+      @web_tester.links
+    end
+    def buttons
+      @web_tester.buttons
+    end
+    def select_lists
+      @web_tester.select_lists
+    end
+    def checkboxes
+      @web_tester.checkboxes
+    end
+    def radios
+      @web_tester.radios
+    end
+    def text_fields
+      @web_tester.text_fields
+    end
+=end
 
     # enter text into a text field
     def enter_text(elementName, elementValue)
@@ -236,7 +265,18 @@ module RWebUnit
     end
     alias set_form_element enter_text
 
+    [:click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
+      define_method method do |*args|
+        @web_tester.send(method, *args)
+      end
+    end
+    alias click_link click_link_with_text
+    alias click_button_with_text click_button_with_caption
+    alias click_button click_button_with_caption
+    alias click_radio_button click_radio_option
+    alias clear_radio_button clear_radio_option
 
+=begin
     #links
     def click_link_with_text(link_text)
       operation_delay
@@ -275,21 +315,6 @@ module RWebUnit
     end
     alias click_button_with_text click_button_with_caption
     alias click_button click_button_with_caption
-
-    def click_button_with_image_src_contains(image_filename)
-      operation_delay
-      found = nil
-      raise "no buttons in this page" if buttons.length <= 0
-      buttons.each { |btn|
-        if btn && btn.src  && btn.src.include?(image_filename) then
-          found = btn
-          break
-        end
-      }
-      raise "not image button with src: #{image_filename} found" if found.nil?
-      found.click
-    end
-    alias click_button_with_image click_button_with_image_src_contains
 
     def click_button_with_value(value)
       operation_delay
@@ -335,6 +360,23 @@ module RWebUnit
       operation_delay
       @web_tester.select_option(selectName, option)
     end
+=end
+
+    def click_button_with_image_src_contains(image_filename)
+      operation_delay
+      found = nil
+      raise "no buttons in this page" if buttons.length <= 0
+      buttons.each { |btn|
+        if btn && btn.src  && btn.src.include?(image_filename) then
+          found = btn
+          break
+        end
+      }
+      raise "not image button with src: #{image_filename} found" if found.nil?
+      found.click
+    end
+    alias click_button_with_image click_button_with_image_src_contains
+
 
     def new_popup_window(options)
       @web_tester.new_popup_window(options)
@@ -387,17 +429,26 @@ module RWebUnit
     end
 
     # fail the test if user can perform the operation
-    def shall_not_allow
+    def shall_not_allow(&block)
       operation_performed_ok = false
       begin
         yield
         operation_performed_ok  = true
       rescue
       end
-
       raise "Operation shall not be allowed" if operation_performed_ok
     end
     alias do_not_allow shall_not_allow
+
+    def shall_allow(&block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok  = true
+      rescue
+      end
+      raise "Operation failed" unless operation_performed_ok
+    end
 
     # ---
     # For debugging
@@ -406,15 +457,15 @@ module RWebUnit
       @web_tester.dump_response(stream)
     end
 
-    def save_current_page(to_dir = "C:\\temp")
+    def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
       Dir.mkdir(to_dir) unless File.exists?(to_dir)
       file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
       file = File.join(to_dir, file_name)
       File.new(file, "w").puts page_source
     end
 
-    def click_popup_window(button, waitTime= 9, user_input=nil )
-      @web_tester.start_clicker(button, waitTime, user_input)
+    def click_popup_window(button, wait_time= 9, user_input=nil )
+      @web_tester.start_clicker(button, wait_time, user_input)
       sleep 0.5
     end
 
@@ -427,6 +478,16 @@ module RWebUnit
         # ignore
       end
     end
+
+    # try operation, ignore if errors occur
+    #
+    def failsafe(&block)
+      begin
+        yield
+      rescue =>e
+      end
+    end
+    alias fail_safe failsafe
 
   end
 end

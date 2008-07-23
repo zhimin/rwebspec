@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>CHANGELOG</string>
+	<string>sample/sample_rwebunit_testcase.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -13,8 +13,6 @@
 			<string>trunk</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>selected</key>
-			<true/>
 			<key>sourceDirectory</key>
 			<string></string>
 		</dict>
@@ -28,14 +26,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>116</integer>
+			<integer>0</integer>
 		</dict>
 		<key>README</key>
 		<dict>
@@ -56,14 +54,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>20</integer>
 				<key>line</key>
 				<integer>38</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>28</integer>
 		</dict>
 		<key>SolutionLog</key>
 		<dict>
@@ -126,28 +124,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>49</integer>
+				<integer>43</integer>
 				<key>line</key>
-				<integer>124</integer>
+				<integer>430</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>117</integer>
+			<integer>399</integer>
 		</dict>
 		<key>lib/rwebunit/rspec_helper.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>8</integer>
+				<integer>7</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>25</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>88</integer>
 		</dict>
 		<key>lib/rwebunit/test_context.rb</key>
 		<dict>
@@ -168,14 +166,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>94</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>15</integer>
+			<integer>58</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>84</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>94</integer>
+			</dict>
 		</dict>
 		<key>lib/rwebunit/web_testcase.rb</key>
 		<dict>
@@ -196,14 +210,44 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>287</integer>
+				<integer>72</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>31</integer>
+		</dict>
+		<key>sample/sample_rwebunit_testcase.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
@@ -213,6 +257,7 @@
 		<string>lib/rwebunit/assert.rb</string>
 		<string>lib/rwebunit.rb</string>
 		<string>Rakefile</string>
+		<string>sample/sample_rwebunit_testcase.rb</string>
 		<string>SolutionLog</string>
 		<string>lib/rwebunit/rspec_helper.rb</string>
 		<string>README</string>
@@ -225,6 +270,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{411, 34}, {975, 790}}</string>
+	<string>{{223, 38}, {975, 790}}</string>
 </dict>
 </plist>

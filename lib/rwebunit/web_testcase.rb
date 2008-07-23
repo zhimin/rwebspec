@@ -26,7 +26,7 @@ module RWebUnit
     end
 
     def open_browser(baseUrl, relativeUrl)
-      test_context.base_url = baseUrl
+      context.base_url = baseUrl
       begin_at(relativeUrl)
     end
     alias open_ie open_browser

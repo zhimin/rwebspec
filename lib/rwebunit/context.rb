@@ -8,7 +8,7 @@ module RWebUnit
   ##
   #  Store test optionns
   #
-  class TestContext
+  class Context
     attr_accessor :base_url
 
     def initialize(base_url)

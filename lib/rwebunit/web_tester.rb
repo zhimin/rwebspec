@@ -13,9 +13,11 @@ rescue LoadError => e
 end
 
 begin
+  require 'rubygems'
   require "firewatir";
   $firewatir_loaded = true
 rescue LoadError => e
+  puts e
   $firewatir_loaded = false
 end
 
@@ -41,15 +43,15 @@ module RWebUnit
   #
   class WebTester
 
-    attr_accessor :test_context
+    attr_accessor :context
 
     def initialize(base_url = nil, options = {})
       default_options = {:speed => "zippy",
         :visible => true,
         :highlight_colour => 'yellow',
-      :close_others => true}
+        :close_others => true}
       options = default_options.merge options
-      @test_context = TestContext.new base_url if base_url
+      @context = Context.new base_url if base_url
 
       if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
         @@browser = FireWatir::Firefox.start(base_url)
@@ -212,11 +214,11 @@ module RWebUnit
     end
 
     def base_url=(new_base_url)
-      if @test_context
-        @test_conext.base_url = new_base_url
+      if @context
+        @conext.base_url = new_base_url
         return
       end
-      @test_context = TestContext.new base_url
+      @context = Context.new base_url
     end
 
     def is_firefox?
@@ -248,8 +250,8 @@ module RWebUnit
     end
 
     def full_url(relative_url)
-      if @test_context && @test_context.base_url
-        @test_context.base_url + relative_url
+      if @context && @context.base_url
+        @context.base_url + relative_url
       else
         relative_url
       end
