@@ -57,7 +57,6 @@ module RWebUnit
       sprintf("%c", random_number(97, 122)) if lowercase
       sprintf("%c", random_number(65, 90)) unless lowercase
     end
-    alias randomChar random_char
 
     def random_digit()
       sprintf("%c", random_number(48, 57))

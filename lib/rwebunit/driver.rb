@@ -31,6 +31,43 @@ module RWebUnit
       yield page
     end
 
+    # fail the test if user can perform the operation
+    #
+    # Example:
+    #  shall_not_allow { 1/0 }
+    def shall_not_allow(&block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok  = true
+      rescue
+      end
+      raise "Operation shall not be allowed" if operation_performed_ok
+    end
+    alias do_not_allow shall_not_allow
+
+    def allow(&block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok  = true
+      rescue
+      end
+      operation_performed_ok
+    end
+
+    # try operation, ignore if errors occur
+    #
+    # Example:
+    #   failsafe { click_link("Logout") }  # try logout, but it still OK if not being able to (already logout))
+    def failsafe(&block)
+      begin
+        yield
+      rescue =>e
+      end
+    end
+    alias fail_safe failsafe
+
     def context
       @web_tester.context
     end
@@ -54,20 +91,6 @@ module RWebUnit
       end
     end
     alias refresh_page refresh
-
-=begin    
-    # browser navigation
-    def go_back
-      @web_tester.go_back
-    end
-    
-    def go_forward
-      @web_tester.go_forward
-    end
-    def refresh;
-      @web_tester.refresh;
-    end
-=end
 
     def goto_page(page)
       operation_delay
@@ -127,103 +150,6 @@ module RWebUnit
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
 
-
-=begin    
-    def area(*args)
-      @web_tester.area(*args);
-    end
-    
-    def button(*args)
-      @web_tester.button(*args);
-    end
-    
-    def cell(*args)
-      @web_tester.cell(*args);
-    end
-    alias td cell
-
-    def checkbox(*args)
-      @web_tester.checkbox(*args);
-    end
-    alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
-
-    def div(*args)
-      @web_tester.div(*args);
-    end
-    def form(*args)
-      @web_tester.form(*args);
-    end
-    def frame(*args)
-      @web_tester.frame(*args);
-    end
-    def h1(*args)
-      @web_tester.h1(*args);
-    end
-    def h2(*args)
-      @web_tester.h2(*args);
-    end
-    def h3(*args)
-      @web_tester.h3(*args);
-    end
-    def h4(*args)
-      @web_tester.h4(*args);
-    end
-    def h5(*args)
-      @web_tester.h5(*args);
-    end
-    def h6(*args)
-      @web_tester.h6(*args);
-    end
-    def hidden(*args)
-      @web_tester.hidden(*args);
-    end
-    def image(*args)
-      @web_tester.image(*args);
-    end
-    def li(*args)
-      @web_tester.li(*args);
-    end
-    def link(*args)
-      @web_tester.link(*args);
-    end
-    def map(*args)
-      @web_tester.map(*args);
-    end
-    def pre(*args)
-      @web_tester.pre(*args);
-    end
-    def row(*args)
-      @web_tester.row(*args);
-    end
-    alias tr row
-
-    def radio(*args)
-      @web_tester.radio(*args);
-    end
-    def select_list(*args)
-      @web_tester.select_list(*args);
-    end
-    def span(*args)
-      @web_tester.span(*args);
-    end
-    def table(*args)
-      @web_tester.table(*args);
-    end
-    def text_field(*args)
-      @web_tester.text_field(*args);
-    end
-
-    def paragraph(*args)
-      @web_tester.paragraph(*args);
-    end
-    def file_field(*args)
-      @web_tester.file_field(*args);
-    end
-    def label(*args)
-      @web_tester.label(*args);
-    end
-=end
-
     def contains_text(text)
       @web_tester.contains_text(text);
     end
@@ -234,133 +160,23 @@ module RWebUnit
       end
     end
 
-=begin    
-    def images
-      @web_tester.images
-    end
-    def links
-      @web_tester.links
-    end
-    def buttons
-      @web_tester.buttons
-    end
-    def select_lists
-      @web_tester.select_lists
-    end
-    def checkboxes
-      @web_tester.checkboxes
-    end
-    def radios
-      @web_tester.radios
-    end
-    def text_fields
-      @web_tester.text_fields
-    end
-=end
-
-    # enter text into a text field
-    def enter_text(elementName, elementValue)
-      operation_delay
-      @web_tester.set_form_element(elementName, elementValue)
-    end
-    alias set_form_element enter_text
-
-    [:click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
-      define_method method do |*args|
-        @web_tester.send(method, *args)
-      end
-    end
-    alias click_link click_link_with_text
-    alias click_button_with_text click_button_with_caption
-    alias click_button click_button_with_caption
-    alias click_radio_button click_radio_option
-    alias clear_radio_button clear_radio_option
-
-=begin
-    #links
-    def click_link_with_text(link_text)
-      operation_delay
-      @web_tester.click_link_with_text(link_text)
-    end
-    alias click_link click_link_with_text
-
-    def click_link_with_id(link_id)
-      operation_delay
-      @web_tester.click_link_with_id(link_id)
-    end
-
-    ##
-    # buttons
-
-    # submit the form using the first (index) submit button
-    def submit()
-      operation_delay
-      @web_tester.submit()
-    end
-
-    # click a form submit button with specified button id
-    def submit(button_id)
-      operation_delay
-      @web_tester.submit(button_id)
-    end
-
-    def click_button_with_id(button_id)
-      operation_delay
-      @web_tester.click_button_with_id(button_id)
-    end
-
-    def click_button_with_caption(caption)
-      operation_delay
-      @web_tester.click_button_with_caption(caption)
-    end
-    alias click_button_with_text click_button_with_caption
-    alias click_button click_button_with_caption
-
-    def click_button_with_value(value)
-      operation_delay
-      @web_tester.click_button_with_value(value)
-    end
-
-    # Radios
-    def click_radio_option(name, value)
-      operation_delay
-      @web_tester.click_radio_option(name, value)
-    end
-    alias click_radio_button click_radio_option
-
-    def clear_radio_option(name, value)
-      operation_delay
-      @web_tester.clear_radio_option(name, value)
-    end
-    alias clear_radio_button clear_radio_option
-
-    # Filefield
-    def select_file_for_upload(file_field, file_path)
-      operation_delay
-      @web_tester.select_file_for_upload(file_field, file_path)
-    end
-
     # Check one or more checkboxes with same name, can accept a string or an array of string as values checkbox, pass array as values will try to set mulitple checkboxes.
     #
     # page.check_checkbox('bad_ones', 'Chicken Little')
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
-    def check_checkbox(name, value=nil)
-      operation_delay
-      @web_tester.check_checkbox(name, value)
+
+    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
+      define_method method do |*args|
+        @web_tester.send(method, *args)
+      end
     end
 
-    # Uncheck one or more checkboxes with same name
-    def uncheck_checkbox(name, value=nil)
-      operation_delay
-      @web_tester.uncheck_checkbox(name, value)
-    end
-
-    # combo box
-    def select_option(selectName, option)
-      operation_delay
-      @web_tester.select_option(selectName, option)
-    end
-=end
+    alias enter_text set_form_element
+    alias click_link click_link_with_text
+    alias click_button_with_text click_button_with_caption
+    alias click_button click_button_with_caption
+    alias click_radio_button click_radio_option
+    alias clear_radio_button clear_radio_option
 
     def click_button_with_image_src_contains(image_filename)
       operation_delay
@@ -376,7 +192,6 @@ module RWebUnit
       found.click
     end
     alias click_button_with_image click_button_with_image_src_contains
-
 
     def new_popup_window(options)
       @web_tester.new_popup_window(options)
@@ -424,31 +239,11 @@ module RWebUnit
       end
     end
 
+	# Warning: this does not work well with Firefox yet.
     def element_text(elem_id)
       @web_tester.element_value(elem_id)
     end
 
-    # fail the test if user can perform the operation
-    def shall_not_allow(&block)
-      operation_performed_ok = false
-      begin
-        yield
-        operation_performed_ok  = true
-      rescue
-      end
-      raise "Operation shall not be allowed" if operation_performed_ok
-    end
-    alias do_not_allow shall_not_allow
-
-    def shall_allow(&block)
-      operation_performed_ok = false
-      begin
-        yield
-        operation_performed_ok  = true
-      rescue
-      end
-      raise "Operation failed" unless operation_performed_ok
-    end
 
     # ---
     # For debugging
@@ -469,6 +264,7 @@ module RWebUnit
       sleep 0.5
     end
 
+	# Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
         if ENV['ITEST_OPERATION_DELAY']  && ENV['ITEST_OPERATION_DELAY'].to_i > 0 && ENV['ITEST_OPERATION_DELAY'].to_f < 30000  then # max 30 seconds
@@ -478,16 +274,6 @@ module RWebUnit
         # ignore
       end
     end
-
-    # try operation, ignore if errors occur
-    #
-    def failsafe(&block)
-      begin
-        yield
-      rescue =>e
-      end
-    end
-    alias fail_safe failsafe
 
   end
 end

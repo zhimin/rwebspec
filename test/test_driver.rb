@@ -35,6 +35,5 @@ class TestDriver < Test::Unit::TestCase
   
   def test_shall_not_allow
     shall_not_allow {1 / 0}
-    shall_allow { 0/1}  
   end
 end
