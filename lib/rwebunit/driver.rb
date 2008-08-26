@@ -7,6 +7,8 @@
 #    click_button("submit")
 #
 
+require 'socket'
+
 module RWebUnit
   module Driver
 
@@ -73,6 +75,7 @@ module RWebUnit
     end
 
     def begin_at(url)
+      dump_caller_stack
       @web_tester.begin_at(url)
     end
 
@@ -81,19 +84,15 @@ module RWebUnit
     end
 
     def close_browser
+      dump_caller_stack
       @web_tester.close_browser unless ENV['ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN'] == "true"
     end
     alias close_ie close_browser
 
-    [:go_back, :go_forward, :refresh].each do |method|
-      define_method(method) do
-        @web_tester.send(method)
-      end
-    end
-    alias refresh_page refresh
 
     def goto_page(page)
       operation_delay
+      dump_caller_stack
       @web_tester.goto_page(page);
     end
 
@@ -143,6 +142,7 @@ module RWebUnit
     # p 	<p> (paragraph) tags, because
     [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
+        dump_caller_stack
         @web_tester.send(method, *args)
       end
     end
@@ -150,12 +150,17 @@ module RWebUnit
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
 
-    def contains_text(text)
-      @web_tester.contains_text(text);
+    [:go_back, :go_forward, :refresh].each do |method|
+      define_method(method) do
+        dump_caller_stack
+        @web_tester.send(method)
+      end
     end
+    alias refresh_page refresh
 
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do
+        dump_caller_stack
         @web_tester.send(method)
       end
     end
@@ -167,6 +172,7 @@ module RWebUnit
 
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
+        dump_caller_stack
         @web_tester.send(method, *args)
       end
     end
@@ -178,7 +184,42 @@ module RWebUnit
     alias click_radio_button click_radio_option
     alias clear_radio_button clear_radio_option
 
+    def contains_text(text)
+      @web_tester.contains_text(text);
+    end
+
+    # find out the line (and file) the execution is on, and notify iTest via Socket
+    def dump_caller_stack
+      return unless ENV['ITEST_TRACE_EXECUTION'] == "true" 
+      begin
+        itest_port = ENV['ITEST_TRACE_PORT'].to_i || 7025        
+      rescue => e
+        itest_port = 7025
+      end
+      
+      begin
+        caller.each_with_index do |position, idx|
+          next unless position =~ /\A(.*?):(\d+)/
+          file = $1
+          # TODO: send multiple trace to be parse with pages.rb
+          # next if file =~ /example\/example_methods\.rb$/ or file =~ /example\/example_group_methods\.rb$/ or file =~ /driver\.rb$/ or file =~ /timeout\.rb$/ # don't include rspec or ruby trace
+
+          if file.include?("_spec.rb")
+            @itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
+            @itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
+            @itest_socket.puts(position)
+            @itest_socket.close
+          end
+
+          break if idx > 4 or file =~ /"_spec\.rb$/
+        end
+      rescue => e
+        puts "failed to capture log: #{e}"
+      end
+    end
+
     def click_button_with_image_src_contains(image_filename)
+      dump_caller_stack
       operation_delay
       found = nil
       raise "no buttons in this page" if buttons.length <= 0
@@ -239,7 +280,7 @@ module RWebUnit
       end
     end
 
-	# Warning: this does not work well with Firefox yet.
+    # Warning: this does not work well with Firefox yet.
     def element_text(elem_id)
       @web_tester.element_value(elem_id)
     end
@@ -264,7 +305,7 @@ module RWebUnit
       sleep 0.5
     end
 
-	# Support of iTest to ajust the intervals between keystroke/mouse operations
+    # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
         if ENV['ITEST_OPERATION_DELAY']  && ENV['ITEST_OPERATION_DELAY'].to_i > 0 && ENV['ITEST_OPERATION_DELAY'].to_f < 30000  then # max 30 seconds
