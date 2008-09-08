@@ -201,7 +201,7 @@ module RWebUnit
     end
 
     def debug(message)
-      connect_to_itest(" DEBUG", message)
+      connect_to_itest(" DEBUG", message) if $RUN_IN_ITEST
     end
 
     # find out the line (and file) the execution is on, and notify iTest via Socket
