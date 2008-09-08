@@ -58,9 +58,9 @@ module RWebUnit
       elsif $watir_loaded
         @@browser = Watir::IE.new
 
-        if ENV['ITEST_EMULATE_TYPING'] == "true" &&  ENV['ITEST_TYPING_SPEED'] then
-          @@browser.set_slow_speed if ENV['ITEST_TYPING_SPEED'] == 'slow'
-          @@browser.set_fast_speed if ENV['ITEST_TYPING_SPEED'] == 'fast'
+        if $ITEST_EMULATE_TYPING  &&  $ITEST_TYPING_SPEED then
+          @@browser.set_slow_speed if $ITEST_TYPING_SPEED == 'slow'
+          @@browser.set_fast_speed if $ITEST_TYPING_SPEED == 'fast'
         else
           @@browser.speed = :zippy
         end

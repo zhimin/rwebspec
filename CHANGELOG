@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+== 0.9.6
+ - using global variable instead of environment variable passing between rwebunit and iTest
+ - add debug()
+ 
 == 0.9.5
  - Add support for iTest to trace execution
  

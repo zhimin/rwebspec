@@ -85,7 +85,7 @@ module RWebUnit
 
     def close_browser
       dump_caller_stack
-      @web_tester.close_browser unless ENV['ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN'] == "true"
+      @web_tester.close_browser unless $ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN
     end
     alias close_ie close_browser
 
@@ -188,15 +188,25 @@ module RWebUnit
       @web_tester.contains_text(text);
     end
 
+
+    def connect_to_itest(message_type, body)
+      begin
+        itest_port = $ITEST_TRACE_PORT || 7025
+        itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
+        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
+        itest_socket.puts(message_type + "|" + body)
+        itest_socket.close
+      rescue => e
+      end
+    end
+
+    def debug(message)
+      connect_to_itest(" DEBUG", message)
+    end
+
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
-      return unless ENV['ITEST_TRACE_EXECUTION'] == "true" 
-      begin
-        itest_port = ENV['ITEST_TRACE_PORT'].to_i || 7025        
-      rescue => e
-        itest_port = 7025
-      end
-      
+      return unless $ITEST_TRACE_EXECUTION
       begin
         caller.each_with_index do |position, idx|
           next unless position =~ /\A(.*?):(\d+)/
@@ -205,10 +215,7 @@ module RWebUnit
           # next if file =~ /example\/example_methods\.rb$/ or file =~ /example\/example_group_methods\.rb$/ or file =~ /driver\.rb$/ or file =~ /timeout\.rb$/ # don't include rspec or ruby trace
 
           if file.include?("_spec.rb")
-            @itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
-            @itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
-            @itest_socket.puts(position)
-            @itest_socket.close
+            connect_to_itest(" TRACE", position)
           end
 
           break if idx > 4 or file =~ /"_spec\.rb$/
@@ -308,8 +315,8 @@ module RWebUnit
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
-        if ENV['ITEST_OPERATION_DELAY']  && ENV['ITEST_OPERATION_DELAY'].to_i > 0 && ENV['ITEST_OPERATION_DELAY'].to_f < 30000  then # max 30 seconds
-          sleep(ENV['ITEST_OPERATION_DELAY'].to_f / 1000)
+        if $ITEST_OPERATION_DELAY > 0 && $ITEST_OPERATION_DELAY < 30000  then # max 30 seconds
+          sleep(ITEST_OPERATION_DELAY / 1000)
         end
       rescue => e
         # ignore
