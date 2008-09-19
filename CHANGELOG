@@ -1,20 +1,22 @@
 CHANGELOG
 =========
+
 == 0.9.7
- [TODO] browser seems not working
- [TODO] maybe yield to 
- [TODO] install rake
- - add prepare_to_click_button_in_popup() in driver.rb 
+ [TODO] support should.contains?(JAMEs)
+ [WORKING] maybe yield to suport
+ - add prepare_to_click_button_in_popup() in driver.rb
  - refactor web_tester.rb to use dynamicly create test cases
  - rename web_tester.rb to web_browser.rb
+ - add alias visit (goto_page)
+ - WebBrowser.attach_browser return rWebUnit WebBrowser instance instead of Watir or Firefox
 
 == 0.9.6
  - using global variable instead of environment variable passing between rwebunit and iTest
  - add debug()
- 
+
 == 0.9.5
  - Add support for iTest to trace execution
- 
+
 == 0.9.4 (2008-08-20)
  - change test_context => context, avoid confusing Ruby test
  - refactored driver.rb

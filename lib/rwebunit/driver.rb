@@ -6,16 +6,16 @@
 # You can just use
 #    click_button("submit")
 #
-
-require 'socket'
+require File.join(File.dirname(__FILE__), 'itest_plugin')
 
 module RWebUnit
   module Driver
+    include RWebUnit::ITestPlugin
 
     def browser
       @web_browser
     end
-    
+
     # Verify the next page following an operation.
     #
     # Typical usage:
@@ -193,43 +193,6 @@ module RWebUnit
       @web_browser.contains_text(text);
     end
 
-
-    def connect_to_itest(message_type, body)
-      begin
-        itest_port = $ITEST_TRACE_PORT || 7025
-        itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
-        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
-        itest_socket.puts(message_type + "|" + body)
-        itest_socket.close
-      rescue => e
-      end
-    end
-
-    def debug(message)
-      connect_to_itest(" DEBUG", message + "\r\n") if $RUN_IN_ITEST
-    end
-
-    # find out the line (and file) the execution is on, and notify iTest via Socket
-    def dump_caller_stack
-      return unless $ITEST_TRACE_EXECUTION
-      begin
-        caller.each_with_index do |position, idx|
-          next unless position =~ /\A(.*?):(\d+)/
-          file = $1
-          # TODO: send multiple trace to be parse with pages.rb
-          # next if file =~ /example\/example_methods\.rb$/ or file =~ /example\/example_group_methods\.rb$/ or file =~ /driver\.rb$/ or file =~ /timeout\.rb$/ # don't include rspec or ruby trace
-
-          if file.include?("_spec.rb")
-            connect_to_itest(" TRACE", position)
-          end
-
-          break if idx > 4 or file =~ /"_spec\.rb$/
-        end
-      rescue => e
-        puts "failed to capture log: #{e}"
-      end
-    end
-
     def click_button_with_image_src_contains(image_filename)
       dump_caller_stack
       operation_delay
@@ -317,24 +280,44 @@ module RWebUnit
       sleep 0.5
     end
 
-	# run a separate process waiting for the popup window to click
-	#
-	#
-	def prepare_to_click_button_in_popup(button = "OK", wait_time = 3)	  
-	  #  !@web_browser.is_firefox?
-	  # TODO: firefox is OK
-	  if RUBY_PLATFORM =~ /mswin/  then
-    	w = WinClicker.new    
-    	longName = File.expand_path(File.dirname(__FILE__)).gsub("/" , "\\" )
-    	shortName = w.getShortFileName(longName)    	
-    	c = "start ruby #{shortName}\\clickJSDialog.rb #{button} #{wait_time} "		    	
-    	w.winsystem(c)
-    	w = nil    
+    # run a separate process waiting for the popup window to click
+    #
+    #
+    def prepare_to_click_button_in_popup(button = "OK", wait_time = 3)
+      #  !@web_browser.is_firefox?
+      # TODO: firefox is OK
+      if RUBY_PLATFORM =~ /mswin/  then
+        start_checking_js_dialog(button, wait_time)
       else
         raise "this only support on Windows and on IE"
       end
-  	end
-  
+    end
+
+    # Start a background process to click the button on a javascript popup window
+    def start_checking_js_dialog(button = "OK", wait_time = 3)      
+      w = WinClicker.new
+      longName = File.expand_path(File.dirname(__FILE__)).gsub("/" , "\\" )
+      shortName = w.getShortFileName(longName)
+      c = "start ruby #{shortName}\\clickJSDialog.rb #{button} #{wait_time} "
+      w.winsystem(c)
+      w = nil
+    end
+    
+    # Click the button in javascript popup dialog 
+    # Usage:
+    #   click_button_in_popup_after { click_link('Cancel')}
+    #   click_button_in_popup_after("OK") { click_link('Cancel')}
+    #
+    def click_button_in_popup_after(options = {:button => "OK", :wait_time => 3}, &block)      
+      if RUBY_PLATFORM =~ /mswin/  then
+        start_checking_js_dialog(options[:button], options[:wait_time])
+        yield        
+      else
+        raise "this only support on Windows and on IE"
+      end
+      
+    end
+    
     
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay

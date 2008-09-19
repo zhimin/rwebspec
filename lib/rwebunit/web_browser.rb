@@ -14,11 +14,10 @@ rescue LoadError => e
 end
 
 begin
-  require 'rubygems'
+  require "rubygems";
   require "firewatir";
   $firewatir_loaded = true
 rescue LoadError => e
-  puts e
   $firewatir_loaded = false
 end
 
@@ -72,6 +71,13 @@ module RWebUnit
 
     end
 
+    # for popup windows
+    def self.new_from_existing(underlying_browser, web_context = nil)
+      @browser = underlying_browser
+      @context = web_context
+    end
+    
+    
     ##
     #  Delegate to Watir
     #
@@ -133,7 +139,6 @@ module RWebUnit
     # test interaction.
     def close_browser
       if is_firefox? then
-        puts "[debug] about to close firefox"
         @browser.close
       else
         @browser.getIE.quit
@@ -201,7 +206,7 @@ module RWebUnit
     def enter_text_into_field_with_name(name, text)
       if is_firefox?
         wait_before_and_after { text_field(:name, name).value = text }
-        sleep 0.5
+        sleep 0.3
       else
         wait_before_and_after { text_field(:name, name).set(text) }
       end
@@ -318,12 +323,24 @@ module RWebUnit
     def start_window(url = nil)
       @browser.start_window(url);
     end
-
-    def self.attach_browser(how, what)
-      if @browser && @browser.class == Watir::IE
-        Watir::IE.attach(how, what)
-      else
-        raise "not implemented yet"
+    
+    # Attach to existing browser 
+    # 
+    # Usage:
+    #    WebBrowser.attach_browser(:title, "iTest2")
+    #    WebBrowser.attach_browser(:url, "http://www.itest2.com")
+    #    WebBrowser.attach_browser(:title, /agileway\.com\.au\/attachment/)  # regular expression
+    def self.attach_browser(how, what)      
+      if @browser
+        if @browser.class == Watir::IE
+          WebBrowser.new_from_existing(Watir::IE.attach(how, what), @context)
+        else
+          raise "not implemented yet"
+        end
+      else  
+        # No exsiting browser, using IE as default
+        #TODO: trying IE 
+        WebBrowser.new_from_existing(Watir::IE.attach(how, what))
       end
     end
 
