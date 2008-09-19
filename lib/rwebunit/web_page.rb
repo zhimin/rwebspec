@@ -11,8 +11,8 @@ module RWebUnit
   # WebPage (children of AbstractWebPage) encapsulates a real web page.
   # For example,
   #  beginAt("/home")
-  #  @browser.clickLinkWithText("/login")
-  #  @browser.setFormElement("username", "sa")
+  #  @web_browser.clickLinkWithText("/login")
+  #  @web_browser.setFormElement("username", "sa")
   # Can be rewritten to
   #  begin_at("/home")
   #  home_page = HomePage.new
@@ -30,7 +30,7 @@ module RWebUnit
     attr_accessor :browser, :page_text
 
     def initialize(web_tester, page_text=nil)
-      @web_tester = web_tester
+      @web_browser = web_tester
       @page_text = page_text
       begin
         snapshot if $ITEST_DUMP_PAGE
@@ -42,7 +42,7 @@ module RWebUnit
     end
 
     def browser
-      @web_tester
+      @web_browser
     end
 
     def assert_on_page()
@@ -54,19 +54,19 @@ module RWebUnit
     end
 
     def dump(stream = nil)
-      @web_tester.dump_response(stream)
+      @web_browser.dump_response(stream)
     end
 
     def source
-      @web_tester.page_source
+      @web_browser.page_source
     end
 
     def title
-      @web_tester.page_title
+      @web_browser.page_title
     end
 
     def expect_page(page_clazz)
-      page_clazz.new(@web_tester)
+      page_clazz.new(@web_browser)
     end
 
     # TO validate

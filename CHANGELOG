@@ -1,5 +1,12 @@
 CHANGELOG
 =========
+== 0.9.7
+ [TODO] browser seems not working
+ [TODO] maybe yield to 
+ [TODO] install rake
+ - add prepare_to_click_button_in_popup() in driver.rb 
+ - refactor web_tester.rb to use dynamicly create test cases
+ - rename web_tester.rb to web_browser.rb
 
 == 0.9.6
  - using global variable instead of environment variable passing between rwebunit and iTest

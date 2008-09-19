@@ -18,7 +18,7 @@ module RWebUnit
 
     def initialize(name=nil)
       super(name) if name
-      @web_tester = WebTester.new
+      @web_browser = WebBrowser.new
     end
 
     def default_test

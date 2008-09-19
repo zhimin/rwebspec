@@ -23,11 +23,11 @@ class TestKangxiHome < RWebUnit::WebTestCase
    end
 
    def test_homepage_exists()
-      kangxi_homepage = KangxiHomePage.new(@web_tester, "Welcome")
+      kangxi_homepage = KangxiHomePage.new(@web_browser, "Welcome")
    end
 
    def test_all_links_exist
-      kangxi_homepage = KangxiHomePage.new(@web_tester, "Welcome")
+      kangxi_homepage = KangxiHomePage.new(@web_browser, "Welcome")
       kangxi_homepage.assertTheListLinkPresent()
       kangxi_homepage.assertDashboardLinkPresent
       kangxi_homepage.assertTestCenterLinkPresent

@@ -21,10 +21,6 @@ module RWebUnit
     include RWebUnit::Utils
     include RWebUnit::Assert
 
-    def browser
-      @web_tester
-    end
-
     # open a browser, and set base_url via hash, but does not acually
     #
     # example:
@@ -46,47 +42,49 @@ module RWebUnit
 
       uri = URI.parse(base_url)
       uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-      if options[:start_new] || @web_tester.nil?
-        @web_tester = WebTester.new(uri_base, options)
+      if options[:start_new] || @web_browser.nil?
+        @web_browser = WebBrowser.new(uri_base, options)
       end
 
       if options[:go]
         (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path)
       end
-      return @web_tester
+      return @web_browser
     end
     alias open_browser_with open_browser
 
     # --
     #  Content
     # --
+
     def page_title
-      @web_tester.page_title
+      @web_browser.page_title
     end
 
     def page_source
-      @web_tester.page_source
+      @web_browser.page_source
     end
 
     def table_source(table_id)
-      elem = @@browser.document.getElementById(table_id)
-      raise "The element '#{table_id}' is not a table or there are multple elements with same id" unless elem.name.uppercase == "TABLE"
-      elem.innerHTML
+      table(:id, table_id).innerHTML
+      # elem = @web_browser.document.getElementById(table_id)
+      # raise "The element '#{table_id}' is not a table or there are multple elements with same id" unless elem.name.uppercase == "TABLE"
+      # elem.innerHTML
     end
     alias table_source_by_id table_source
 
     def element_text(elem_id)
-      @web_tester.element_value(elem_id)
+      @web_browser.element_value(elem_id)
     end
     alias element_text_by_id element_text
 
     #TODO: is it working?
     def element_source(elem_id)
-      @web_tester.get_html_in_element(elem_id)
+      @web_browser.get_html_in_element(elem_id)
     end
 
     def element_by_id(elem_id)
-      @web_tester.element_by_id(elem_id)
+      @web_browser.element_by_id(elem_id)
     end
 
     def button_by_id(button_id)
@@ -114,7 +112,7 @@ module RWebUnit
     alias links_with_text links_by_text
 
     def save_page(file_name = nil)
-      @web_tester.save_page(file_name)
+      @web_browser.save_page(file_name)
     end
     
     def save_content_to_file(content, file_name = nil)      

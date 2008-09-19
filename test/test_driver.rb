@@ -2,14 +2,14 @@ $:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
 $:.unshift File.dirname(__FILE__)
 
 require "driver.rb"
-require "web_tester.rb"
+require "web_browser.rb"
 require 'test/unit'
 
 class TestDriver < Test::Unit::TestCase
   include RWebUnit::Driver
 
   def setup
-    @web_tester = "dummy"
+    @web_browser = "dummy"
   end
 
   def teardown

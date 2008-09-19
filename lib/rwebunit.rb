@@ -20,7 +20,7 @@ require File.dirname(__FILE__) + "/rwebunit/web_page"
 require File.dirname(__FILE__) + "/rwebunit/assert"
 #This cause some unit test loaded, to use it, load specifiically
 #require File.dirname(__FILE__) + "/rwebunit/web_testcase"
-require File.dirname(__FILE__) + "/rwebunit/web_tester"
+require File.dirname(__FILE__) + "/rwebunit/web_browser"
 require File.dirname(__FILE__) + "/rwebunit/context"
 require File.dirname(__FILE__) + "/rwebunit/driver"
 require File.dirname(__FILE__) + "/rwebunit/rspec_helper"

@@ -12,13 +12,17 @@ require 'socket'
 module RWebUnit
   module Driver
 
+    def browser
+      @web_browser
+    end
+    
     # Verify the next page following an operation.
     #
     # Typical usage:
     #   login_page.click_login
     #   expect_page HomePage
     def expect_page(page_clazz)
-      page_clazz.new(@web_tester)
+      page_clazz.new(@web_browser)
     end
 
     # Using Ruby block syntax to create interesting domain specific language,
@@ -71,21 +75,21 @@ module RWebUnit
     alias fail_safe failsafe
 
     def context
-      @web_tester.context
+      @web_browser.context
     end
 
     def begin_at(url)
       dump_caller_stack
-      @web_tester.begin_at(url)
+      @web_browser.begin_at(url)
     end
 
     def ie
-      @web_tester.ie
+      @web_browser.ie
     end
 
     def close_browser
       dump_caller_stack
-      @web_tester.close_browser unless $ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN
+      @web_browser.close_browser unless $ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN
     end
     alias close_ie close_browser
 
@@ -93,11 +97,12 @@ module RWebUnit
     def goto_page(page)
       operation_delay
       dump_caller_stack
-      @web_tester.goto_page(page);
+      @web_browser.goto_page(page);
     end
+    alias visit goto_page
 
     def attach_browser(how, what)
-      WebTester.attach_browser(how, what)
+      WebBrowser.attach_browser(how, what)
     end
 
     ##
@@ -143,7 +148,7 @@ module RWebUnit
     [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
         dump_caller_stack
-        @web_tester.send(method, *args)
+        @web_browser.send(method, *args)
       end
     end
     alias td cell
@@ -153,7 +158,7 @@ module RWebUnit
     [:go_back, :go_forward, :refresh].each do |method|
       define_method(method) do
         dump_caller_stack
-        @web_tester.send(method)
+        @web_browser.send(method)
       end
     end
     alias refresh_page refresh
@@ -161,7 +166,7 @@ module RWebUnit
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do
         dump_caller_stack
-        @web_tester.send(method)
+        @web_browser.send(method)
       end
     end
 
@@ -173,7 +178,7 @@ module RWebUnit
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
         dump_caller_stack
-        @web_tester.send(method, *args)
+        @web_browser.send(method, *args)
       end
     end
 
@@ -185,7 +190,7 @@ module RWebUnit
     alias clear_radio_button clear_radio_option
 
     def contains_text(text)
-      @web_tester.contains_text(text);
+      @web_browser.contains_text(text);
     end
 
 
@@ -201,7 +206,7 @@ module RWebUnit
     end
 
     def debug(message)
-      connect_to_itest(" DEBUG", message) if $RUN_IN_ITEST
+      connect_to_itest(" DEBUG", message + "\r\n") if $RUN_IN_ITEST
     end
 
     # find out the line (and file) the execution is on, and notify iTest via Socket
@@ -242,7 +247,7 @@ module RWebUnit
     alias click_button_with_image click_button_with_image_src_contains
 
     def new_popup_window(options)
-      @web_tester.new_popup_window(options)
+      @web_browser.new_popup_window(options)
     end
 
     # Wait for specific seconds for an Ajax update finish.
@@ -264,7 +269,7 @@ module RWebUnit
       count = 0
       check_interval = 2 if check_interval < 1 or check_interval > seconds
       while count < (seconds / check_interval) do
-        search_indicator = @web_tester.element_by_id(element_id)
+        search_indicator = @web_browser.element_by_id(element_id)
         search_indicator_outer_html = search_indicator.outerHtml if search_indicator
         if status == 'hide'
           return true if search_indicator_outer_html and !search_indicator_outer_html.include?('style="DISPLAY: none"')
@@ -279,7 +284,7 @@ module RWebUnit
 
     def wait_for_element(element_id, timeout = 30, interval = 0.5)
       start_time = Time.now
-      until @web_tester.element_by_id(element_id) do
+      until @web_browser.element_by_id(element_id) do
         sleep(interval)
         if (Time.now - start_time) > timeout
           raise RuntimeError, "failed to find element: #{element_id} for max #{timeout}"
@@ -289,7 +294,7 @@ module RWebUnit
 
     # Warning: this does not work well with Firefox yet.
     def element_text(elem_id)
-      @web_tester.element_value(elem_id)
+      @web_browser.element_value(elem_id)
     end
 
 
@@ -297,7 +302,7 @@ module RWebUnit
     # For debugging
     # ---
     def dump_response(stream = nil)
-      @web_tester.dump_response(stream)
+      @web_browser.dump_response(stream)
     end
 
     def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
@@ -308,10 +313,29 @@ module RWebUnit
     end
 
     def click_popup_window(button, wait_time= 9, user_input=nil )
-      @web_tester.start_clicker(button, wait_time, user_input)
+      @web_browser.start_clicker(button, wait_time, user_input)
       sleep 0.5
     end
 
+	# run a separate process waiting for the popup window to click
+	#
+	#
+	def prepare_to_click_button_in_popup(button = "OK", wait_time = 3)	  
+	  #  !@web_browser.is_firefox?
+	  # TODO: firefox is OK
+	  if RUBY_PLATFORM =~ /mswin/  then
+    	w = WinClicker.new    
+    	longName = File.expand_path(File.dirname(__FILE__)).gsub("/" , "\\" )
+    	shortName = w.getShortFileName(longName)    	
+    	c = "start ruby #{shortName}\\clickJSDialog.rb #{button} #{wait_time} "		    	
+    	w.winsystem(c)
+    	w = nil    
+      else
+        raise "this only support on Windows and on IE"
+      end
+  	end
+  
+    
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin

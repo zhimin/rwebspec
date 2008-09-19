@@ -7,24 +7,24 @@ class KangxiHomePage < RWebUnit::AbstractWebPage
   end
 
   def assertTheListLinkPresent
-    @browser.assertLinkPresentWithText('The List')
+    @web_browser.assertLinkPresentWithText('The List')
   end
 
   def assertDashboardLinkPresent
-    @browser.assertLinkPresentWithText('Dashboard')
+    @web_browser.assertLinkPresentWithText('Dashboard')
   end
 
   def assertTestCenterLinkPresent
-    @browser.assertLinkPresentWithText('Test center')
+    @web_browser.assertLinkPresentWithText('Test center')
   end
 
   def assertTestWebServiceLinkPresent
-    @browser.assertLinkPresentWithText('Test web service')
+    @web_browser.assertLinkPresentWithText('Test web service')
   end
   
   def clickXMLFormatterLink
-    @browser.clickLinkWithText("XML Formatter")
-    KangxiXMLFormatterPage.new(@browser, "Format XML")
+    @web_browser.clickLinkWithText("XML Formatter")
+    KangxiXMLFormatterPage.new(@web_browser, "Format XML")
   end
 
 end
@@ -36,15 +36,15 @@ class KangxiXMLFormatterPage < RWebUnit::AbstractWebPage
   end
 
   def clickFillExampleLink
-    @browser.clickLinkWithText("Fill example")
+    @web_browser.clickLinkWithText("Fill example")
   end
 
   def enterXml(inputXml)
-    @browser.enterText("inputText", inputXml)
+    @web_browser.enterText("inputText", inputXml)
   end
 
   def clickFormat
-    @browser.clickButtonWithValue("Format")
+    @web_browser.clickButtonWithValue("Format")
   end
 
 end

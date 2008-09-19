@@ -15,7 +15,7 @@ class TestXmlFormatter < RWebUnit::WebTestCase
       super
       getTestContext().base_url = "http://localhost:3721"
       beginAt("/home")
-      kangxi_homepage = KangxiHomePage.new(@web_tester, "Welcome")
+      kangxi_homepage = KangxiHomePage.new(@web_browser, "Welcome")
       @kangxi_xmlformatter_page = kangxi_homepage.clickXMLFormatterLink
    end
 
@@ -31,9 +31,9 @@ class TestXmlFormatter < RWebUnit::WebTestCase
 
    def test_format_sample_xml
       @kangxi_xmlformatter_page.clickFillExampleLink
-      @web_tester.assertElementNotPresent("formatted_xml")
+      @web_browser.assertElementNotPresent("formatted_xml")
       @kangxi_xmlformatter_page.submit
-      @web_tester.assertElementPresent("formatted_xml")
+      @web_browser.assertElementPresent("formatted_xml")
    end
 
    def test_can_call_utils

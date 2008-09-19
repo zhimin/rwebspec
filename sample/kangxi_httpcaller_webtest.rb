@@ -23,9 +23,9 @@ class TestHttpCaller < RWebUnit::WebTestCase
    end
 
    def test_can_display()
-      kangxi_httpcaller_page = KangxiHttpCallerPage.new(@web_tester)
-      @web_tester.assertOptionValuePresent("method", "POST")
-      @web_tester.assertOptionValuePresent("method", "GET")
+      kangxi_httpcaller_page = KangxiHttpCallerPage.new(@web_browser)
+      @web_browser.assertOptionValuePresent("method", "POST")
+      @web_browser.assertOptionValuePresent("method", "GET")
 
    end
 
