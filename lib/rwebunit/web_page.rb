@@ -27,10 +27,11 @@ module RWebUnit
 
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
-    attr_accessor :browser, :page_text
+    attr_accessor :page_text
 
-    def initialize(web_tester, page_text=nil)
-      @web_browser = web_tester
+    def initialize(the_browser, page_text=nil)
+      @web_browser = the_browser
+      @web_tester = the_browser
       @page_text = page_text
       begin
         snapshot if $ITEST_DUMP_PAGE
@@ -63,10 +64,6 @@ module RWebUnit
 
     def title
       @web_browser.page_title
-    end
-
-    def expect_page(page_clazz)
-      page_clazz.new(@web_browser)
     end
 
     # TO validate

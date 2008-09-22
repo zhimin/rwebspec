@@ -43,7 +43,7 @@ module RWebUnit
       uri = URI.parse(base_url)
       uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
       if options[:start_new] || @web_browser.nil?
-        @web_browser = WebBrowser.new(uri_base, options)
+        @web_browser = WebBrowser.new(uri_base, nil, options)
       end
 
       if options[:go]

@@ -9,6 +9,7 @@ CHANGELOG
  - rename web_tester.rb to web_browser.rb
  - add alias visit (goto_page)
  - WebBrowser.attach_browser return rWebUnit WebBrowser instance instead of Watir or Firefox
+ - expect_page(Class, argument) added to support one more additional argument
 
 == 0.9.6
  - using global variable instead of environment variable passing between rwebunit and iTest

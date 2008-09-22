@@ -21,8 +21,12 @@ module RWebUnit
     # Typical usage:
     #   login_page.click_login
     #   expect_page HomePage
-    def expect_page(page_clazz)
-      page_clazz.new(@web_browser)
+    def expect_page(page_clazz, argument = nil)
+      if argument
+        page_clazz.new(@web_browser, argument)
+       else
+         page_clazz.new(@web_browser)
+       end
     end
 
     # Using Ruby block syntax to create interesting domain specific language,

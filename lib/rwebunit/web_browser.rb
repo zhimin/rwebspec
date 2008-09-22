@@ -45,11 +45,15 @@ module RWebUnit
 
     attr_accessor :context
 
-    def initialize(base_url = nil, options = {})
+    def initialize(base_url = nil, existing_browser = nil, options = {})
       default_options = {:speed => "zippy",:visible => true,
       :highlight_colour => 'yellow',  :close_others => true}
       options = default_options.merge options
       @context = Context.new base_url if base_url
+
+      if (existing_browser) then
+        @browser = existing_browser
+      else
 
       if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
         @browser = FireWatir::Firefox.start(base_url)
@@ -68,13 +72,12 @@ module RWebUnit
       else
         raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
       end
-
+	 end
     end
 
     # for popup windows
     def self.new_from_existing(underlying_browser, web_context = nil)
-      @browser = underlying_browser
-      @context = web_context
+      return WebBrowser.new(web_context ? web_context.base_url : nil, underlying_browser)
     end
     
     
@@ -145,6 +148,7 @@ module RWebUnit
       end
       sleep 2
     end
+	alias close close_browser
 
     def self.close_all_browsers
       if is_firefox? then
