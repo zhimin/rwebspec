@@ -180,7 +180,7 @@ module RWebUnit
     #
     # page.check_checkbox('bad_ones', 'Chicken Little')
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
-
+    #
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
         dump_caller_stack
@@ -195,6 +195,11 @@ module RWebUnit
     alias click_radio_button click_radio_option
     alias clear_radio_button clear_radio_option
 
+    # for text field can be easier to be identified by attribute "id" instead of "name", not recommended though
+    def enter_text_with_id(textfield_id, value)
+      text_field(:id, textfield_id).set(value)
+    end
+    
     def contains_text(text)
       @web_browser.contains_text(text);
     end
