@@ -159,13 +159,15 @@ module RWebUnit
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
 
-    [:go_back, :go_forward, :refresh].each do |method|
+    [:back, :forward, :refresh].each do |method|
       define_method(method) do
         dump_caller_stack
         @web_browser.send(method)
       end
     end
     alias refresh_page refresh
+    alias go_back back
+    alias go_forward forward
 
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do

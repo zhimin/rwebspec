@@ -195,12 +195,14 @@ module RWebUnit
     end
 
 
-    [:go_back, :go_forward, :refresh, :focus, :close_others].each do |method|
+    [:back, :forward, :refresh, :focus, :close_others].each do |method|
       define_method(method) do
         @browser.send(method)
       end
     end
     alias refresh_page refresh
+    alias go_back back
+    alias go_forward forward
 
     def goto_page(page)
       @browser.goto full_url(page);
