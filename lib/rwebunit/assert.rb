@@ -228,6 +228,7 @@ module RWebUnit
     def assert_title_equals(title)
       assert_equals(title, @web_browser.page_title)
     end
+    alias assert_title assert_title_equals
 
     def assert_equals(expected, actual, msg=nil)
       assert(expected == actual, (msg.nil?) ? "Expected: #{expected} diff from actual: #{actual}" : msg)

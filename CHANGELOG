@@ -1,19 +1,19 @@
-ChangeLog
+CHANGELOG
 =========
 
-[TODO]
-  - support should.contains?(JAMEs)
+== 0.9.8
+ [New] 'assert_title' to check page title
 
 == 0.9.7
+ [TODO] support should.contains?(JAMEs)
+ [WORKING] maybe yield to suport
  - add prepare_to_click_button_in_popup() in driver.rb
  - refactor web_tester.rb to use dynamicly create test cases
  - rename web_tester.rb to web_browser.rb
  - add alias visit (goto_page)
  - WebBrowser.attach_browser return rWebUnit WebBrowser instance instead of Watir or Firefox
  - expect_page(Class, argument) added to support one more additional argument
- - fixed "go_back", "go_forward" 
- - add "enter_text_with_id" 
- 
+
 == 0.9.6
  - using global variable instead of environment variable passing between rwebunit and iTest
  - add debug()
