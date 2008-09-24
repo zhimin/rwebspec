@@ -5,10 +5,15 @@ module RWebUnit
 
     def connect_to_itest(message_type, body)
       begin
+        the_message = message_type + "|" + body
+        if @last_message == the_message then
+          return
+        end
         itest_port = $ITEST_TRACE_PORT || 7025
         itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
         itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
-        itest_socket.puts(message_type + "|" + body)
+        itest_socket.puts(the_message)
+        @last_message = the_message
         itest_socket.close
       rescue => e
       end

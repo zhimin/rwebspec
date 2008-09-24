@@ -24,9 +24,9 @@ module RWebUnit
     def expect_page(page_clazz, argument = nil)
       if argument
         page_clazz.new(@web_browser, argument)
-       else
-         page_clazz.new(@web_browser)
-       end
+      else
+        page_clazz.new(@web_browser)
+      end
     end
 
     # Using Ruby block syntax to create interesting domain specific language,
@@ -89,6 +89,14 @@ module RWebUnit
 
     def ie
       @web_browser.ie
+    end
+
+    def is_firefox?
+      @web_browser.is_firefox?
+    end
+
+    def firefox
+      @web_browser.firefox
     end
 
     def close_browser
@@ -199,7 +207,7 @@ module RWebUnit
     def enter_text_with_id(textfield_id, value)
       text_field(:id, textfield_id).set(value)
     end
-    
+
     def contains_text(text)
       @web_browser.contains_text(text);
     end
@@ -305,7 +313,7 @@ module RWebUnit
     end
 
     # Start a background process to click the button on a javascript popup window
-    def start_checking_js_dialog(button = "OK", wait_time = 3)      
+    def start_checking_js_dialog(button = "OK", wait_time = 3)
       w = WinClicker.new
       longName = File.expand_path(File.dirname(__FILE__)).gsub("/" , "\\" )
       shortName = w.getShortFileName(longName)
@@ -313,23 +321,23 @@ module RWebUnit
       w.winsystem(c)
       w = nil
     end
-    
-    # Click the button in javascript popup dialog 
+
+    # Click the button in javascript popup dialog
     # Usage:
     #   click_button_in_popup_after { click_link('Cancel')}
     #   click_button_in_popup_after("OK") { click_link('Cancel')}
     #
-    def click_button_in_popup_after(options = {:button => "OK", :wait_time => 3}, &block)      
+    def click_button_in_popup_after(options = {:button => "OK", :wait_time => 3}, &block)
       if RUBY_PLATFORM =~ /mswin/  then
         start_checking_js_dialog(options[:button], options[:wait_time])
-        yield        
+        yield
       else
         raise "this only support on Windows and on IE"
       end
-      
+
     end
-    
-    
+
+
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
@@ -340,6 +348,7 @@ module RWebUnit
         # ignore
       end
     end
+
 
   end
 end
