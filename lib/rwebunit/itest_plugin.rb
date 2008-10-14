@@ -9,7 +9,7 @@ module RWebUnit
         if @last_message == the_message then
           return
         end
-        itest_port = $ITEST_TRACE_PORT || 7025
+        itest_port = $ITEST2_TRACE_PORT || 7025
         itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
         itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
         itest_socket.puts(the_message)
@@ -25,7 +25,7 @@ module RWebUnit
 
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
-      return unless $ITEST_TRACE_EXECUTION
+      return unless $ITEST2_TRACE_EXECUTION
       begin
         caller.each_with_index do |position, idx|
           next unless position =~ /\A(.*?):(\d+)/

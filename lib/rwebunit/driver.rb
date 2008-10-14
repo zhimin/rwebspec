@@ -101,7 +101,7 @@ module RWebUnit
 
     def close_browser
       dump_caller_stack
-      @web_browser.close_browser unless $ITEST_LEAVE_BROWSER_OPEN_AFTER_RUN
+      @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
     end
     alias close_ie close_browser
 
@@ -341,7 +341,7 @@ module RWebUnit
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
-        if $ITEST_OPERATION_DELAY > 0 && $ITEST_OPERATION_DELAY < 30000  then # max 30 seconds
+        if $ITEST2_OPERATION_DELAY > 0 && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
           sleep(ITEST_OPERATION_DELAY / 1000)
         end
       rescue => e

@@ -4,6 +4,8 @@ module Spec
 
       alias :spec :describe
       alias :specification :describe
+      alias :test_suite :describe
+      alias :suite :describe
 
     end
   end
@@ -16,6 +18,8 @@ module Spec
 
       alias_method :scenario, :it
       alias_method :story, :it
+      alias_method :test_case, :it
+      alias_method :test, :it
     end
   end
 end
@@ -24,11 +28,11 @@ module Spec
   module Runner
     class SpecParser
       def example_group_at_line(source, line_number)
-        find_above(source, line_number, /^\s*(context|describe|specification|spec)\s+(.*)\s+do/)
+        find_above(source, line_number, /^\s*(context|describe|specification|spec|test_suite|suite)\s+(.*)\s+do/)
       end
 
       def example_at_line(source, line_number)
-        find_above(source, line_number, /^\s*(specify|it|story|scenario)\s+(.*)\s+do/)
+        find_above(source, line_number, /^\s*(specify|it|story|scenario|test_case|test)\s+(.*)\s+do/)
       end
     end
   end
@@ -59,11 +63,15 @@ module Spec
       return line if line =~ /(should_not|should)_receive/
 
       line.gsub!(/(^\s*)context([\s*|\(]['|"|A-Z])/, '\1describe\2')
+      line.gsub!(/(^\s*)test_suite([\s*|\(]['|"|A-Z])/, '\1describe\2')
+      line.gsub!(/(^\s*)suite([\s*|\(]['|"|A-Z])/, '\1describe\2')
       line.gsub!(/(^\s*)spec([\s*|\(]['|"|A-Z])/, '\1describe\2') #new
       line.gsub!(/(^\s*)specification([\s*|\(]['|"|A-Z])/, '\1describe\2') #new
       line.gsub!(/(^\s*)specify([\s*|\(]['|"|A-Z])/, '\1it\2')
       line.gsub!(/(^\s*)scenario([\s*|\(]['|"|A-Z])/, '\1it\2')  #new
       line.gsub!(/(^\s*)story([\s*|\(]['|"|A-Z])/, '\1it\2')  #new
+      line.gsub!(/(^\s*)test_case([\s*|\(]['|"|A-Z])/, '\1it\2')  #new
+      line.gsub!(/(^\s*)test([\s*|\(]['|"|A-Z])/, '\1it\2')  #new
       line.gsub!(/(^\s*)context_setup(\s*[do|\{])/, '\1before(:all)\2')
       line.gsub!(/(^\s*)context_teardown(\s*[do|\{])/, '\1after(:all)\2')
       line.gsub!(/(^\s*)setup(\s*[do|\{])/, '\1before(:each)\2')

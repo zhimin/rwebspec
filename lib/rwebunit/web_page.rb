@@ -34,8 +34,8 @@ module RWebUnit
       @web_tester = the_browser
       @page_text = page_text
       begin
-        snapshot if $ITEST_DUMP_PAGE
-        delay = $ITEST_PAGE_DELAY
+        snapshot if $ITEST2_DUMP_PAGE
+        delay = $ITEST2_PAGE_DELAY
         sleep(delay)
       rescue => e
       end
@@ -79,13 +79,13 @@ module RWebUnit
 
 
     def	snapshot
-      if $ITEST_DUMP_DIR
-        spec_run_id = $ITEST_RUNNING_SPEC_ID || "unknown"
+      if $ITEST2_DUMP_DIR
+        spec_run_id = $ITEST2_RUNNING_SPEC_ID || "unknown"
         spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
-        spec_run_dir = File.join($ITEST_DUMP_DIR, spec_run_dir_name)
+        spec_run_dir = File.join($ITEST2_DUMP_DIR, spec_run_dir_name)
         Dir.mkdir(spec_run_dir) unless File.exists?(spec_run_dir)
         file_name = Time.now.strftime("%m%d%H%M%S") + "_" + self.class.name.gsub("", "") + ".html"
-        file = File.join($ITEST_DUMP_DIR, spec_run_dir_name, file_name)
+        file = File.join($ITEST2_DUMP_DIR, spec_run_dir_name, file_name)
         page_source = browser.page_source
         File.new(file, "w").puts source
       end
