@@ -7,6 +7,7 @@
 #    click_button("submit")
 #
 require File.join(File.dirname(__FILE__), 'itest_plugin')
+require 'timeout'
 
 module RWebUnit
   module Driver
@@ -249,7 +250,7 @@ module RWebUnit
     #
     def ajax_wait_for_element(element_id, seconds, status='show', check_interval=2)
       count = 0
-      check_interval = 2 if check_interval < 1 or check_interval > seconds
+      check_interval = 1 if check_interval < 1 or check_interval > seconds
       while count < (seconds / check_interval) do
         search_indicator = @web_browser.element_by_id(element_id)
         search_indicator_outer_html = search_indicator.outerHtml if search_indicator
@@ -274,11 +275,46 @@ module RWebUnit
       end
     end
 
+    # TODO: Firewatir does not suport retrieving style or outerHtml
+    #    http://jira.openqa.org/browse/WTR-260
+    #    http://code.google.com/p/firewatir/issues/detail?id=76
+    #
+    # Max timeout value is 10 minutes
+    #
+    def ajax_call_complete_after_element_hidden(elem_id, check_start = 0.5, timeout = 5, interval = 0.5, &block)
+      yield
+      sleep check_start  # the time allowed to perform the coomplete
+      timeout = 10 * 60 if timeout > 10 * 600 or timeout <= 0
+      begin
+        Timeout::timeout(timeout) {
+          begin
+            elem = element_by_id(elem_id)
+            puts elem.methods.sort.inspect
+            while elem  do
+              puts "outer=>#{elem.outerHtml}|"
+              puts "style =>#{elem.attribute_value('style')}|"
+              # puts "html => #{elem.html}"
+              sleep interval
+              elem = element_by_id(elem_id)
+            end
+          rescue => e
+            puts e
+          end
+        }
+      rescue Timeout::Error
+        # Too slow!!
+        raise "Too slow, wait max #{timeout} seconds, the element #{elem_id} still there"
+      end
+    end
+
     # Warning: this does not work well with Firefox yet.
     def element_text(elem_id)
       @web_browser.element_value(elem_id)
     end
 
+    def element_by_id(elem_id)
+      @web_browser.element_by_id(elem_id)
+    end
 
     # ---
     # For debugging
@@ -342,7 +378,7 @@ module RWebUnit
     def operation_delay
       begin
         if $ITEST2_OPERATION_DELAY > 0 && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-          sleep(ITEST_OPERATION_DELAY / 1000)
+          sleep($ITEST2_OPERATION_DELAY / 1000)
         end
       rescue => e
         # ignore

@@ -84,7 +84,7 @@ module RWebUnit
     ##
     #  Delegate to Watir
     #
-    [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
+    [:button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
         @browser.send(method, *args)
       end
@@ -92,6 +92,15 @@ module RWebUnit
     alias td cell
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
+
+    # FireWatir does not support area directly, treat it as text_field
+    def area(*args) 
+      if is_firefox?
+        text_field(*args)
+      else
+        @browser.send("area", *args)
+      end
+    end
 
     def contains_text(text)
       @browser.contains_text(text);
@@ -300,7 +309,8 @@ module RWebUnit
 
     def element_by_id(elem_id)
       if is_firefox?
-        elem = label(:id, elem_id)  || button(:id, elem_id) || span(:id, elem_id) || hidden(:id, elem_id) || link(:id, elem_id) || radio(:id, elem_id)
+        # elem = @browser.document.getElementById(elem_id)
+        elem = div(:id, elem_id) || label(:id, elem_id)  || button(:id, elem_id) || span(:id, elem_id) || hidden(:id, elem_id) || link(:id, elem_id) || radio(:id, elem_id)
       else
         elem = @browser.document.getElementById(elem_id)
       end

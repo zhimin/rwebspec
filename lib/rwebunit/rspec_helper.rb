@@ -25,8 +25,14 @@ module RWebUnit
     #
     # example:
     #   open_browser :base_url => http://localhost:8080
+    #
+    # There are 3 ways to set base url 
+    #   1. pass as first argument
+    #   2. If running using iTest2, used as confiured
+    #   3. Use default value set
     def open_browser(base_url = nil, options = {})
-      base_url ||= ENV['ITEST_PROJECT_BASE_URL']
+      base_url ||= $ITEST2_PROJECT_BASE_URL
+      base_url ||= $BASE_URL 
       raise "base_url must be set" if base_url.nil?
       
       default_options = {:speed => "fast",
@@ -37,8 +43,8 @@ module RWebUnit
         :go => true}
 
       options = default_options.merge options
-      options[:firefox] = true if "Firefox" == ENV['ITEST_BROWSER']
-      (ENV['ITEST_HIDE_BROWSER'] == "true") ? $HIDE_IE = true : $HIDE_IE = false
+      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
+      ($ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
 
       uri = URI.parse(base_url)
       uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"

@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+TODO:
+  Firefox: check the element is hidden or showing, 
+     Checkfor driver.rb: ajax_call_complete_after_element_hidden
+  Firefox: attach browser
+  Firefox Workaround: element_by_id
+     
+== 0.9.9
+ [Fixes] add "area" method for running tests against Firefox
+ 
 == 0.9.8
  [New] 'assert_title' to check page title
  [Fixes] Not same two same messages to iTest in a row
