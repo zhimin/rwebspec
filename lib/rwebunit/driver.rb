@@ -114,8 +114,14 @@ module RWebUnit
     end
     alias visit goto_page
 
-    def attach_browser(how, what)
-      WebBrowser.attach_browser(how, what)
+    def attach_browser(how, what, options = {})
+      options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
+      begin
+        options.merge!(:base_url => browser.context.base_url)
+      rescue => e
+        puts "error to attach to browser: #{e}"
+      end
+      WebBrowser.attach_browser(how, what, options)
     end
 
     ##

@@ -23,19 +23,6 @@ end
 
 raise "You have must at least Watir or Firewatir installed" unless $watir_loaded || $firewatir_loaded
 
-# Patch: fix typo in Watir 1.5.3
-module Watir
-  class IE
-    def self.close_all_but(except=nil)
-      Watir::IE.each do |ie|
-        ie.close_modal
-        ie.close unless except and except.hwnd == ie.hwnd
-      end
-      sleep 1.0 # replace with polling for window count to be zero?
-    end
-  end
-end
-
 module RWebUnit
 
   ##
@@ -55,32 +42,32 @@ module RWebUnit
         @browser = existing_browser
       else
 
-      if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
-        @browser = FireWatir::Firefox.start(base_url)
-      elsif $watir_loaded
-        @browser = Watir::IE.new
+        if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
+          @browser = FireWatir::Firefox.start(base_url)
+        elsif $watir_loaded
+          @browser = Watir::IE.new
 
-        if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
-          @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
-          @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+          if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
+            @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
+            @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+          else
+            @browser.speed = :zippy
+          end
+          @browser.activeObjectHighLightColor = options[:highlight_colour]
+          @browser.visible = options[:visible] unless $HIDE_IE
+          @browser.close_others if options[:close_others]
         else
-          @browser.speed = :zippy
+          raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
         end
-        @browser.activeObjectHighLightColor = options[:highlight_colour]
-        @browser.visible = options[:visible] unless $HIDE_IE
-        @browser.close_others if options[:close_others]
-      else
-        raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
       end
-	 end
     end
 
     # for popup windows
     def self.new_from_existing(underlying_browser, web_context = nil)
       return WebBrowser.new(web_context ? web_context.base_url : nil, underlying_browser)
     end
-    
-    
+
+
     ##
     #  Delegate to Watir
     #
@@ -94,7 +81,7 @@ module RWebUnit
     alias tr row
 
     # FireWatir does not support area directly, treat it as text_field
-    def area(*args) 
+    def area(*args)
       if is_firefox?
         text_field(*args)
       else
@@ -157,7 +144,7 @@ module RWebUnit
       end
       sleep 2
     end
-	alias close close_browser
+    alias close close_browser
 
     def self.close_all_browsers
       if is_firefox? then
@@ -339,24 +326,25 @@ module RWebUnit
     def start_window(url = nil)
       @browser.start_window(url);
     end
-    
-    # Attach to existing browser 
-    # 
+
+    # Attach to existing browser
+    #
     # Usage:
     #    WebBrowser.attach_browser(:title, "iTest2")
     #    WebBrowser.attach_browser(:url, "http://www.itest2.com")
+    #    WebBrowser.attach_browser(:url, "http://www.itest2.com", {:browser => "Firefox", :base_url => "http://www.itest2.com"})
     #    WebBrowser.attach_browser(:title, /agileway\.com\.au\/attachment/)  # regular expression
-    def self.attach_browser(how, what)      
-      if @browser
-        if @browser.class == Watir::IE
-          WebBrowser.new_from_existing(Watir::IE.attach(how, what), @context)
-        else
-          raise "not implemented yet"
-        end
-      else  
-        # No exsiting browser, using IE as default
-        #TODO: trying IE 
-        WebBrowser.new_from_existing(Watir::IE.attach(how, what))
+    def self.attach_browser(how, what, options={})
+      default_options = {:browser => "IE"}
+      options = default_options.merge(options)
+      puts "debug: atatch browser options: #{options.inspect}"
+      site_context = Context.new(options[:base_url]) if options[:base_url]
+      if (options[:browser] == "Firefox")
+        puts "debug: about to create a new ff instance: #{$firewatir_loaded}"
+        ff = FireWatir::Firefox.new
+        WebBrowser.new_from_existing(ff.attach(how, what), site_context)
+      else
+        WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
       end
     end
 
