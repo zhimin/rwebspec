@@ -33,38 +33,48 @@ module RWebUnit
     attr_accessor :context
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
-      default_options = {:speed => "zippy",:visible => true,
-      :highlight_colour => 'yellow',  :close_others => true}
+      default_options = {:speed => "zippy", :visible => true,
+          :highlight_colour => 'yellow',  :close_others => true}
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
       if (existing_browser) then
         @browser = existing_browser
       else
-
         if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
           @browser = FireWatir::Firefox.start(base_url)
         elsif $watir_loaded
           @browser = Watir::IE.new
-
-          if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
-            @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
-            @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
-          else
-            @browser.speed = :zippy
-          end
-          @browser.activeObjectHighLightColor = options[:highlight_colour]
-          @browser.visible = options[:visible] unless $HIDE_IE
-          @browser.close_others if options[:close_others]
-        else
-          raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
         end
       end
+
+      if @browser && @browser.class == Watir::IE
+        if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
+          @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
+          @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+        else
+          @browser.speed = :zippy
+        end
+        @browser.activeObjectHighLightColor = options[:highlight_colour]
+        @browser.visible = options[:visible] unless $HIDE_IE
+        @browser.close_others if options[:close_others]
+      else
+        raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
+      end
+
+    end
+
+    def self.reuse(base_url, options)
+      Watir::IE.each do |browser_window|
+        return WebBrowser.new(base_url, browser_window, options)
+      end
+      puts "no browser instance found"
+      WebBrowser.new(base_url, nil, options)
     end
 
     # for popup windows
     def self.new_from_existing(underlying_browser, web_context = nil)
-      return WebBrowser.new(web_context ? web_context.base_url : nil, underlying_browser)
+      return WebBrowser.new(web_context ? web_context.base_url : nil, underlying_browser, {:close_others => false})
     end
 
 
@@ -337,14 +347,14 @@ module RWebUnit
     def self.attach_browser(how, what, options={})
       default_options = {:browser => "IE"}
       options = default_options.merge(options)
-      puts "debug: atatch browser options: #{options.inspect}"
+      puts "debug: atatch browser options: #{how}:#{what} #{options.inspect}"
       site_context = Context.new(options[:base_url]) if options[:base_url]
       if (options[:browser] == "Firefox")
         puts "debug: about to create a new ff instance: #{$firewatir_loaded}"
-        ff = FireWatir::Firefox.new
-        WebBrowser.new_from_existing(ff.attach(how, what), site_context)
+        return WebBrowser.new_from_existing(FireWatir::Firefox.new.attach(how, what), site_context)
       else
-        WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
+        puts "XX: attaching to existing window: #{how}: #{what}"
+        return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
       end
     end
 
@@ -370,11 +380,7 @@ module RWebUnit
     # For deubgging
     # ---
     def dump_response(stream = nil)
-      if stream.nil?
-        puts page_source # std out
-      else
-        stream.puts page_source
-      end
+      stream.nil? ?  puts(page_source) : stream.puts(page_source)
     end
 
     # A Better Popup Handler using the latest Watir version. Posted by Mark_cain@rl.gov
@@ -417,5 +423,4 @@ module RWebUnit
     end
 
   end
-
 end

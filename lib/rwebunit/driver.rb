@@ -117,7 +117,7 @@ module RWebUnit
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
       begin
-        options.merge!(:base_url => browser.context.base_url)
+      	options.merge!(:base_url => browser.context.base_url)
       rescue => e
         puts "error to attach to browser: #{e}"
       end
@@ -199,6 +199,7 @@ module RWebUnit
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
         dump_caller_stack
+        operation_delay
         @web_browser.send(method, *args)
       end
     end
@@ -212,6 +213,8 @@ module RWebUnit
 
     # for text field can be easier to be identified by attribute "id" instead of "name", not recommended though
     def enter_text_with_id(textfield_id, value)
+      dump_caller_stack
+      operation_delay
       text_field(:id, textfield_id).set(value)
     end
 
@@ -294,12 +297,10 @@ module RWebUnit
       begin
         Timeout::timeout(timeout) {
           begin
-            elem = element_by_id(elem_id)
-            puts elem.methods.sort.inspect
+            elem = element_by_id(elem_id)            
             while elem  do
               puts "outer=>#{elem.outerHtml}|"
-              puts "style =>#{elem.attribute_value('style')}|"
-              # puts "html => #{elem.html}"
+              puts "style =>#{elem.attribute_value('style')}|"              
               sleep interval
               elem = element_by_id(elem_id)
             end
@@ -382,15 +383,26 @@ module RWebUnit
 
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
-      begin
-        if $ITEST2_OPERATION_DELAY > 0 && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+      begin      	
+        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 && 
+           $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
           sleep($ITEST2_OPERATION_DELAY / 1000)
+        end        
+        
+        while $ITEST2_PAUSE          
+          debug("Paused, waiting ...")
+          sleep 1
         end
       rescue => e
+        puts "Error on delaying: #{e}"
         # ignore
       end
     end
 
 
+	def close_all_browsers
+	  Watir::IE.close_all
+	end
+		
   end
 end

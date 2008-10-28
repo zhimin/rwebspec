@@ -4,11 +4,17 @@ CHANGELOG
 TODO:
   Firefox: check the element is hidden or showing, 
      Checkfor driver.rb: ajax_call_complete_after_element_hidden
-     doesn't support outerHtml yet
+     does not support outerHtml yet
   Firefox: attach browser,
      Unfortundately, Firewatir does not support attaching current window
   Firefox Workaround: element_by_id
-     
+  
+  0.9.10 (2008-10-28)
+  [Feature] Better support reuse IE window for testing
+
+  0.9.9.1
+  [Feature] Support pausing in iTest2
+    
 == 0.9.9
  [Fixes] add "area" method for running tests against Firefox
  [Enhancement] Pass browser type and base_utl when calling attach_browser

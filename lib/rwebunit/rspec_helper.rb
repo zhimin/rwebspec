@@ -48,8 +48,11 @@ module RWebUnit
 
       uri = URI.parse(base_url)
       uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-      if options[:start_new] || @web_browser.nil?
+      if options[:start_new]
         @web_browser = WebBrowser.new(uri_base, nil, options)
+      else 
+        # Reuse existing browser
+        @web_browser = WebBrowser.reuse(uri_base, options)
       end
 
       if options[:go]
