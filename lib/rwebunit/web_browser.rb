@@ -34,7 +34,7 @@ module RWebUnit
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
       default_options = {:speed => "zippy", :visible => true,
-          :highlight_colour => 'yellow',  :close_others => true}
+      :highlight_colour => 'yellow',  :close_others => true}
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
@@ -48,7 +48,7 @@ module RWebUnit
         end
       end
 
-	  raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
+      raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
       if @browser.class == Watir::IE
         if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
           @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
@@ -65,13 +65,13 @@ module RWebUnit
 
     def self.reuse(base_url, options)
       if $ITEST2_BROWSER == "Firefox"  then
-      	WebBrowser.new(base_url, nil, options)
+        WebBrowser.new(base_url, nil, options)
       else
-	    Watir::IE.each do |browser_window|
-    	    return WebBrowser.new(base_url, browser_window, options)
-      	end
-      	puts "no browser instance found"
-      	WebBrowser.new(base_url, nil, options)
+        Watir::IE.each do |browser_window|
+          return WebBrowser.new(base_url, browser_window, options)
+        end
+        puts "no browser instance found"
+        WebBrowser.new(base_url, nil, options)
       end
     end
 

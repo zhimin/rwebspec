@@ -1,4 +1,3 @@
-
 # convenient methods to drive the browser.
 #
 # Instead of
@@ -117,7 +116,7 @@ module RWebUnit
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
       begin
-      	options.merge!(:base_url => browser.context.base_url)
+        options.merge!(:base_url => browser.context.base_url)
       rescue => e
         puts "error to attach to browser: #{e}"
       end
@@ -297,10 +296,10 @@ module RWebUnit
       begin
         Timeout::timeout(timeout) {
           begin
-            elem = element_by_id(elem_id)            
+            elem = element_by_id(elem_id)
             while elem  do
               puts "outer=>#{elem.outerHtml}|"
-              puts "style =>#{elem.attribute_value('style')}|"              
+              puts "style =>#{elem.attribute_value('style')}|"
               sleep interval
               elem = element_by_id(elem_id)
             end
@@ -383,16 +382,16 @@ module RWebUnit
 
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
-      begin      	
-        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 && 
-           $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-          sleep($ITEST2_OPERATION_DELAY / 1000)
-        end        
-        
-        while $ITEST2_PAUSE          
-          debug("Paused, waiting ...")
-          sleep 1
+      begin
+        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
+          $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+            sleep($ITEST2_OPERATION_DELAY / 1000)
         end
+
+        while $ITEST2_PAUSE
+            debug("Paused, waiting ...")
+            sleep 1
+          end
       rescue => e
         puts "Error on delaying: #{e}"
         # ignore
@@ -400,21 +399,21 @@ module RWebUnit
     end
 
 
-	def close_all_browsers
-	  Watir::IE.close_all
-	end
+    def close_all_browsers
+      Watir::IE.close_all
+    end
 
-	def is_mac?
-       RUBY_PLATFORM.downcase.include?("darwin")
+    def is_mac?
+      RUBY_PLATFORM.downcase.include?("darwin")
     end
-    
+
     def is_windows?
-       RUBY_PLATFORM.downcase.include?("mswin")
+      RUBY_PLATFORM.downcase.include?("mswin")
     end
-    
+
     def is_linux?
-       RUBY_PLATFORM.downcase.include?("linux")
+      RUBY_PLATFORM.downcase.include?("linux")
     end
-		
+
   end
 end
