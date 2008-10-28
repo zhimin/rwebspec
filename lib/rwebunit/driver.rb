@@ -1,4 +1,4 @@
-# The Mixin is normally included in the spec/tests and pages, provide
+
 # convenient methods to drive the browser.
 #
 # Instead of
@@ -403,6 +403,18 @@ module RWebUnit
 	def close_all_browsers
 	  Watir::IE.close_all
 	end
+
+	def is_mac?
+       RUBY_PLATFORM.downcase.include?("darwin")
+    end
+    
+    def is_windows?
+       RUBY_PLATFORM.downcase.include?("mswin")
+    end
+    
+    def is_linux?
+       RUBY_PLATFORM.downcase.include?("linux")
+    end
 		
   end
 end

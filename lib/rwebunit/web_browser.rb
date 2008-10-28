@@ -48,7 +48,8 @@ module RWebUnit
         end
       end
 
-      if @browser && @browser.class == Watir::IE
+	  raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
+      if @browser.class == Watir::IE
         if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
           @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
           @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
@@ -58,18 +59,20 @@ module RWebUnit
         @browser.activeObjectHighLightColor = options[:highlight_colour]
         @browser.visible = options[:visible] unless $HIDE_IE
         @browser.close_others if options[:close_others]
-      else
-        raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present"
       end
 
     end
 
     def self.reuse(base_url, options)
-      Watir::IE.each do |browser_window|
-        return WebBrowser.new(base_url, browser_window, options)
+      if $ITEST2_BROWSER == "Firefox"  then
+      	WebBrowser.new(base_url, nil, options)
+      else
+	    Watir::IE.each do |browser_window|
+    	    return WebBrowser.new(base_url, browser_window, options)
+      	end
+      	puts "no browser instance found"
+      	WebBrowser.new(base_url, nil, options)
       end
-      puts "no browser instance found"
-      WebBrowser.new(base_url, nil, options)
     end
 
     # for popup windows

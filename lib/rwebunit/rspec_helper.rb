@@ -1,6 +1,6 @@
 require 'uri'
 
-# ZZ patches to RSpec 1.1.2
+# ZZ patches to RSpec 1.1.2 - 1.1.4
 #  - add to_s method to example_group
 module Spec
   module Example
