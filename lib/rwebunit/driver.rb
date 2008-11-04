@@ -384,14 +384,14 @@ module RWebUnit
     def operation_delay
       begin
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
-          $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-            sleep($ITEST2_OPERATION_DELAY / 1000)
+           $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+          sleep($ITEST2_OPERATION_DELAY / 1000)
         end
 
         while $ITEST2_PAUSE
-            debug("Paused, waiting ...")
-            sleep 1
-          end
+          debug("Paused, waiting ...")
+          sleep 1
+        end
       rescue => e
         puts "Error on delaying: #{e}"
         # ignore
@@ -399,21 +399,42 @@ module RWebUnit
     end
 
 
-    def close_all_browsers
-      Watir::IE.close_all
-    end
+	def close_all_browsers
+	  Watir::IE.close_all
+	end
 
-    def is_mac?
-      RUBY_PLATFORM.downcase.include?("darwin")
+	def is_mac?
+       RUBY_PLATFORM.downcase.include?("darwin")
     end
 
     def is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin")
+       RUBY_PLATFORM.downcase.include?("mswin")
     end
 
     def is_linux?
-      RUBY_PLATFORM.downcase.include?("linux")
+       RUBY_PLATFORM.downcase.include?("linux")
     end
+
+	def click_button_in_security_information_popup(button = "&Yes")
+	    if is_windows? && !is_firefox?
+	      WIN32OLE.new('AutoItX3.Control').ControlClick("Security Information",'', button)
+	    end
+	end
+        alias click_security_information_popup click_button_in_security_information_popup
+
+	def click_button_in_security_alert_popup(button = "&Yes")
+	    if is_windows? && !is_firefox?
+	      WIN32OLE.new('AutoItX3.Control').ControlClick("Security Alert",'', button)
+	    end
+	end
+	alias click_security_alert_popup click_button_in_security_alert_popup
+
+	def click_button_in_javascript_popup(button = "OK")
+	    if is_windows? && !is_firefox?
+	      WIN32OLE.new('AutoItX3.Control').ControlClick("Microsoft Internet Explorer",'', button)
+	    end
+	end
+	alias click_javascript_popup click_button_in_javascript_popup
 
   end
 end

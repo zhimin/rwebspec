@@ -350,13 +350,10 @@ module RWebUnit
     def self.attach_browser(how, what, options={})
       default_options = {:browser => "IE"}
       options = default_options.merge(options)
-      puts "debug: atatch browser options: #{how}:#{what} #{options.inspect}"
       site_context = Context.new(options[:base_url]) if options[:base_url]
       if (options[:browser] == "Firefox")
-        puts "debug: about to create a new ff instance: #{$firewatir_loaded}"
         return WebBrowser.new_from_existing(FireWatir::Firefox.new.attach(how, what), site_context)
       else
-        puts "XX: attaching to existing window: #{how}: #{what}"
         return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
       end
     end
