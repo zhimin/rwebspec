@@ -9,6 +9,11 @@ TODO:
      Unfortundately, Firewatir does not support attaching current window
   Firefox Workaround: element_by_id
   
+  0.10.1 (2008-11-08)
+  - Upgrade to support Firewatir 1.6.2
+  - Work around Firefox reuse one window browser issue
+  - Exclude watir/contrib/enabled_popup, user can add themselves
+  
   0.9.10 (2008-10-28)
   [Feature] Better support reuse IE window for testing
 

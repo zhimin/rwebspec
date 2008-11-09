@@ -5,7 +5,8 @@
 
 begin
   require 'watir'
-  require 'watir/contrib/enabled_popup'
+  #TODO, popup not supported yet in latest watir
+  #require 'watir/contrib/enabled_popup'
   require 'watir/contrib/visible'
   require 'watir/close_all'
   $watir_loaded = true
@@ -49,7 +50,7 @@ module RWebUnit
       end
 
       raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
-      if @browser.class == Watir::IE
+      if  $watir_loaded && @browser.class == Watir::IE
         if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
           @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
           @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
@@ -64,13 +65,13 @@ module RWebUnit
     end
 
     def self.reuse(base_url, options)
-      if $ITEST2_BROWSER == "Firefox"  then
-        WebBrowser.new(base_url, nil, options)
-      else
+      if RUBY_PLATFORM.downcase.include?("mswin") && $ITEST2_BROWSER != "Firefox"
         Watir::IE.each do |browser_window|
           return WebBrowser.new(base_url, browser_window, options)
         end
         puts "no browser instance found"
+        WebBrowser.new(base_url, nil, options)
+      else
         WebBrowser.new(base_url, nil, options)
       end
     end
