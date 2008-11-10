@@ -5,8 +5,12 @@
 
 begin
   require 'watir'
-  #TODO, popup not supported yet in latest watir
-  #require 'watir/contrib/enabled_popup'
+  require 'Win32API'
+  require 'dl/import'
+  require 'dl/struct'
+  require 'watir/win32ole'
+  require 'watir/win32'
+  require 'watir/contrib/enabled_popup'
   require 'watir/contrib/visible'
   require 'watir/close_all'
   $watir_loaded = true
