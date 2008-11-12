@@ -11,8 +11,8 @@ rescue LoadError => no_as1_err
   # active_support 2.0 loaded error
 end
 require 'active_support/core_ext'
-
 require 'spec'
+require 'hpricot' # for parsing HTML
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebunit/test_utils"

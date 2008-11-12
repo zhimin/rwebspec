@@ -6,7 +6,6 @@
 #    click_button("submit")
 #
 require File.join(File.dirname(__FILE__), 'itest_plugin')
-require 'hpricot'
 require 'timeout'
 
 module RWebUnit
