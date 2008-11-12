@@ -6,6 +6,7 @@
 #    click_button("submit")
 #
 require File.join(File.dirname(__FILE__), 'itest_plugin')
+require 'hpricot'
 require 'timeout'
 
 module RWebUnit
@@ -340,6 +341,19 @@ module RWebUnit
       @web_browser.start_clicker(button, wait_time, user_input)
       sleep 0.5
     end
+
+	# return plain text view of page
+	def page_text
+	  Hpricot(page_source).to_plain_text
+	end
+
+	def label_with_id(label_id)
+	  label(:id, label_id).text
+	end
+
+	def span_with_id(span_id)
+	  span(:id, span_id).text
+	end
 
     # run a separate process waiting for the popup window to click
     #
