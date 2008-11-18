@@ -5,11 +5,12 @@
 
 begin
   require 'watir'
-  require 'Win32API'
-  require 'dl/import'
-  require 'dl/struct'
-  require 'watir/win32ole'
-  require 'watir/win32'
+#  require 'Win32API'
+#  require 'dl/import'
+#  require 'dl/struct'
+#  require 'watir/win32ole'
+#  require 'watir/win32'
+  require 'watir/ie'
   require 'watir/contrib/enabled_popup'
   require 'watir/contrib/visible'
   require 'watir/close_all'

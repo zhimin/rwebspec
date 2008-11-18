@@ -354,6 +354,11 @@ module RWebUnit
 	  span(:id, span_id).text
 	end
 
+	def cell_with_id(cell_id)
+	  span(:id, cell_id).text
+	end
+	alias table_data_with_id cell_with_id
+
     # run a separate process waiting for the popup window to click
     #
     #

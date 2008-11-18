@@ -36,7 +36,7 @@ Rake::RDocTask.new { |rdoc|
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebunit"
-  s.version = "0.10.2"
+  s.version = "0.10.2.1"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
 # s.description = ""
 
@@ -56,9 +56,10 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   s.files = s.files + Dir.glob( "sample/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   s.files = s.files + Dir.glob( "docs/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-  s.add_dependency(%q<rspec>, [">= 1.1.4"])
-#  s.add_dependency("watir", ">= 1.5.4")
-#  s.add_dependency("firewatir", ">= 1.1")
+  s.add_dependency(%q<rspec>, ["= 1.1.4"])
+  s.add_dependency("commonwatir", ">= 1.6.2")
+#  s.add_dependency("watir", ">= 1.6.2")
+#  s.add_dependency("firewatir", ">= 1.6.2")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

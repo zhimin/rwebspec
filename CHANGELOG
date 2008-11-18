@@ -8,7 +8,11 @@ TODO:
   Firefox: attach browser,
      Unfortundately, Firewatir does not support attaching current window
   Firefox Workaround: element_by_id
-  
+
+  0.10.3
+  - added label_with_id, span_with_id, cell_with_id
+  - better fixes for enabled_popup
+
   0.10.1 (2008-11-08)
   - Upgrade to support Firewatir 1.6.2
   - Work around Firefox reuse one window browser issue
