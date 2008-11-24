@@ -358,7 +358,7 @@ module RWebUnit
 	  span(:id, cell_id).text
 	end
 	alias table_data_with_id cell_with_id
-
+	
     # run a separate process waiting for the popup window to click
     #
     #
@@ -394,7 +394,6 @@ module RWebUnit
       else
         raise "this only support on Windows and on IE"
       end
-
     end
 
 
@@ -432,25 +431,79 @@ module RWebUnit
     def is_linux?
        RUBY_PLATFORM.downcase.include?("linux")
     end
+	
+  # Start background thread to click popup windows
+  #  Warning: 
+  #    Make browser window active
+  #    Don't mouse your mouse to focus other window during test execution
+  def check_for_popups
+    autoit = WIN32OLE.new('AutoItX3.Control')
+    #
+    # Do forever - assumes popups could occur anywhere/anytime in your
+    # application.
+    loop do
+      # Look for window with given title. Give up after 1 second.
+      ret = autoit.WinWait('Windows Internet Explorer', '', 1)
+      #
+      # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
+      if (ret==1) then autoit.Send('{enter}') end
+      #
+      # Take a rest to avoid chewing up cycles and give another thread a go.
+      # Then resume the loop.
+      sleep(3)
+    end
+  end
 
-	def click_button_in_security_information_popup(button = "&Yes")
+  ## 
+  #  Check for "Security Information" and "Security Alert" alert popup, click 'Yes'
+  #
+  # Usage: For individual test suite
+  #
+  # before(:all) do
+  #  $popup = Thread.new { check_for_alerts }  
+  #  open_in_browser
+  #  ...
+  # end
+  #
+  # after(:all) do
+  #   close_browser
+  #   Thread.kill($popup) 
+  # end
+  #
+  # or for all tests, 
+  #  $popup = Thread.new { check_for_alerts }  
+  #  at_exit{ Thread.kill($popup) } 
+  def check_for_security_alerts
+    autoit = WIN32OLE.new('AutoItX3.Control')
+    loop do
+      ["Security Alert", "Security Information"].each do |win_title|
+        ret = autoit.WinWait(win_title, '', 1)
+        if (ret==1) then autoit.Send('{Y}') end
+      end
+      sleep(3)
+    end
+  end 
+  
+	def verify_alert(title = "Microsoft Internet Explorer", button = "OK")
 	    if is_windows? && !is_firefox?
-	      WIN32OLE.new('AutoItX3.Control').ControlClick("Security Information",'', button)
+	      WIN32OLE.new('AutoItX3.Control').ControlClick(title,'', button)
+	    else
+	      raise "This function only supports IE"
 	    end
 	end
-        alias click_security_information_popup click_button_in_security_information_popup
+	
+	def click_button_in_security_information_popup(button = "&Yes")
+		verify_alert("Security Information", "", button)
+	end
+    alias click_security_information_popup click_button_in_security_information_popup
 
 	def click_button_in_security_alert_popup(button = "&Yes")
-	    if is_windows? && !is_firefox?
-	      WIN32OLE.new('AutoItX3.Control').ControlClick("Security Alert",'', button)
-	    end
+		verify_alert("Security Alert", "", button)
 	end
 	alias click_security_alert_popup click_button_in_security_alert_popup
 
 	def click_button_in_javascript_popup(button = "OK")
-	    if is_windows? && !is_firefox?
-	      WIN32OLE.new('AutoItX3.Control').ControlClick("Microsoft Internet Explorer",'', button)
-	    end
+		verify_alert()
 	end
 	alias click_javascript_popup click_button_in_javascript_popup
 
