@@ -33,7 +33,7 @@ module RWebUnit
           # TODO: send multiple trace to be parse with pages.rb
           # next if file =~ /example\/example_methods\.rb$/ or file =~ /example\/example_group_methods\.rb$/ or file =~ /driver\.rb$/ or file =~ /timeout\.rb$/ # don't include rspec or ruby trace
 
-          if file.include?("_spec.rb")
+          if file.include?("_spec.rb") || file.include?("_test.rb") || file.include?("_cmd.rb")
             connect_to_itest(" TRACE", position)
           end
 
