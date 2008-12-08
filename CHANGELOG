@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+  1.0.1
+  [Enhancement] Normalize windows file path before setting upload
+  
+  1.0 (2008-11-25)
+  
 TODO:
   Firefox: check the element is hidden or showing, 
      Checkfor driver.rb: ajax_call_complete_after_element_hidden

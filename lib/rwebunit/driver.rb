@@ -416,12 +416,12 @@ module RWebUnit
     end
 
 
-	def close_all_browsers
-	  Watir::IE.close_all
-	end
+  	def close_all_browsers
+  	  Watir::IE.close_all
+  	end
 
-	def is_mac?
-       RUBY_PLATFORM.downcase.include?("darwin")
+  	def is_mac?
+      RUBY_PLATFORM.downcase.include?("darwin")
     end
 
     def is_windows?

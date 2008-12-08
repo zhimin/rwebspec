@@ -5,11 +5,6 @@
 
 begin
   require 'watir'
-#  require 'Win32API'
-#  require 'dl/import'
-#  require 'dl/struct'
-#  require 'watir/win32ole'
-#  require 'watir/win32'
   require 'watir/ie'
   require 'watir/contrib/enabled_popup'
   require 'watir/contrib/visible'
@@ -339,7 +334,8 @@ module RWebUnit
     end
 
     def select_file_for_upload(file_field, file_path)
-      file_field(:name, file_field).set(file_path)
+      normalized_file_path = is_windows? ? file_path.gsub("/", "\\") : file_path
+      file_field(:name, file_field).set(normalized_file_path)
     end
 
     def start_window(url = nil)
@@ -426,6 +422,11 @@ module RWebUnit
       file_name ||= Time.now.strftime("%Y%m%d%H%M%S") + ".html"
       puts "about to save page: #{File.expand_path(file_name)}"
       File.open(file_name, "w").puts page_source
+    end
+
+
+    def is_windows?
+      RUBY_PLATFORM.downcase.include?("mswin")
     end
 
   end
