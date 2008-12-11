@@ -14,6 +14,8 @@ require 'active_support/core_ext'
 require 'spec'
 require 'hpricot' # for parsing HTML
 
+RWEBUNIT_VERSION = "1.0.1"
+
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebunit/test_utils"
 require File.dirname(__FILE__) + "/rwebunit/web_page"

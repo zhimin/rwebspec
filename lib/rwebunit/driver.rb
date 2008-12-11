@@ -495,7 +495,7 @@ module RWebUnit
 	def click_button_in_security_information_popup(button = "&Yes")
 		verify_alert("Security Information", "", button)
 	end
-    alias click_security_information_popup click_button_in_security_information_popup
+        alias click_security_information_popup click_button_in_security_information_popup
 
 	def click_button_in_security_alert_popup(button = "&Yes")
 		verify_alert("Security Alert", "", button)
@@ -506,6 +506,25 @@ module RWebUnit
 		verify_alert()
 	end
 	alias click_javascript_popup click_button_in_javascript_popup
+
+ ##
+  # This only works for IEs
+  #   Cons:
+  #     - Slow
+  #     - only works in IE
+  #     - does not work for security alert ?
+  def ie_popup_clicker(button_name = "OK", max_wait = 15)
+    require 'watir/contrib/enabled_popup'
+    require 'win32ole'
+    hwnd = ie.enabled_popup(15)
+    if (hwnd)  #yeah! a popup
+      popup = WinClicker.new
+      popup.makeWindowActive(hwnd) #Activate the window.
+      popup.clickWindowsButton_hwnd(hwnd, button_name) #Click the button
+      #popup.clickWindowsButton(/Internet/,button_name,30)
+      popup = nil
+    end
+  end
 
   end
 end
