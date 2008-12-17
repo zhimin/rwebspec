@@ -355,7 +355,7 @@ module RWebUnit
     end
 
     def cell_with_id(cell_id)
-      span(:id, cell_id).text
+      cell(:id, cell_id).text
     end
     alias table_data_with_id cell_with_id
 

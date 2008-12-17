@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+  1.0.2
+  - add more unit tests
+  Fixes cell_with_id
 
   1.0.1
   [Enhancement] Normalize windows file path before setting upload
