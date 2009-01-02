@@ -1,30 +1,33 @@
-rWebUnit is a ruby version of thoughtwork's open source jWebUnit, which 'facilitates creation of
-acceptance tests for web applications'.
 
-rWebUnit wraps the popular web testing framework: WATIR  (jWebUnit depends on HttpUnit).
-Because underlying technologies are different (HttpUnit simulates a browser, Watir drives IE), rWebUnit does
-not support full jWebUnit API.  
+rWebUnit wraps the popular web testing framework WATIR with RSpec Syntax to provide better easy to read automated web test cases. By using iTest/Watir recorder, the rWebUnit test scripts can be recorded in Firefox. iTest2 makes editing/executing test cases with ease. 
 
-For example, 
-  jWebUnit: checkCheckBox("name", "new_value") can set new value for a checkbox, but rWebUnit/Watir can't.
-On the other hand, HttpUnit has limited support of Javascript, You don't need to worry about it in Watir.
+Sample rWebUnit Test:
 
-Here are reasons you might want to try rWebUnit instead of using Watir directly.
+require 'rwebunit'
 
-  * already familar with jWebUnit framework (arguably, more readable tests)
-  * want to use WebTest - Page framework to design your tests (look at sample\kongming_webtest.rb)
-  * want to use a high level of API beyond specific framework: WATIR
-  * utilize common test methods included in rWebUnit (like getToday ...)
-  
-TODO:
-====
-  * file upload (waiting for Watir 2.0?)
-  * script to convert jWebUnit -> rWebUnit, and vice versa.
-  
-FAQ:
-===
-1. How can I run rWebUnit tests without showing IE window?
+spec "Locate a Suncorp Branch" do
+  include RWebUnit::RSpecHelper
 
-A: This is really a WATIR question. Append '-b' option your command.
-   Example: ruby hide_webtest.rb -b
+  before(:all) do
+    open_browser_with("http://suncorp.com.au/")
+  end
+
+  before(:each) do
+    goto_page("/locator")
+  end
+
+  after(:all) do
+    close_browser
+  end
+
+  scenario "Find by extended trading hours" do
+    checkbox(:id, "OpenExtendedTradingHoursSerivceId").click # using Watir directly
+    enter_text("Postcode_Locator__Postcode", "4061") 
+    click_button_with_image("search_button.gif")
+    page_source.should include("Queen St Mall")  
+  end
+end
+
+
+iTest2 Homepage: http://www.itest2.com
   
