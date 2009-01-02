@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'firewatir'
 
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
