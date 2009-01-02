@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="US-ASCII"?>
+<project>
+  <name>MyOrganizedInfo</name>
+  <default_browser>Internet Explorer</default_browser>
+  <environments>
+    <entry name="build_server" default="false">
+      <base_url>http://192.168.0.8:3200</base_url>
+    </entry>
+    <entry name="development" default="true">
+      <base_url>http://192.168.0.2:3200</base_url>
+    </entry>
+    <entry name="staging" default="false">
+      <base_url>http://wenji.agileway.net</base_url>
+    </entry>
+    <entry name="uat" default="false">
+      <base_url>http://wenji-uat.agileway.net</base_url>
+    </entry>
+  </environments>
+  <exclude_dirs></exclude_dirs>
+  <exclude_files></exclude_files>
+  <test_named_as>test_suite</test_named_as>
+  <spec_template></spec_template>
+  <page_template>class NewPage &lt; RWebUnit::AbstractWebPage
+
+  def initialize(browser, text='')    
+    super(browser, text)           
+  end
+
+end</page_template>
+  <test_suite_template>require File.dirname(__FILE__) + '/test_helper.rb'
+
+suite "User authentication module" do
+  include MyOrganizedInfoHelper
+
+  before(:each) do
+    open_browser
+  end
+
+  after(:each) do
+    close_browser
+  end
+
+  test "New test" do
+  end
+
+end
+</test_suite_template>
+</project>

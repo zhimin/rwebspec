@@ -1,0 +1,51 @@
+<?xml version="1.1" encoding="US-ASCII"?>
+<project>
+  <name>iTest2 Demo</name>
+  <default_browser>Internet Explorer</default_browser>
+  <environments>
+    <entry name="build_server" default="false">
+      <base_url>http://localhost:4006</base_url>
+    </entry>
+    <entry name="development" default="true">
+      <base_url>http://localhost:3007</base_url>
+    </entry>
+  </environments>
+  <exclude_dirs></exclude_dirs>
+  <exclude_files></exclude_files>
+  <test_named_as>specification</test_named_as>
+  <spec_template>require 'rwebunit'
+
+spec "TEST_SUITE_NAME" do
+  include RWebUnit::RSpecHelper
+
+  before(:all) do
+    open_browser("http://MYCOOLSITE.COM")
+  end
+
+  before(:each) do
+    goto_page("/")
+  end
+
+  after(:all) do
+    close_browser
+  end
+
+  scenario "TEST_CASE" do
+  end
+
+
+end</spec_template>
+  <page_template></page_template>
+  <test_suite_template>require File.dirname(__FILE__) + "/stack"
+
+test_suite "Stack (empty)" do
+  before(:each) do
+  end
+
+  test_case "Enter test case name" do
+
+  end
+
+end
+</test_suite_template>
+</project>

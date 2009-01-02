@@ -1,0 +1,50 @@
+<?xml version="1.1" encoding="US-ASCII"?>
+<project>
+  <name>Newtours</name>
+  <default_browser>Internet Explorer</default_browser>
+  <environments>
+    <entry name="production" default="false">
+      <base_url>http://newtours.demoaut.com</base_url>
+    </entry>
+  </environments>
+  <exclude_dirs></exclude_dirs>
+  <exclude_files></exclude_files>
+  <test_named_as>test_suite</test_named_as>
+  <spec_template></spec_template>
+  <page_template>
+class NewtoursFlightFinderPage &lt; RWebUnit::AbstractWebPage
+
+  def initialize(browser)
+    super(browser, "IDENTTY_TEXT")
+  end
+
+end</page_template>
+  <test_suite_template>load File.join(File.dirname(__FILE__), "newtours_test_helper.rb")
+
+suite "New Test Suite" do
+  include NewtoursTestHelper
+
+  before(:all) do
+    open_browser
+  end
+
+  before(:each) do
+    begin_at "/"
+    login_as("agileway") # see bottom
+  end
+
+  after(:each) do
+    failsafe { sign_off }
+  end
+
+  after(:all) do
+    failsafe { browser.close if browser.is_firefox? and is_windows? }
+  end
+  
+  test "New test case" do
+  end
+
+
+end
+</test_suite_template>
+</project>
