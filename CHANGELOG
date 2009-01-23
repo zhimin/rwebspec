@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+  1.0.3
+  -- add method: dubugging?
+  -- add utils method: this_dir, this_file
+  
   1.0.2
   - add more unit tests
   Fixes cell_with_id

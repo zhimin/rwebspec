@@ -78,6 +78,16 @@ module RWebUnit
     end
     alias random_string_in_collection random_string_in
 
+    def this_file
+      __FILE__
+    end
+    alias current_file this_file
+    
+    def this_directory
+      File.dirname(this_file)
+    end
+    alias current_directory this_directory
+    
     private
     def format_date(date, date_format = nil)
       date_format ||=  "%02d/%02d/%04d"

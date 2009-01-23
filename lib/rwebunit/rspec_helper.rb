@@ -130,6 +130,11 @@ module RWebUnit
       File.open(file_name, "w").puts content
     end
 
+    # When running 
+    def debugging?
+      $ITEST2_DEBUGGING && $ITEST2_RUNNING_AS == "test_case"
+    end
+    
   end
 
 end
