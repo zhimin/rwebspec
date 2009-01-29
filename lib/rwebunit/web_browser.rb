@@ -113,6 +113,14 @@ module RWebUnit
     end
     alias html_body page_source
 
+    def html
+      @browser.html
+    end
+
+    def text
+      @browser.text
+    end
+
     def page_title
       if is_firefox?
         @browser.title

@@ -21,46 +21,7 @@ module RWebUnit
     include RWebUnit::Utils
     include RWebUnit::Assert
 
-    # open a browser, and set base_url via hash, but does not acually
-    #
-    # example:
-    #   open_browser :base_url => http://localhost:8080
-    #
-    # There are 3 ways to set base url 
-    #   1. pass as first argument
-    #   2. If running using iTest2, used as confiured
-    #   3. Use default value set
-    def open_browser(base_url = nil, options = {})
-      base_url ||= $ITEST2_PROJECT_BASE_URL
-      base_url ||= $BASE_URL 
-      raise "base_url must be set" if base_url.nil?
-      
-      default_options = {:speed => "fast",
-        :visible => true,
-        :highlight_colour => 'yellow',
-        :close_others => true,
-        :start_new => false, 	# start a new browser always
-        :go => true}
 
-      options = default_options.merge options
-      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
-      ($ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
-
-      uri = URI.parse(base_url)
-      uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-      if options[:start_new]
-        @web_browser = WebBrowser.new(uri_base, nil, options)
-      else 
-        # Reuse existing browser
-        @web_browser = WebBrowser.reuse(uri_base, options)
-      end
-
-      if options[:go]
-        (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path)
-      end
-      return @web_browser
-    end
-    alias open_browser_with open_browser
 
     # --
     #  Content

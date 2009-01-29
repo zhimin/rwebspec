@@ -1,9 +1,14 @@
 CHANGELOG
 =========
-  1.0.3
-  -- add method: dubugging?
-  -- add utils method: this_dir, this_file
+  1.0.4
+  Added: WebBrowser.html WebBrowser.text
+  Added: random method in test_utils
+  Enhancemet: close_browser works even no browser started in the test
+  move open_browser to driver.rb
   
+  1.0.3
+  - New set of samples (real life tests)
+
   1.0.2
   - add more unit tests
   Fixes cell_with_id
@@ -14,7 +19,7 @@ CHANGELOG
   1.0 (2008-11-25)
   
 TODO:
-  Firefox: check the element is hidden or showing, 
+  Firefox: check the element is hidden or showing,
      Checkfor driver.rb: ajax_call_complete_after_element_hidden
      does not support outerHtml yet
   Firefox: attach browser,

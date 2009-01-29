@@ -12,6 +12,47 @@ module RWebUnit
   module Driver
     include RWebUnit::ITestPlugin
 
+    # open a browser, and set base_url via hash, but does not acually
+    #
+    # example:
+    #   open_browser :base_url => http://localhost:8080
+    #
+    # There are 3 ways to set base url 
+    #   1. pass as first argument
+    #   2. If running using iTest2, used as confiured
+    #   3. Use default value set
+    def open_browser(base_url = nil, options = {})
+      base_url ||= $ITEST2_PROJECT_BASE_URL
+      base_url ||= $BASE_URL 
+      raise "base_url must be set" if base_url.nil?
+      
+      default_options = {:speed => "fast",
+        :visible => true,
+        :highlight_colour => 'yellow',
+        :close_others => true,
+        :start_new => false, 	# start a new browser always
+        :go => true}
+
+      options = default_options.merge options
+      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
+      ($ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
+
+      uri = URI.parse(base_url)
+      uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+      if options[:start_new]
+        @web_browser = WebBrowser.new(uri_base, nil, options)
+      else 
+        # Reuse existing browser
+        @web_browser = WebBrowser.reuse(uri_base, options)
+      end
+
+      if options[:go]
+        (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path)
+      end
+      return @web_browser
+    end
+    alias open_browser_with open_browser
+    
     def browser
       @web_browser
     end
@@ -92,7 +133,7 @@ module RWebUnit
     end
 
     def is_firefox?
-      @web_browser.is_firefox?
+      @web_browser.is_firefox? if @web_browser
     end
 
     def firefox
@@ -100,8 +141,11 @@ module RWebUnit
     end
 
     def close_browser
-      dump_caller_stack
-      @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
+      if @web_browser
+        @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
+      else
+        WebBrowser.close_all_browsers
+      end
     end
     alias close_ie close_browser
 
@@ -343,7 +387,7 @@ module RWebUnit
 
     # return plain text view of page
     def page_text
-      Hpricot(page_source).to_plain_text
+      @browser.text
     end
 
     def label_with_id(label_id)
@@ -401,143 +445,143 @@ module RWebUnit
     def operation_delay
       begin
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
-            $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-          sleep($ITEST2_OPERATION_DELAY / 1000)
-        end
-
-        while $ITEST2_PAUSE
-          debug("Paused, waiting ...")
-          sleep 1
-        end
-      rescue => e
-        puts "Error on delaying: #{e}"
-        # ignore
-      end
-    end
-
-
-    def close_all_browsers
-      Watir::IE.close_all
-    end
-
-    def is_mac?
-      RUBY_PLATFORM.downcase.include?("darwin")
-    end
-
-    def is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin")
-    end
-
-    def is_linux?
-      RUBY_PLATFORM.downcase.include?("linux")
-    end
-
-    # Start background thread to click popup windows
-    #  Warning:
-    #    Make browser window active
-    #    Don't mouse your mouse to focus other window during test execution
-    def check_for_popups
-      autoit = WIN32OLE.new('AutoItX3.Control')
-      #
-      # Do forever - assumes popups could occur anywhere/anytime in your
-      # application.
-      loop do
-        # Look for window with given title. Give up after 1 second.
-        ret = autoit.WinWait('Windows Internet Explorer', '', 1)
-        #
-        # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
-        if (ret==1) then
-          autoit.Send('{enter}')
-        end
-        #
-        # Take a rest to avoid chewing up cycles and give another thread a go.
-        # Then resume the loop.
-        sleep(3)
-      end
-    end
-
-    ##
-    #  Check for "Security Information" and "Security Alert" alert popup, click 'Yes'
-    #
-    # Usage: For individual test suite
-    #
-    # before(:all) do
-    #  $popup = Thread.new { check_for_alerts }
-    #  open_in_browser
-    #  ...
-    # end
-    #
-    # after(:all) do
-    #   close_browser
-    #   Thread.kill($popup)
-    # end
-    #
-    # or for all tests,
-    #  $popup = Thread.new { check_for_alerts }
-    #  at_exit{ Thread.kill($popup) }
-    def check_for_security_alerts
-      autoit = WIN32OLE.new('AutoItX3.Control')
-      loop do
-        ["Security Alert", "Security Information"].each do |win_title|
-          ret = autoit.WinWait(win_title, '', 1)
-          if (ret==1) then
-            autoit.Send('{Y}')
+          $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+            sleep($ITEST2_OPERATION_DELAY / 1000)
           end
+
+          while $ITEST2_PAUSE
+            debug("Paused, waiting ...")
+            sleep 1
+          end
+        rescue => e
+          puts "Error on delaying: #{e}"
+          # ignore
         end
-        sleep(3)
       end
-    end
 
-    def verify_alert(title = "Microsoft Internet Explorer", button = "OK")
-      if is_windows? && !is_firefox?
-        WIN32OLE.new('AutoItX3.Control').ControlClick(title, '', button)
-      else
-        raise "This function only supports IE"
+
+      def close_all_browsers
+        Watir::IE.close_all
       end
-    end
 
-    def click_button_in_security_information_popup(button = "&Yes")
-      verify_alert("Security Information", "", button)
-    end
-    alias click_security_information_popup click_button_in_security_information_popup
-
-    def click_button_in_security_alert_popup(button = "&Yes")
-      verify_alert("Security Alert", "", button)
-    end
-    alias click_security_alert_popup click_button_in_security_alert_popup
-
-    def click_button_in_javascript_popup(button = "OK")
-      verify_alert()
-    end
-    alias click_javascript_popup click_button_in_javascript_popup
-
-    ##
-    # This only works for IEs
-    #   Cons:
-    #     - Slow
-    #     - only works in IE
-    #     - does not work for security alert ?
-    def ie_popup_clicker(button_name = "OK", max_wait = 15)
-      require 'watir/contrib/enabled_popup'
-      require 'win32ole'
-      hwnd = ie.enabled_popup(15)
-      if (hwnd)  #yeah! a popup
-        popup = WinClicker.new
-        popup.makeWindowActive(hwnd) #Activate the window.
-        popup.clickWindowsButton_hwnd(hwnd, button_name) #Click the button
-        #popup.clickWindowsButton(/Internet/,button_name,30)
-        popup = nil
+      def is_mac?
+        RUBY_PLATFORM.downcase.include?("darwin")
       end
-    end
 
-    ##
-    #  Convert :first to 1, :second to 2, and so on...
-    def symbol_to_sequence(symb)
-      value = { :zero => 0, :first => 1, :second => 2, :third => 3,
-        :fourth => 4, :fifth => 5, :sixth => 6, :seventh => 7,
+      def is_windows?
+        RUBY_PLATFORM.downcase.include?("mswin")
+      end
+
+      def is_linux?
+        RUBY_PLATFORM.downcase.include?("linux")
+      end
+
+      # Start background thread to click popup windows
+      #  Warning:
+      #    Make browser window active
+      #    Don't mouse your mouse to focus other window during test execution
+      def check_for_popups
+        autoit = WIN32OLE.new('AutoItX3.Control')
+        #
+        # Do forever - assumes popups could occur anywhere/anytime in your
+        # application.
+        loop do
+          # Look for window with given title. Give up after 1 second.
+          ret = autoit.WinWait('Windows Internet Explorer', '', 1)
+          #
+          # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
+          if (ret==1) then
+            autoit.Send('{enter}')
+          end
+          #
+          # Take a rest to avoid chewing up cycles and give another thread a go.
+          # Then resume the loop.
+          sleep(3)
+        end
+      end
+
+      ##
+      #  Check for "Security Information" and "Security Alert" alert popup, click 'Yes'
+      #
+      # Usage: For individual test suite
+      #
+      # before(:all) do
+      #  $popup = Thread.new { check_for_alerts }
+      #  open_in_browser
+      #  ...
+      # end
+      #
+      # after(:all) do
+      #   close_browser
+      #   Thread.kill($popup)
+      # end
+      #
+      # or for all tests,
+      #  $popup = Thread.new { check_for_alerts }
+      #  at_exit{ Thread.kill($popup) }
+      def check_for_security_alerts
+        autoit = WIN32OLE.new('AutoItX3.Control')
+        loop do
+          ["Security Alert", "Security Information"].each do |win_title|
+            ret = autoit.WinWait(win_title, '', 1)
+            if (ret==1) then
+              autoit.Send('{Y}')
+            end
+          end
+          sleep(3)
+        end
+      end
+
+      def verify_alert(title = "Microsoft Internet Explorer", button = "OK")
+        if is_windows? && !is_firefox?
+          WIN32OLE.new('AutoItX3.Control').ControlClick(title, '', button)
+        else
+          raise "This function only supports IE"
+        end
+      end
+
+      def click_button_in_security_information_popup(button = "&Yes")
+        verify_alert("Security Information", "", button)
+      end
+      alias click_security_information_popup click_button_in_security_information_popup
+
+      def click_button_in_security_alert_popup(button = "&Yes")
+        verify_alert("Security Alert", "", button)
+      end
+      alias click_security_alert_popup click_button_in_security_alert_popup
+
+      def click_button_in_javascript_popup(button = "OK")
+        verify_alert()
+      end
+      alias click_javascript_popup click_button_in_javascript_popup
+
+      ##
+      # This only works for IEs
+      #   Cons:
+      #     - Slow
+      #     - only works in IE
+      #     - does not work for security alert ?
+      def ie_popup_clicker(button_name = "OK", max_wait = 15)
+        require 'watir/contrib/enabled_popup'
+        require 'win32ole'
+        hwnd = ie.enabled_popup(15)
+        if (hwnd)  #yeah! a popup
+          popup = WinClicker.new
+          popup.makeWindowActive(hwnd) #Activate the window.
+          popup.clickWindowsButton_hwnd(hwnd, button_name) #Click the button
+          #popup.clickWindowsButton(/Internet/,button_name,30)
+          popup = nil
+        end
+      end
+
+      ##
+      #  Convert :first to 1, :second to 2, and so on...
+      def symbol_to_sequence(symb)
+        value = { :zero => 0, :first => 1, :second => 2, :third => 3,
+          :fourth => 4, :fifth => 5, :sixth => 6, :seventh => 7,
         :eighth => 8, :ninth => 9, :tenth => 10 }[symb]
-      return value || symb.to_i
-    end
+        return value || symb.to_i
+      end
 
+    end
   end
-end
