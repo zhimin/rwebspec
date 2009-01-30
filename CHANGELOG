@@ -5,6 +5,7 @@ CHANGELOG
   Added: random method in test_utils
   Enhancemet: close_browser works even no browser started in the test
   move open_browser to driver.rb
+  fixed include rwebunit causing stack too deep error
   
   1.0.3
   - New set of samples (real life tests)

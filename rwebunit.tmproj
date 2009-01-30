@@ -28,12 +28,12 @@
 				<key>column</key>
 				<integer>2</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>9</integer>
+			<integer>0</integer>
 		</dict>
 		<key>README</key>
 		<dict>
@@ -54,9 +54,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>30</integer>
 				<key>line</key>
-				<integer>43</integer>
+				<integer>53</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -82,9 +82,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>27</integer>
-				<key>line</key>
 				<integer>25</integer>
+				<key>line</key>
+				<integer>15</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -140,12 +140,12 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>534</integer>
+				<integer>390</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>445</integer>
+			<integer>370</integer>
 		</dict>
 		<key>lib/rwebunit/itest_plugin.rb</key>
 		<dict>
@@ -182,14 +182,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>34</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>122</integer>
+				<integer>23</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>102</integer>
+			<integer>14</integer>
 		</dict>
 		<key>lib/rwebunit/test_utils.rb</key>
 		<dict>
@@ -210,14 +210,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>43</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>336</integer>
+				<integer>120</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>317</integer>
+			<integer>102</integer>
 		</dict>
 		<key>lib/rwebunit/web_page.rb</key>
 		<dict>
@@ -315,6 +315,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{913, -11}, {856, 746}}</string>
+	<string>{{397, 84}, {856, 746}}</string>
 </dict>
 </plist>

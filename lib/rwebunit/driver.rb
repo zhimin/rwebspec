@@ -153,7 +153,7 @@ module RWebUnit
     def goto_page(page)
       operation_delay
       dump_caller_stack
-      @web_browser.goto_page(page);
+      @web_browser.goto_page(page) if @web_browser
     end
     alias visit goto_page
 
@@ -210,7 +210,8 @@ module RWebUnit
     [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
         dump_caller_stack
-        @web_browser.send(method, *args)
+        # add check for @web_browser, in case the moudule included without init browser
+        @web_browser.send(method, *args) if @web_browser
       end
     end
     alias td cell
@@ -220,7 +221,7 @@ module RWebUnit
     [:back, :forward, :refresh].each do |method|
       define_method(method) do
         dump_caller_stack
-        @web_browser.send(method)
+        @web_browser.send(method)  if @web_browser
       end
     end
     alias refresh_page refresh
@@ -230,7 +231,7 @@ module RWebUnit
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do
         dump_caller_stack
-        @web_browser.send(method)
+        @web_browser.send(method)  if @web_browser
       end
     end
 
@@ -243,7 +244,7 @@ module RWebUnit
       define_method method do |*args|
         dump_caller_stack
         operation_delay
-        @web_browser.send(method, *args)
+        @web_browser.send(method, *args)  if @web_browser
       end
     end
 
