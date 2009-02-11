@@ -1,9 +1,9 @@
-require 'runit/assert'
+require 'test/unit/assertions'
 
 module RWebUnit
   module Assert
 
-    include RUNIT::Assert
+    include Test::Unit::Assertions
 
     #TODO for drag-n-drop, check the postion in list
     #    def assert_position_in_list(list_element_id)

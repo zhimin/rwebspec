@@ -27,13 +27,6 @@ module RWebUnit
     #  Content
     # --
 
-    def page_title
-      @web_browser.page_title
-    end
-
-    def page_source
-      @web_browser.page_source
-    end
 
     def table_source(table_id)
       table(:id, table_id).innerHTML

@@ -25,18 +25,18 @@ module RWebUnit
     alias getToday today
 
 
-    def days_before(days)
+    def days_before(days, format = '%d/%m/%y')
       nil if !(days.instance_of?(Fixnum))
-      format_date(Time.now - days * 24 * 3600)
+      format_date(Time.now - days * 24 * 3600, format)
     end
 
     def yesterday
       days_before(1)
     end
 
-    def days_from_now(days)
+    def days_from_now(days, format = '%d/%m/%y')
       nil if !(days.instance_of?(Fixnum))
-      format_date(Time.now + days * 24 * 3600)
+      format_date(Time.now + days * 24 * 3600, format)
     end
     alias days_after days_from_now
 
