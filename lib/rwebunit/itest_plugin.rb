@@ -6,7 +6,7 @@ module RWebUnit
     def connect_to_itest(message_type, body)
       begin
         the_message = message_type + "|" + body
-        if @last_message == the_message then
+        if @last_message == the_message then # ignore the message same as preivous one
           return
         end
         itest_port = $ITEST2_TRACE_PORT || 7025
@@ -18,6 +18,7 @@ module RWebUnit
       rescue => e
       end
     end
+    alias connect_to_itest2 connect_to_itest
 
     def debug(message)
       connect_to_itest(" DEBUG", message + "\r\n") if $RUN_IN_ITEST
@@ -43,5 +44,6 @@ module RWebUnit
         puts "failed to capture log: #{e}"
       end
     end
+  
   end
 end
