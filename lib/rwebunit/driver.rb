@@ -6,11 +6,13 @@
 #    click_button("submit")
 #
 require File.join(File.dirname(__FILE__), 'itest_plugin')
+require File.join(File.dirname(__FILE__), 'popup')
 require 'timeout'
 
 module RWebUnit
   module Driver
     include RWebUnit::ITestPlugin
+    include RWebUnit::Popup
 
     # open a browser, and set base_url via hash, but does not acually
     #
@@ -69,58 +71,6 @@ module RWebUnit
         page_clazz.new(@web_browser)
       end
     end
-
-    # Using Ruby block syntax to create interesting domain specific language,
-    # may be appeal to someone.
-
-    # Example:
-    #  on @page do |i|
-    #    i.enter_text('btn1')
-    #    i.click_button('btn1')
-    #  end
-    def on(page, &block)
-      yield page
-    end
-
-    # fail the test if user can perform the operation
-    #
-    # Example:
-    #  shall_not_allow { 1/0 }
-    def shall_not_allow(&block)
-      operation_performed_ok = false
-      begin
-        yield
-        operation_performed_ok  = true
-      rescue
-      end
-      raise "Operation shall not be allowed" if operation_performed_ok
-    end
-    alias do_not_allow shall_not_allow
-    alias should_not_allow shall_not_allow
-
-    def allow(&block)
-      operation_performed_ok = false
-      begin
-        yield
-        operation_performed_ok  = true
-      rescue
-      end
-      operation_performed_ok
-    end
-    alias shall_allow  allow
-    alias should_allow  allow
-
-    # try operation, ignore if errors occur
-    #
-    # Example:
-    #   failsafe { click_link("Logout") }  # try logout, but it still OK if not being able to (already logout))
-    def failsafe(&block)
-      begin
-        yield
-      rescue =>e
-      end
-    end
-    alias fail_safe failsafe
 
     def context
       @web_browser.context
@@ -224,6 +174,7 @@ module RWebUnit
     [:back, :forward, :refresh].each do |method|
       define_method(method) do
         dump_caller_stack
+        operation_delay
         @web_browser.send(method)  if @web_browser
       end
     end
@@ -289,6 +240,151 @@ module RWebUnit
       @web_browser.new_popup_window(options)
     end
 
+
+    # Warning: this does not work well with Firefox yet.
+    def element_text(elem_id)
+      @web_browser.element_value(elem_id)
+    end
+
+    def element_by_id(elem_id)
+      @web_browser.element_by_id(elem_id)
+    end
+
+    # ---
+    # For debugging
+    # ---
+    def dump_response(stream = nil)
+      @web_browser.dump_response(stream)
+    end
+
+    def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
+      Dir.mkdir(to_dir) unless File.exists?(to_dir)
+      file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
+      file = File.join(to_dir, file_name)
+      File.new(file, "w").puts page_source
+    end
+
+
+    def page_title
+      @web_browser.page_title
+    end
+
+    def page_source
+      @web_browser.page_source
+    end
+
+    # return plain text view of page
+    def page_text
+      @web_browser.text
+    end
+
+    def label_with_id(label_id)
+      label(:id, label_id).text
+    end
+
+    def span_with_id(span_id)
+      span(:id, span_id).text
+    end
+
+    def cell_with_id(cell_id)
+      cell(:id, cell_id).text
+    end
+    alias table_data_with_id cell_with_id
+
+    def close_all_browsers
+      if is_firefox?
+        FireWatir::Firefox.close_all
+      else
+        Watir::IE.close_all
+      end
+    end
+
+    def is_mac?
+      RUBY_PLATFORM.downcase.include?("darwin")
+    end
+
+    def is_windows?
+      RUBY_PLATFORM.downcase.include?("mswin")
+    end
+
+    def is_linux?
+      RUBY_PLATFORM.downcase.include?("linux")
+    end
+
+    #= Convenient functions
+    #
+
+    # Using Ruby block syntax to create interesting domain specific language,
+    # may be appeal to someone.
+
+    # Example:
+    #  on @page do |i|
+    #    i.enter_text('btn1')
+    #    i.click_button('btn1')
+    #  end
+    def on(page, &block)
+      yield page
+    end
+
+    # fail the test if user can perform the operation
+    #
+    # Example:
+    #  shall_not_allow { 1/0 }
+    def shall_not_allow(&block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok  = true
+      rescue
+      end
+      raise "Operation shall not be allowed" if operation_performed_ok
+    end
+    alias do_not_allow shall_not_allow
+    alias should_not_allow shall_not_allow
+
+    def allow(&block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok  = true
+      rescue
+      end
+      operation_performed_ok
+    end
+    alias shall_allow  allow
+    alias should_allow  allow
+
+    # try operation, ignore if errors occur
+    #
+    # Example:
+    #   failsafe { click_link("Logout") }  # try logout, but it still OK if not being able to (already logout))
+    def failsafe(&block)
+      begin
+        yield
+      rescue =>e
+      end
+    end
+    alias fail_safe failsafe
+
+    # try the operation up to specified times, and sleep given interval (in seconds)
+    # Example
+    #    repeat_try(3, 2) { click_button('Search' }
+    def repeat_try(num_tries, interval = 2, &block)
+      num_tries ||= 1
+      (num_tries - 1).times do |num|
+        begin
+          yield
+          return
+        rescue => e
+          sleep interval
+        end
+      end
+
+      # last try, throw error if still fails
+      yield
+    end
+
+
     # Wait for specific seconds for an Ajax update finish.
     # Trick: In your Rails application,
     #     :loading 	=> "Element.show('search_indicator');
@@ -321,8 +417,10 @@ module RWebUnit
       return false
     end
 
+
     def wait_for_element(element_id, timeout = 30, interval = 0.5)
       start_time = Time.now
+      #TODO might not work with Firefox
       until @web_browser.element_by_id(element_id) do
         sleep(interval)
         if (Time.now - start_time) > timeout
@@ -361,216 +459,6 @@ module RWebUnit
       end
     end
 
-    # Warning: this does not work well with Firefox yet.
-    def element_text(elem_id)
-      @web_browser.element_value(elem_id)
-    end
-
-    def element_by_id(elem_id)
-      @web_browser.element_by_id(elem_id)
-    end
-
-    # ---
-    # For debugging
-    # ---
-    def dump_response(stream = nil)
-      @web_browser.dump_response(stream)
-    end
-
-    def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
-      Dir.mkdir(to_dir) unless File.exists?(to_dir)
-      file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
-      file = File.join(to_dir, file_name)
-      File.new(file, "w").puts page_source
-    end
-
-    def click_popup_window(button, wait_time= 9, user_input=nil )
-      @web_browser.start_clicker(button, wait_time, user_input)
-      sleep 0.5
-    end
-
-
-    def page_title
-      @web_browser.page_title
-    end
-
-    def page_source
-      @web_browser.page_source
-    end
-
-    # return plain text view of page
-    def page_text
-      @web_browser.text
-    end
-
-    def label_with_id(label_id)
-      label(:id, label_id).text
-    end
-
-    def span_with_id(span_id)
-      span(:id, span_id).text
-    end
-
-    def cell_with_id(cell_id)
-      cell(:id, cell_id).text
-    end
-    alias table_data_with_id cell_with_id
-
-    # run a separate process waiting for the popup window to click
-    #
-    #
-    def prepare_to_click_button_in_popup(button = "OK", wait_time = 3)
-      #  !@web_browser.is_firefox?
-      # TODO: firefox is OK
-      if RUBY_PLATFORM =~ /mswin/  then
-        start_checking_js_dialog(button, wait_time)
-      else
-        raise "this only support on Windows and on IE"
-      end
-    end
-
-    # Start a background process to click the button on a javascript popup window
-    def start_checking_js_dialog(button = "OK", wait_time = 3)
-      w = WinClicker.new
-      longName = File.expand_path(File.dirname(__FILE__)).gsub("/", "\\" )
-      shortName = w.getShortFileName(longName)
-      c = "start ruby #{shortName}\\clickJSDialog.rb #{button} #{wait_time} "
-      w.winsystem(c)
-      w = nil
-    end
-
-    # Click the button in javascript popup dialog
-    # Usage:
-    #   click_button_in_popup_after { click_link('Cancel')}
-    #   click_button_in_popup_after("OK") { click_link('Cancel')}
-    #
-    def click_button_in_popup_after(options = {:button => "OK", :wait_time => 3}, &block)
-      if is_windows?  then
-        start_checking_js_dialog(options[:button], options[:wait_time])
-        yield
-      else
-        raise "this only support on Windows and on IE"
-      end
-    end
-
-
-    def close_all_browsers
-      if is_firefox?
-        FireWatir::Firefox.close_all
-      else
-        Watir::IE.close_all
-      end
-    end
-
-    def is_mac?
-      RUBY_PLATFORM.downcase.include?("darwin")
-    end
-
-    def is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin")
-    end
-
-    def is_linux?
-      RUBY_PLATFORM.downcase.include?("linux")
-    end
-
-    # Start background thread to click popup windows
-    #  Warning:
-    #    Make browser window active
-    #    Don't mouse your mouse to focus other window during test execution
-    def check_for_popups
-      autoit = WIN32OLE.new('AutoItX3.Control')
-      #
-      # Do forever - assumes popups could occur anywhere/anytime in your
-      # application.
-      loop do
-        # Look for window with given title. Give up after 1 second.
-        ret = autoit.WinWait('Windows Internet Explorer', '', 1)
-        #
-        # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
-        if (ret==1) then
-          autoit.Send('{enter}')
-        end
-        #
-        # Take a rest to avoid chewing up cycles and give another thread a go.
-        # Then resume the loop.
-        sleep(3)
-      end
-    end
-
-    ##
-    #  Check for "Security Information" and "Security Alert" alert popup, click 'Yes'
-    #
-    # Usage: For individual test suite
-    #
-    # before(:all) do
-    #  $popup = Thread.new { check_for_alerts }
-    #  open_in_browser
-    #  ...
-    # end
-    #
-    # after(:all) do
-    #   close_browser
-    #   Thread.kill($popup)
-    # end
-    #
-    # or for all tests,
-    #  $popup = Thread.new { check_for_alerts }
-    #  at_exit{ Thread.kill($popup) }
-    def check_for_security_alerts
-      autoit = WIN32OLE.new('AutoItX3.Control')
-      loop do
-        ["Security Alert", "Security Information"].each do |win_title|
-          ret = autoit.WinWait(win_title, '', 1)
-          if (ret==1) then
-            autoit.Send('{Y}')
-          end
-        end
-        sleep(3)
-      end
-    end
-
-    def verify_alert(title = "Microsoft Internet Explorer", button = "OK")
-      if is_windows? && !is_firefox?
-        WIN32OLE.new('AutoItX3.Control').ControlClick(title, '', button)
-      else
-        raise "This function only supports IE"
-      end
-    end
-
-    def click_button_in_security_information_popup(button = "&Yes")
-      verify_alert("Security Information", "", button)
-    end
-    alias click_security_information_popup click_button_in_security_information_popup
-
-    def click_button_in_security_alert_popup(button = "&Yes")
-      verify_alert("Security Alert", "", button)
-    end
-    alias click_security_alert_popup click_button_in_security_alert_popup
-
-    def click_button_in_javascript_popup(button = "OK")
-      verify_alert()
-    end
-    alias click_javascript_popup click_button_in_javascript_popup
-
-    ##
-    # This only works for IEs
-    #   Cons:
-    #     - Slow
-    #     - only works in IE
-    #     - does not work for security alert ?
-    def ie_popup_clicker(button_name = "OK", max_wait = 15)
-      require 'watir/contrib/enabled_popup'
-      require 'win32ole'
-      hwnd = ie.enabled_popup(15)
-      if (hwnd)  #yeah! a popup
-        popup = WinClicker.new
-        popup.makeWindowActive(hwnd) #Activate the window.
-        popup.clickWindowsButton_hwnd(hwnd, button_name) #Click the button
-        #popup.clickWindowsButton(/Internet/,button_name,30)
-        popup = nil
-      end
-    end
 
     ##
     #  Convert :first to 1, :second to 2, and so on...

@@ -21,12 +21,9 @@ module RWebUnit
     include RWebUnit::Utils
     include RWebUnit::Assert
 
-
-
     # --
     #  Content
     # --
-
 
     def table_source(table_id)
       table(:id, table_id).innerHTML
@@ -46,9 +43,6 @@ module RWebUnit
       @web_browser.get_html_in_element(elem_id)
     end
 
-    def element_by_id(elem_id)
-      @web_browser.element_by_id(elem_id)
-    end
 
     def button_by_id(button_id)
       button(:id, button_id)
