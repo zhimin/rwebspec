@@ -476,18 +476,18 @@ module RWebUnit
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
           $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
             sleep($ITEST2_OPERATION_DELAY / 1000)
-          end
+        end
 
-          while $ITEST2_PAUSE
+        while $ITEST2_PAUSE
             debug("Paused, waiting ...")
             sleep 1
-          end
-        rescue => e
+        end
+      rescue => e
           puts "Error on delaying: #{e}"
           # ignore
-        end
       end
-
     end
-  end
+
+   end
 end
+  
