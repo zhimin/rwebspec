@@ -11,22 +11,44 @@ module RWebUnit
     # default date format returned is 29/12/2007.
     # if supplied parameter is not '%m/%d/%Y' -> 12/29/2007
     # Otherwise, "2007-12-29", which is most approiate date format
-    def today(format = '%d/%m/%y')
-      if format.downcase == '%d/%m/%y'
-        format_date(Time.now, "%02d/%02d/%04d")
-      elsif format.downcase == '%m/%d/%y'
-        sprintf("%02d/%02d/%04d", Time.now.month, Time.now.day, Time.now.year)
-      else
-        sprintf("%04d-%02d-%02d", Time.now.year, Time.now.month, Time.now.day)
-      end
+    #
+    #  %a - The abbreviated weekday name (``Sun'')
+#  %A - The  full  weekday  name (``Sunday'')
+#  %b - The abbreviated month name (``Jan'')
+#  %B - The  full  month  name (``January'')
+#  %c - The preferred local date and time representation
+#  %d - Day of the month (01..31)
+#  %H - Hour of the day, 24-hour clock (00..23)
+#  %I - Hour of the day, 12-hour clock (01..12)
+#  %j - Day of the year (001..366)
+#  %m - Month of the year (01..12)
+#  %M - Minute of the hour (00..59)
+#  %p - Meridian indicator (``AM''  or  ``PM'')
+#  %S - Second of the minute (00..60)
+#  %U - Week  number  of the current year,
+#          starting with the first Sunday as the first
+#          day of the first week (00..53)
+#  %W - Week  number  of the current year,
+#          starting with the first Monday as the first
+#          day of the first week (00..53)
+#  %w - Day of the week (Sunday is 0, 0..6)
+#  %x - Preferred representation for the date alone, no time
+#  %X - Preferred representation for the time alone, no date
+#  %y - Year without a century (00..99)
+#  %Y - Year with century
+#  %Z - Time zone name
+#  %% - Literal ``%'' character
+
+    def today(format = '%d/%m/%Y')
+    format_date(Time.now, format)   
     end
     alias getToday_AU today
     alias getToday_US today
     alias getToday today
 
 
-    def days_before(days, format = '%d/%m/%y')
-      nil if !(days.instance_of?(Fixnum))
+    def days_before(days, format = '%d/%m/%Y')
+      nil if !(days.instance_of?(Fixnum))     
       format_date(Time.now - days * 24 * 3600, format)
     end
 
@@ -34,7 +56,7 @@ module RWebUnit
       days_before(1)
     end
 
-    def days_from_now(days, format = '%d/%m/%y')
+    def days_from_now(days, format = '%d/%m/%Y')
       nil if !(days.instance_of?(Fixnum))
       format_date(Time.now + days * 24 * 3600, format)
     end
@@ -141,10 +163,9 @@ module RWebUnit
        end
      end
 
-    def format_date(date, date_format = nil)
-      date_format ||=  "%02d/%02d/%04d"
-      sprintf(date_format, date.day, date.month, date.year)
+    def format_date(date, date_format = '%d/%m/%Y')
+      date.strftime(date_format)
     end
-
+    
   end
 end

@@ -6,7 +6,7 @@ CHANGELOG
   Changed dependency (Assertions) for test-unit 2.0.2, ruby 1.9.1 ready
   Extract popup.rb out
   Added repeat_try in driver.rb
-  
+  remove should_not_allow, should_allow. Important!!! don't define methods start with should_not_, should_  
     
   1.0.4
   Added: WebBrowser.html WebBrowser.text

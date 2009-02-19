@@ -340,7 +340,6 @@ module RWebUnit
       raise "Operation shall not be allowed" if operation_performed_ok
     end
     alias do_not_allow shall_not_allow
-    alias should_not_allow shall_not_allow
 
     def allow(&block)
       operation_performed_ok = false
@@ -352,7 +351,6 @@ module RWebUnit
       operation_performed_ok
     end
     alias shall_allow  allow
-    alias should_allow  allow
 
     # try operation, ignore if errors occur
     #

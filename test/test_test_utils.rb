@@ -17,7 +17,6 @@ class TestWebTestCase < Test::Unit::TestCase
       today_str = sprintf("%02d/%02d/%04d", Time.now.day, Time.now.month, Time.now.year)
       assert_equal(today_str, getToday)
       assert_equal(today_str, today)
-      assert_equal(sprintf("%04d-%02d-%02d", Time.now.year, Time.now.month, Time.now.day), today("blah"))
       assert_equal(sprintf("%02d/%02d/%04d", Time.now.month, Time.now.day,  Time.now.year), today("%m/%d/%Y"))
    end
 
