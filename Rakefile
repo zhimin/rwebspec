@@ -1,15 +1,13 @@
 require 'rubygems'
-require 'rake/testtask'
+require 'spec/rake/spectask'
 require 'rake/rdoctask'
-
-Gem::manage_gems
 require 'rake/gempackagetask'
 
 $:.unshift(File.dirname(__FILE__) + "/lib")
 #require 'rwebunit'
 
 desc "Default task"
-task :default => [ :clean, :test, :doc, :gem]
+task :default => [ :clean, :spec, :doc, :gem]
 
 desc "Clean generated files"
 task :clean do
@@ -17,11 +15,12 @@ task :clean do
   rm_rf 'doc'
 end
 
-# run the unit tests
-Rake::TestTask.new("test") { |t|
-  t.test_files = FileList['test/test*.rb']
-  t.verbose= true
-}
+desc 'Run all specs'
+Spec::Rake::SpecTask.new('spec') do |t|
+  t.spec_opts = ['--format', 'specdoc', '--colour']
+  # t.libs = ["lib", "server/lib" ]
+  t.spec_files = Dir['spec/**/*_spec.rb'].sort
+end
 
 # Generate the RDoc documentation
 Rake::RDocTask.new { |rdoc|
