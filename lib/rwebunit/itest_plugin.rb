@@ -11,7 +11,7 @@ module RWebUnit
         end
         itest_port = $ITEST2_TRACE_PORT || 7025
         itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
-        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, 'localhost'))
+        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, '127.0.0.1'))
         itest_socket.puts(the_message)
         @last_message = the_message
         itest_socket.close
