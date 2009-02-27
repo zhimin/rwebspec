@@ -168,11 +168,12 @@ module RWebUnit
     end
     alias close close_browser
 
+    #TODO determine browser type, check FireWatir support or not 
     def self.close_all_browsers
-      if is_firefox? then
-        @browser.close_all
+      if is_windows?
+      Watir::IE.close_all
       else
-        Watir::IE.close_all
+       # raise "not supported in FireFox yet." 
       end
     end
 
@@ -433,7 +434,7 @@ module RWebUnit
     end
 
 
-    def is_windows?
+    def self.is_windows?
       RUBY_PLATFORM.downcase.include?("mswin")
     end
 
