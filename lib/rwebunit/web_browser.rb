@@ -43,6 +43,15 @@ module RWebUnit
         @browser = existing_browser
       else
         if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
+          # JSSH is running, 9997
+          begin
+          require 'net/telnet'
+          firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
+          FireWatir::Firefox.firefox_started = true
+        rescue => e
+          # puts "debug: XXX #{e}" 
+          sleep 1
+        end
           @browser = FireWatir::Firefox.start(base_url)
         elsif $watir_loaded
           @browser = Watir::IE.new

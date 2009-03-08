@@ -1,6 +1,9 @@
 CHANGELOG
 =========
-
+  1.1.1
+  add open_browser.rb, check for firefox with jssh is running
+  added assert_exists, assert_not_exists
+  
   1.1
   
   Changed dependency (Assertions) for test-unit 2.0.2, ruby 1.9.1 ready

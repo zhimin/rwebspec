@@ -246,5 +246,36 @@ module RWebUnit
       assert(false, message)
     end
 
+
+    # Check a HTML element exists or not
+    # Example:
+    #  assert_exists("label", "receipt_date")
+    #  assert_exists(:span, :receipt_date)
+    def assert_exists(tag, id) {}
+      begin
+        eval("#{tag}(:id, '#{id.to_s}').text")
+      rescue => e
+        raise "Expected wlement '#{tag}' with id: '#{id}' not found, #{e}"
+      end
+    end
+    alias assert_exists? assert_exists
+
+    def assert_not_exists(tag, id) {}
+      begin
+        eval("#{tag}(:id, '#{id.to_s˝}').text")
+        raise "Unexpected element '#{tag}' + with id: '#{id}' found"
+      rescue => e
+      end
+    end
+    alias assert_not_exists? assert_not_exists
+    
+    def assert_visible(message = "", &block)
+      raise "todo"
+    end
+    
+    def assert_not_visible(message = "", &block)
+      raise "todo"
+    end
+    
   end
 end

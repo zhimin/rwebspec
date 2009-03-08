@@ -367,14 +367,16 @@ module RWebUnit
     # try the operation up to specified times, and sleep given interval (in seconds)
     # Example
     #    repeat_try(3, 2) { click_button('Search' }
-    #    repeat_try { click_button('Search' } # using default 5 tries, 1 second interval
-    def repeat_try(num_tries = 5, interval = 1, &block)
+    #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
+    def repeat_try(num_tries = 5, interval = 2, &block)
       num_tries ||= 1
       (num_tries - 1).times do |num|
         begin
+          # puts "debug: try #{num}"
           yield
           return
         rescue => e
+          # puts "debug: #{num} failed: #{e}"
           sleep interval
         end
       end
