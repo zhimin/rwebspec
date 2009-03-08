@@ -251,31 +251,42 @@ module RWebUnit
     # Example:
     #  assert_exists("label", "receipt_date")
     #  assert_exists(:span, :receipt_date)
-    def assert_exists(tag, id) {}
+    def assert_exists(tag, element_id) {}
       begin
-        eval("#{tag}(:id, '#{id.to_s}').text")
+        eval("#{tag}(:id, '#{element_id.to_s}').text")
       rescue => e
-        raise "Expected wlement '#{tag}' with id: '#{id}' not found, #{e}"
+        raise "Expected wlement '#{tag}' with id: '#{element_id}' not found, #{e}"
       end
     end
     alias assert_exists? assert_exists
+    alias assert_element_exists assert_exists
 
-    def assert_not_exists(tag, id) {}
+    def assert_not_exists(tag, element_id) {}
       begin
-        eval("#{tag}(:id, '#{id.to_s˝}').text")
-        raise "Unexpected element '#{tag}' + with id: '#{id}' found"
+        eval("#{tag}(:id, '#{element_id.to_s}').text")
+        raise "Unexpected element '#{tag}' + with id: '#{element_id}' found"
       rescue => e
       end
     end
     alias assert_not_exists? assert_not_exists
+    alias assert_element_not_exists? assert_not_exists
     
-    def assert_visible(message = "", &block)
-      raise "todo"
+    def assert_visible(tag, element_id)
+      begin
+        assert(eval("#{tag}(:id, '#{element_id.to_s}').visible?"))
+      rescue => e
+		raise "Expected wlement '#{tag}' with id: '#{element_id}' not found, #{e}"
+      end   
     end
     
-    def assert_not_visible(message = "", &block)
-      raise "todo"
+    def assert_hidden(tag, element_id)
+      begin
+        assert(!eval("#{tag}(:id, '#{element_id.to_s}').visible?"))
+      rescue => e
+		raise "Expected wlement '#{tag}' with id: '#{element_id}' not found, #{e}"
+      end   
     end
+    alias assert_not_visible assert_hidden
     
   end
 end

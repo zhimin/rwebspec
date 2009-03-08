@@ -179,8 +179,8 @@ module RWebUnit
 
     #TODO determine browser type, check FireWatir support or not 
     def self.close_all_browsers
-      if is_windows?
-      Watir::IE.close_all
+      if RUBY_PLATFORM.downcase.include?("mswin")
+        Watir::IE.close_all
       else
        # raise "not supported in FireFox yet." 
       end
@@ -352,7 +352,7 @@ module RWebUnit
     end
 
     def select_file_for_upload(file_field, file_path)
-      normalized_file_path = is_windows? ? file_path.gsub("/", "\\") : file_path
+      normalized_file_path = RUBY_PLATFORM.downcase.include?("mswin") ? file_path.gsub("/", "\\") : file_path
       file_field(:name, file_field).set(normalized_file_path)
     end
 

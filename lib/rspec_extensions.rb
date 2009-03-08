@@ -44,6 +44,7 @@ module Spec
       alias_method :scenario, :it
       alias_method :story, :it
       alias_method :test_case, :it
+      alias_method :use_case, :it
       alias_method :test, :it
     end
   end
