@@ -110,6 +110,10 @@ module RWebUnit
     end
     alias visit goto_page
 
+	def goto_url(url)
+	  @web_browser.goto_url url
+	end
+	
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
       begin

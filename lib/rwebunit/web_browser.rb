@@ -236,6 +236,10 @@ module RWebUnit
       @browser.goto full_url(page);
     end
 
+    def goto_url(url)
+      @browser.goto url
+    end
+    
     # text fields
     def enter_text_into_field_with_name(name, text)
       if is_firefox?
