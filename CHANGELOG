@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+  1.1.3
+   add open_existing_browser
 
   1.1.2 (2009-03-13)
   added goto_url
