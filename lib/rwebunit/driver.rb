@@ -128,7 +128,7 @@ module RWebUnit
 	#	example: 
 	#     use_current_browser(:title, /.*/) # use what ever browser window
 	#     use_current_browser(:title, "iTest2") # use browser window with title "iTest2" 	
-	def self.use_current_browser(how = :title, what = /.*/)
+	def use_current_browser(how = :title, what = /.*/)
 	   @web_browser = WebBrowser.attach_browser(how, what)
 	end
 	
