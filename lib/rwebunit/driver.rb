@@ -14,6 +14,9 @@ module RWebUnit
     include RWebUnit::ITestPlugin
     include RWebUnit::Popup
 
+    @@default_polling_interval = 1 # second
+    @@default_timeout = 30 # seconds
+
     # open a browser, and set base_url via hash, but does not acually
     #
     # example:
@@ -55,10 +58,37 @@ module RWebUnit
     end
     alias open_browser_with open_browser
 
+    # return the underlying RWebUnit::Browser object
     def browser
       @web_browser
     end
 
+
+    # Close the current browser window (started by the script). If no browser started, then close
+    # all browser windows.
+    #
+    def close_browser
+      if @web_browser
+        # Old iTest2 version
+        # @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
+        @web_browser.close_browser
+      else
+        WebBrowser.close_all_browsers
+      end
+    end
+    alias close_ie close_browser
+
+
+    # Close all opening browser windows 
+    #
+    def close_all_browsers
+      if is_firefox?
+        FireWatir::Firefox.close_all
+      else
+        Watir::IE.close_all
+      end
+    end
+    
     # Verify the next page following an operation.
     #
     # Typical usage:
@@ -80,29 +110,27 @@ module RWebUnit
       dump_caller_stack
       @web_browser.begin_at(url)
     end
-
+    
+    # Return the Watir::IE instance
+    #
     def ie
       @web_browser.ie
     end
 
+    # Return the FireWatir::Firefox instance
+    #
+    def firefox
+      @web_browser.firefox
+    end
+    
     def is_firefox?
       @web_browser.is_firefox? if @web_browser
     end
 
-    def firefox
-      @web_browser.firefox
-    end
-
-    def close_browser
-      if @web_browser
-        @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
-      else
-        WebBrowser.close_all_browsers
-      end
-    end
-    alias close_ie close_browser
 
 
+    # Go the 
+    #
     def goto_page(page)
       operation_delay
       dump_caller_stack
@@ -110,10 +138,10 @@ module RWebUnit
     end
     alias visit goto_page
 
-	def goto_url(url)
-	  @web_browser.goto_url url
-	end
-	
+    def goto_url(url)
+      @web_browser.goto_url url
+    end
+
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
       begin
@@ -124,14 +152,14 @@ module RWebUnit
       WebBrowser.attach_browser(how, what, options)
     end
 
-	# Reuse current an opened browser window instead of opening a new one
-	#	example: 
-	#     use_current_browser(:title, /.*/) # use what ever browser window
-	#     use_current_browser(:title, "iTest2") # use browser window with title "iTest2" 	
-	def use_current_browser(how = :title, what = /.*/)
-	   @web_browser = WebBrowser.attach_browser(how, what)
-	end
-	
+    # Reuse current an opened browser window instead of opening a new one
+    #	example:
+    #     use_current_browser(:title, /.*/) # use what ever browser window
+    #     use_current_browser(:title, "iTest2") # use browser window with title "iTest2"
+    def use_current_browser(how = :title, what = /.*/)
+      @web_browser = WebBrowser.attach_browser(how, what)
+    end
+
     ##
     #  Delegate to WebTester
     #
@@ -303,13 +331,6 @@ module RWebUnit
     end
     alias table_data_with_id cell_with_id
 
-    def close_all_browsers
-      if is_firefox?
-        FireWatir::Firefox.close_all
-      else
-        Watir::IE.close_all
-      end
-    end
 
     def is_mac?
       RUBY_PLATFORM.downcase.include?("darwin")
@@ -376,27 +397,20 @@ module RWebUnit
     end
     alias fail_safe failsafe
 
-    # try the operation up to specified times, and sleep given interval (in seconds)
-    # Example
-    #    repeat_try(3, 2) { click_button('Search' }
-    #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
-    def repeat_try(num_tries = 5, interval = 2, &block)
-      num_tries ||= 1
-      (num_tries - 1).times do |num|
-        begin
-          # puts "debug: try #{num}"
-          yield
-          return
-        rescue => e
-          # puts "debug: #{num} failed: #{e}"
-          sleep interval
-        end
-      end
 
-      # last try, throw error if still fails
-      yield
+    # Execute the provided block until either (1) it returns true, or
+    # (2) the timeout (in seconds) has been reached. If the timeout is reached,
+    # a TimeOutException will be raised. The block will always
+     # execute at least once.  
+     # 
+     # Examples: 
+     #   wait_until {puts 'hello'}
+     #   wait_until { div(:id, :receipt_date).exists? }
+     #
+    def wait_until(timeout = @@default_timeout, polling_interval = @default_polling_interval, &block)
+      Watir::Waiter.wait_until(timeout, polling_interval)
     end
-
+    alias repeat_try wait_until
 
     # Wait for specific seconds for an Ajax update finish.
     # Trick: In your Rails application,
@@ -413,7 +427,7 @@ module RWebUnit
     #
     # Warning: this method has not been fully tested, if you are not using Rails, change your parameter accordingly.
     #
-    def ajax_wait_for_element(element_id, seconds, status='show', check_interval=2)
+    def ajax_wait_for_element(element_id, seconds, status='show', check_interval = @@default_polling_interval)
       count = 0
       check_interval = 1 if check_interval < 1 or check_interval > seconds
       while count < (seconds / check_interval) do
@@ -430,8 +444,8 @@ module RWebUnit
       return false
     end
 
-
-    def wait_for_element(element_id, timeout = 30, interval = 0.5)
+=begin
+    def wait_for_element(element_id, timeout = @@default_timeout, interval = @@default_polling_interval)
       start_time = Time.now
       #TODO might not work with Firefox
       until @web_browser.element_by_id(element_id) do
@@ -473,33 +487,66 @@ module RWebUnit
     end
 
 
+
+    # try the operation up to specified times, and sleep given interval (in seconds)
+    # Example
+    #    repeat_try(3, 2) { click_button('Search' }
+    #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
+    def repeat_try(num_tries = @default_timeout, interval = @default_polling_interval, &block)
+      num_tries ||= 1
+      (num_tries - 1).times do |num|
+        begin
+          # puts "debug: try #{num}"
+          yield
+          return
+        rescue => e
+          # puts "debug: #{num} failed: #{e}"
+          sleep interval
+        end
+      end
+
+      # last try, throw error if still fails
+      yield
+    end
+    
+=end
+    
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
-      value = { :zero => 0, :first => 1, :second => 2, :third => 3,
-        :fourth => 4, :fifth => 5, :sixth => 6, :seventh => 7,
-      :eighth => 8, :ninth => 9, :tenth => 10 }[symb]
+      value = { :zero => 0,
+        :first => 1,
+        :second => 2,
+        :third => 3,
+        :fourth => 4,
+        :fifth => 5,
+        :sixth => 6,
+        :seventh => 7,
+        :eighth => 8,
+        :ninth => 9,
+      :tenth => 10 }[symb]
       return value || symb.to_i
     end
 
+    private
+    
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
           $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
             sleep($ITEST2_OPERATION_DELAY / 1000)
-        end
+          end
 
-        while $ITEST2_PAUSE
+          while $ITEST2_PAUSE
             debug("Paused, waiting ...")
             sleep 1
-        end
-      rescue => e
+          end
+        rescue => e
           puts "Error on delaying: #{e}"
           # ignore
+        end
       end
-    end
 
-   end
-end
-  
+    end
+  end

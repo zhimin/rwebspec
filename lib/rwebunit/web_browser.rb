@@ -45,13 +45,13 @@ module RWebUnit
         if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
           # JSSH is running, 9997
           begin
-          require 'net/telnet'
-          firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
-          FireWatir::Firefox.firefox_started = true
-        rescue => e
-          # puts "debug: XXX #{e}" 
-          sleep 1
-        end
+            require 'net/telnet'
+            firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
+            FireWatir::Firefox.firefox_started = true
+          rescue => e
+            # puts "debug: XXX #{e}"
+            sleep 1
+          end
           @browser = FireWatir::Firefox.start(base_url)
         elsif $watir_loaded
           @browser = Watir::IE.new
@@ -177,12 +177,12 @@ module RWebUnit
     end
     alias close close_browser
 
-    #TODO determine browser type, check FireWatir support or not 
+    #TODO determine browser type, check FireWatir support or not
     def self.close_all_browsers
       if RUBY_PLATFORM.downcase.include?("mswin")
         Watir::IE.close_all
       else
-       # raise "not supported in FireFox yet." 
+        # raise "not supported in FireFox yet."
       end
     end
 
@@ -239,7 +239,7 @@ module RWebUnit
     def goto_url(url)
       @browser.goto url
     end
-    
+
     # text fields
     def enter_text_into_field_with_name(name, text)
       if is_firefox?

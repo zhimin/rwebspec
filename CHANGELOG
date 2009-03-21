@@ -1,5 +1,18 @@
 CHANGELOG
 =========
+
+  1.2
+  REVISIT all APIs  
+  - assertions
+     - assert_not (new)
+     - wait_until (new) 
+     - assert_text_field_value (new)
+	 - assert_text_present_in_table (renamed)
+     - assert_element_present (removed, use assert div(:id, "").exists?)
+  - add unit tests
+  - run unit test against the test page in Firefox Browser       
+  - major documentation update
+   
   1.1.3
    add open_existing_browser
 

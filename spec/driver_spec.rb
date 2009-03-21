@@ -15,6 +15,11 @@ specification "Driver" do
   include RWebUnit::Driver
   include RWebUnit::Assert
 
+  before(:all) do
+    test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
+    open_browser(test_page_file, {:firefox => true})
+  end
+
   #ABC
   story "expect_page" do
     new_page = expect_page MockPage
