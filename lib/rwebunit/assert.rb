@@ -279,7 +279,7 @@ module RWebUnit
     # Assert given text appear inside a table (inside <table> tag like below) 
     #
     # <table id="t1">
-    # <!-- check start here -->
+    #
     # <tbody>
     #   <tr id="row_1">
     #     <td id="cell_1_1">A</td>
@@ -290,7 +290,7 @@ module RWebUnit
     #     <td id="cell_2_2">b</td>
     #   </tr>
     # </tbody>
-    # <!-- check end here -->
+    #
     # </table>
     #
     # The plain text view of above table

@@ -46,6 +46,40 @@ background: #f4f4ed;
   </script>
   <script src="prototype.js" type="text/javascript"></script>
 
+<script language="javascript" type="text/javascript">
+
+  today  = new Date();
+  var curr_date = today.getDate();
+  var curr_month = today.getMonth();
+  curr_month++;
+  var curr_year = today.getFullYear();
+  var date_prefix = "";
+  if (curr_date < 10) {
+    date_prefix = "0";
+  }
+  var month_prefix = "";
+  if (curr_month  < 10) {
+    month_prefix = "0";
+  }
+  var today_str = date_prefix + curr_date + "/" + month_prefix + curr_month + "/" + curr_year;
+
+  var rand_no = 1;
+
+  function transfer() {
+    Element.show('spinner');
+    var rand_no = Math.floor(10000*Math.random()) + 1;
+    setTimeout( "show_receipt(" + rand_no + ")", rand_no );
+  }
+
+  function show_receipt(msecs) {
+    Element.hide('spinner');
+     $('receipt').replace("<p>Receipt No: <label>" + msecs + "</label> <br/>Receipt Date: <label id='date'>" + today_str +  "</label></p>");
+  }
+
+
+</script>
+
+
 </head>
 
 <body>
@@ -138,52 +172,70 @@ background: #f4f4ed;
 </form>
 <h2>Specific Text</h2>
 
-<p><b>Label Tag</b> &nbsp; 1: <label id="label_1">First Label</label> &nbsp; &nbsp; 2: <label id="label_2">Second
-  Label</label> <br/>
-  <b>Span Tag</b> &nbsp;&nbsp; 1: <span id="span_1">First Span</span> &nbsp; &nbsp; 2: <span
-    id="span_2">Second Span</span></p>
+<table border="0" width="100%" cellspacing="5" cellpadding="5">
+	<tr>
+		<td width="40%">
+			<p><b>Label Tag</b> &nbsp; 1: <label id="label_1">First Label</label> &nbsp; &nbsp; 2: <label id="label_2">Second
+			  Label</label> <br/>
+			  <b>Span Tag</b> &nbsp;&nbsp; 1: <span id="span_1">First Span</span> &nbsp; &nbsp; 2: <span
+			    id="span_2">Second Span</span></p>
 
-<p><b>Table</b>
-<table id="alpha_table" cellpadding="1" cellspacing="1" border="1" width="30%">
-  <tr id="row_1">
-    <td id="cell_1_1">A</td>
-    <td id="cell_1_2">B</td>
-  </tr>
-  <tr id="row_2">
-    <td id="cell_2_1">a</td>
-    <td id="cell_2_2">b</td>
-  </tr>
+			<p><b>Table</b>
+			<table id="alpha_table" cellpadding="1" cellspacing="1" border="1" width="30%">
+			  <tr id="row_1">
+			    <td id="cell_1_1">A</td>
+			    <td id="cell_1_2">B</td>
+			  </tr>
+			  <tr id="row_2">
+			    <td id="cell_2_1">a</td>
+			    <td id="cell_2_2">b</td>
+			  </tr>
+			</table>
+			</p>
+
+			<h2>Special</h2>
+
+			<a name="here"></a><p><b>Same links</b>: <a href="#here" onclick="$('for_link_1').show(); $('for_link_2').hide(); ">Click Me</a> <a href="#here" onclick="$('for_link_1').hide(); $('for_link_2').show(); ">Click Me</a><br/>
+			<div id="for_link_1" style="display:none;">
+			  iTest2 is good
+			</div>
+			<div id="for_link_2" style="display:none;">
+			  You joking, iTest2 is awesome!
+			</div>
+			</p>
+			
+		</td>
+		<td width="60%" valign="top">
+			<a name="ajax"></a><h2>Ajax</h2>
+
+			<p>
+			  <a href="#ajax" onclick="$('info').show();">Show info</a>
+			  <a href="#ajax" onclick="$('info').hide();">Hide info</a>
+			</p>
+
+			<div id="info" style="display:none;">
+			  I like iTest2
+			</div>
+
+			<p>
+			  <input type="button" id="vote_btn" value="Vote" disabled="true"/>
+			  &nbsp;
+			  <a href="#" onclick="$('vote_btn').disabled = false;">Enable Vote button</a>
+			</p>
+			
+			<p>Enter Amount: <input type="text" name="amount"/></p>
+
+			<p><input type="submit" value="Transfer" onclick="transfer();"/> <img src="spinner.gif" id="spinner" style="display:none;"/></p>
+
+			<div id="receipt">
+			</div>
+			
+			
+		</td>
+	</tr>
 </table>
-</p>
-
-<h2>Special</h2>
-
-<a name="here"></a><p><b>Same links</b>: <a href="#here" onclick="$('for_link_1').show(); $('for_link_2').hide(); ">Click Me</a> <a href="#here" onclick="$('for_link_1').hide(); $('for_link_2').show(); ">Click Me</a><br/>
-<div id="for_link_1" style="display:none;">
-  iTest2 is good
-</div>
-<div id="for_link_2" style="display:none;">
-  You joking, iTest2 is awesome!
-</div>
-</p>
 
 <hr>
-<a name="ajax"></a><h2>Ajax</h2>
-
-<p>
-  <a href="#ajax" onclick="$('info').show();">Show info</a>
-  <a href="#ajax" onclick="$('info').hide();">Hide info</a>
-</p>
-
-<div id="info" style="display:none;">
-  I like iTest2
-</div>
-
-<p>
-  <input type="button" id="vote_btn" value="Vote" disabled="true"/>
-  &nbsp;
-  <a href="#" onclick="$('vote_btn').disabled = false;">Enable Vote button</a>
-</p>
 
 <hr/>
 <input type="button" id="complete_btn" value="I made it to last operation">

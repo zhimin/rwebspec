@@ -7,7 +7,7 @@ $:.unshift(File.dirname(__FILE__) + "/lib")
 #require 'rwebunit'
 
 desc "Default task"
-task :default => [ :clean, :spec, :doc, :gem]
+task :default => [ :clean, :spec, :rdoc, :gem]
 
 desc "Clean generated files"
 task :clean do
@@ -37,11 +37,11 @@ spec = Gem::Specification.new do |s|
   s.name = "rwebunit"
   s.version = "1.2"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
-# s.description = ""
+  # s.description = ""
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.net"
-  s.homepage= "http://code.google.com/p/rwebunit/"
+  s.homepage= "http://github.com/zhimin/rwebunit/tree/master"
   s.rubyforge_project = "rwebunit"
 
   s.has_rdoc    = true
@@ -50,20 +50,17 @@ spec = Gem::Specification.new do |s|
   s.autorequire     = "rwebunit"
 
   s.files = [ "Rakefile", "README", "CHANGELOG", "MIT-LICENSE" ]
-#  s.files = s.files + Dir.glob( "bin/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-  s.files = s.files + Dir.glob( "lib/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-  s.files = s.files + Dir.glob( "test/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-  s.files = s.files + Dir.glob( "sample/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
-  s.files = s.files + Dir.glob( "docs/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
+  s.files = s.files + Dir.glob( "lib/**/*" )
+  s.files = s.files + Dir.glob( "test/**/*" )
+  s.files = s.files + Dir.glob( "sample/**/*")
+  s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, [">= 1.1.12"])
   s.add_dependency("commonwatir", ">= 1.6.2")
   s.add_dependency("test-unit", ">= 2.0.2")
-#  s.add_dependency("watir", ">= 1.6.2")
-#  s.add_dependency("firewatir", ">= 1.6.2")
+  #  s.add_dependency("watir", ">= 1.6.2")
+  #  s.add_dependency("firewatir", ">= 1.6.2")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.need_zip = true
 end
-
-

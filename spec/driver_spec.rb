@@ -1,9 +1,14 @@
 require 'rubygems'
 require "spec"
+require 'uri'
+
 require File.join(File.dirname(__FILE__), "..", "lib/rspec_extensions.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/driver.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/context.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/web_browser.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/web_page.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/assert.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/watir_extensions.rb")
 require 'test/unit/assertions'
 
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
@@ -49,5 +54,10 @@ specification "Driver" do
     assert_equal 11, symbol_to_sequence(11)
   end
 
+  story "wait_util" do
+    click_button("Transfer")
+    wait_until(11, 2) { label(:id, :date).exists? }
+  end
+  
 end
 #END

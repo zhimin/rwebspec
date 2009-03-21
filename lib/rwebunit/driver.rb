@@ -8,6 +8,7 @@
 require File.join(File.dirname(__FILE__), 'itest_plugin')
 require File.join(File.dirname(__FILE__), 'popup')
 require 'timeout'
+require 'uri'
 
 module RWebUnit
   module Driver
@@ -407,10 +408,10 @@ module RWebUnit
      #   wait_until {puts 'hello'}
      #   wait_until { div(:id, :receipt_date).exists? }
      #
-    def wait_until(timeout = @@default_timeout, polling_interval = @default_polling_interval, &block)
-      Watir::Waiter.wait_until(timeout, polling_interval)
+    def wait_until(timeout = @@default_timeout || 30, polling_interval = @@default_polling_interval || 1, &block)
+      waiter = Watir::Waiter.new(timeout, polling_interval)
+      waiter.wait_until { yield }
     end
-    alias repeat_try wait_until
 
     # Wait for specific seconds for an Ajax update finish.
     # Trick: In your Rails application,
@@ -486,7 +487,7 @@ module RWebUnit
       end
     end
 
-
+=end
 
     # try the operation up to specified times, and sleep given interval (in seconds)
     # Example
@@ -509,7 +510,6 @@ module RWebUnit
       yield
     end
     
-=end
     
     ##
     #  Convert :first to 1, :second to 2, and so on...
