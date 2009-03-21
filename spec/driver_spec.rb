@@ -58,6 +58,12 @@ specification "Driver" do
     click_button("Transfer")
     wait_until(11, 2) { label(:id, :date).exists? }
   end
-  
+
+  story "click button with image" do
+    click_button_with_image("search_button.gif")
+    go_back
+    refresh
+  end
+
 end
 #END

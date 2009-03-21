@@ -24,6 +24,25 @@ module RWebUnit
       connect_to_itest(" DEBUG", message + "\r\n") if $RUN_IN_ITEST
     end
 
+
+    # Support of iTest to ajust the intervals between keystroke/mouse operations
+    def operation_delay
+      begin
+        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
+          $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+            sleep($ITEST2_OPERATION_DELAY / 1000)
+        end
+
+        while $ITEST2_PAUSE
+            debug("Paused, waiting ...")
+            sleep 1
+        end
+      rescue => e
+        puts "Error on delaying: #{e}"
+        # ignore
+      end
+    end
+
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
       return unless $ITEST2_TRACE_EXECUTION
@@ -44,6 +63,6 @@ module RWebUnit
         puts "failed to capture log: #{e}"
       end
     end
-  
+
   end
 end

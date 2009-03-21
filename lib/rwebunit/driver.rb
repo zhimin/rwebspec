@@ -80,7 +80,7 @@ module RWebUnit
     alias close_ie close_browser
 
 
-    # Close all opening browser windows 
+    # Close all opening browser windows
     #
     def close_all_browsers
       if is_firefox?
@@ -89,7 +89,7 @@ module RWebUnit
         Watir::IE.close_all
       end
     end
-    
+
     # Verify the next page following an operation.
     #
     # Typical usage:
@@ -111,7 +111,7 @@ module RWebUnit
       dump_caller_stack
       @web_browser.begin_at(url)
     end
-    
+
     # Return the Watir::IE instance
     #
     def ie
@@ -123,14 +123,16 @@ module RWebUnit
     def firefox
       @web_browser.firefox
     end
-    
+
     def is_firefox?
       @web_browser.is_firefox? if @web_browser
     end
 
 
-
-    # Go the 
+    # Go to another page on the testing site.
+    #
+    #  open_browser("http://www.itest2.com")
+    #  goto_page("/demo")  # visit page http://www.itest2.com/demo
     #
     def goto_page(page)
       operation_delay
@@ -139,10 +141,17 @@ module RWebUnit
     end
     alias visit goto_page
 
+    # Go to another web site, normally different site being tested on
+    #
+    #  open_browser("http://www.itest2.com")
+    #  goto_url("http://myorganized.info")
     def goto_url(url)
       @web_browser.goto_url url
     end
 
+    # Attach to existinb browser window
+    #
+    #  attach_browser(:title,    )
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
       begin
@@ -258,9 +267,13 @@ module RWebUnit
     end
 
     def contains_text(text)
-      @web_browser.contains_text(text);
+      @web_browser.contains_text(text)
     end
 
+    # Click image buttion with image source name
+    #
+    # For an image submit button <input name="submit" type="image" src="/images/search_button.gif">
+    #  click_button_with_image("search_button.gif")
     def click_button_with_image_src_contains(image_filename)
       dump_caller_stack
       operation_delay
@@ -298,6 +311,9 @@ module RWebUnit
       @web_browser.dump_response(stream)
     end
 
+    # For current page souce to a file in specified folder for inspection
+    #
+    #   save_current_page("C:\\mysite")
     def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
       Dir.mkdir(to_dir) unless File.exists?(to_dir)
       file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
@@ -305,11 +321,12 @@ module RWebUnit
       File.new(file, "w").puts page_source
     end
 
-
+    # current web page title
     def page_title
       @web_browser.page_title
     end
 
+    # current page source (in HTML)
     def page_source
       @web_browser.page_source
     end
@@ -319,14 +336,26 @@ module RWebUnit
       @web_browser.text
     end
 
+    # return the text of specific (identified by attribute "id") label tag
+    # For page containing
+    #     <label id="preferred_ide">iTest2</label>
+    # label_with_id("preferred_ids") # => iTest2
     def label_with_id(label_id)
       label(:id, label_id).text
     end
 
+    # return the text of specific (identified by attribute "id") span tag
+    # For page containing
+    #     <span id="preferred_recorder">iTest2/Watir Recorder</span>
+    # span_with_id("preferred_recorder") # => iTest2/Watir Recorder
     def span_with_id(span_id)
       span(:id, span_id).text
     end
 
+    # return the text of specific (identified by attribute "id") ta tag
+    # For page containing
+    #     <td id="preferred_recorder">iTest2/Watir Recorder</span>
+    # td_with_id("preferred_recorder") # => iTest2/Watir Recorder
     def cell_with_id(cell_id)
       cell(:id, cell_id).text
     end
@@ -402,12 +431,12 @@ module RWebUnit
     # Execute the provided block until either (1) it returns true, or
     # (2) the timeout (in seconds) has been reached. If the timeout is reached,
     # a TimeOutException will be raised. The block will always
-     # execute at least once.  
-     # 
-     # Examples: 
-     #   wait_until {puts 'hello'}
-     #   wait_until { div(:id, :receipt_date).exists? }
-     #
+    # execute at least once.
+    #
+    # Examples:
+    #   wait_until {puts 'hello'}
+    #   wait_until { div(:id, :receipt_date).exists? }
+    #
     def wait_until(timeout = @@default_timeout || 30, polling_interval = @@default_polling_interval || 1, &block)
       waiter = Watir::Waiter.new(timeout, polling_interval)
       waiter.wait_until { yield }
@@ -509,8 +538,8 @@ module RWebUnit
       # last try, throw error if still fails
       yield
     end
-    
-    
+
+
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
@@ -528,25 +557,6 @@ module RWebUnit
       return value || symb.to_i
     end
 
-    private
-    
-    # Support of iTest to ajust the intervals between keystroke/mouse operations
-    def operation_delay
-      begin
-        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
-          $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-            sleep($ITEST2_OPERATION_DELAY / 1000)
-          end
-
-          while $ITEST2_PAUSE
-            debug("Paused, waiting ...")
-            sleep 1
-          end
-        rescue => e
-          puts "Error on delaying: #{e}"
-          # ignore
-        end
-      end
-
-    end
   end
+
+end
