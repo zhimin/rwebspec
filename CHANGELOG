@@ -11,7 +11,7 @@ CHANGELOG
   - driver.rb
      - wait_until (new) 
      - repeat_try_util (new)
-     - repeat_try (add more clear messages when block failed)
+     - try (add more clear messages when block failed)
   - add unit tests
   - run unit test against the test page in Firefox Browser       
   - major documentation update

@@ -433,6 +433,7 @@ module RWebUnit
     # a TimeOutException will be raised. The block will always
     # execute at least once.
     #
+    # This does not handle error, if the given block raise error, the statement finish with error
     # Examples:
     #   wait_until {puts 'hello'}
     #   wait_until { div(:id, :receipt_date).exists? }
@@ -521,7 +522,7 @@ module RWebUnit
     # Try the operation up to specified times, and sleep given interval (in seconds)
     # Error will be ignored until timeout     
     # Example
-    #    repeat_try(3, 2) { click_button('Search' }
+    #    repeat_try(3, 2) { click_button('Search' } # 3 times, 6 seconds in total
     #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
     def repeat_try(num_tries = @@default_timeout || 30, interval = @@default_polling_interval || 1, &block)
       num_tries ||= 1
@@ -544,14 +545,15 @@ module RWebUnit
       yield
     end
 
+    # TODO: syntax
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
     # Error will be ignored until timeout 
     # Example
-    #    repeat_try_until { click_link('waiting')} # try 15 times, 2 seconds interval (default value)
-    #    repeat_try_until(3, 2) { click_button('Search' }
-    #    repeat_try_until { click_button('Search' } # using default 5 tries, 2 second interval
-    def repeat_try_until(timeout = @@default_timeout, interval = @@default_polling_interval || 1, &block)
+    #    try { click_link('waiting')} # try 15 times, 2 seconds interval (default value)
+    #    try(3, 2) { click_button('Search' }
+    #    try { click_button('Search' } # using default 5 tries, 2 second interval
+    def try(timeout = @@default_timeout, interval = @@default_polling_interval || 1, &block)
       num_tries = timeout / interval
       num_tries = 1 if num_tries < 1
       (num_tries - 1).times do |num|
@@ -570,7 +572,8 @@ module RWebUnit
         raise e.to_s + " after trying #{timeout} seconds with polling interval #{interval}"
       end
     end
-
+    alias try_upto try
+    
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
