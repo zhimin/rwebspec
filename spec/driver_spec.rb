@@ -65,5 +65,13 @@ specification "Driver" do
     refresh
   end
 
+  story "repeat_try_until" do
+    begin
+    repeat_try_until(2) { 1 / 0}
+    rescue => e
+      assert_equal("divided by 0 after trying 2 seconds with polling interval 1", e.to_s)
+    end
+  end
+  
 end
 #END

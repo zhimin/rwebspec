@@ -5,10 +5,13 @@ CHANGELOG
   REVISIT all APIs  
   - assertions
      - assert_not (new)
-     - wait_until (new) 
      - assert_text_field_value (new)
 	 - assert_text_present_in_table (renamed)
      - assert_element_present (removed, use assert div(:id, "").exists?)
+  - driver.rb
+     - wait_until (new) 
+     - repeat_try_util (new)
+     - repeat_try (add more clear messages when block failed)
   - add unit tests
   - run unit test against the test page in Firefox Browser       
   - major documentation update
