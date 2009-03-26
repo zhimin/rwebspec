@@ -300,14 +300,12 @@ module RWebUnit
     #  assert_text_present_in_table("t1", ">A<")  # => true
     #  assert_text_present_in_table("t1", ">A<", :just_plain_text => true)  # => false        
     def assert_text_present_in_table(table_id, text, options = { :just_plain_text => false })
-      table_source = options[:just_plain_text] ? table(:id, table_id).text : table(:id, table_id).innerHTML      
-      assert(table_source.include?(text),  "the text #{text} not found in table #{table_id}")
+      assert(table_source(table_id, options).include?(text),  "the text #{text} not found in table #{table_id}")
     end
     alias assert_text_in_table assert_text_present_in_table
 
     def assert_text_not_present_in_table(table_id, text, options = { :just_plain_text => false })
-      table_source = options[:just_plain_text] ? table(:id, table_id).text : table(:id, table_id).innerHTML
-      assert_not(table_source.include?(text),  "the text #{text} not found in table #{table_id}")
+      assert_not(table_source(table_id, options).include?(text),  "the text #{text} not found in table #{table_id}")
     end
     alias assert_text_not_in_table assert_text_not_present_in_table
 
@@ -338,5 +336,14 @@ module RWebUnit
     #    def assert_position_in_list(list_element_id)
     #      raise "not implemented"
     #    end
+    
+    private
+    def table_source(table_id, options)
+   	  elem_table = table(:id, table_id.to_s)
+      elem_table_text = elem_table.text 
+      elem_table_html = is_firefox? ? elem_table.innerHTML : elem_table.html
+      table_source = options[:just_plain_text] ? elem_table_text : elem_table_html
+    end
+    
   end
 end

@@ -173,7 +173,10 @@ module RWebUnit
     ##
     #  Delegate to WebTester
     #
-
+    # Note:
+    #   label(:id, "abc") # OK
+    #   label(:id, :abc)  # Error
+    #
     # Depends on which object type, you can use following attribute
     # More details: http://wiki.openqa.org/display/WTR/Methods+supported+by+Element
     #
@@ -341,7 +344,7 @@ module RWebUnit
     #     <label id="preferred_ide">iTest2</label>
     # label_with_id("preferred_ids") # => iTest2
     def label_with_id(label_id)
-      label(:id, label_id).text
+      label(:id, label_id.to_s).text
     end
 
     # return the text of specific (identified by attribute "id") span tag
@@ -475,7 +478,9 @@ module RWebUnit
       return false
     end
 
-=begin
+	#Wait the element with given id to be present in web page
+	#
+	# Warning: this not working in Firefox, try use wait_util or try instead
     def wait_for_element(element_id, timeout = @@default_timeout, interval = @@default_polling_interval)
       start_time = Time.now
       #TODO might not work with Firefox
@@ -486,6 +491,7 @@ module RWebUnit
         end
       end
     end
+=begin
 
     # TODO: Firewatir does not suport retrieving style or outerHtml
     #    http://jira.openqa.org/browse/WTR-260

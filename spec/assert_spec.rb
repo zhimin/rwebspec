@@ -45,8 +45,8 @@ describe "Assertion" do
   end
 
   it "assert_text_prsent" do
-    assert_text_present("<h1>iTest2/Watir Test Page</h1>")
-    assert_text_not_present("<h1>Watir Test Page</h1>")
+    assert_text_present("iTest2/Watir Test Page")
+    assert_text_not_present("Watir Test Page2")
   end
 
   it "assert_title" do
@@ -109,14 +109,18 @@ describe "Assertion" do
   # end
 
   it "assert_exists, assert_not" do
-    assert div(:id, :info).exists?
-    assert_not div(:id, :not_there).exists?
-    assert_exists(:div, :info)
+    assert div(:id, "info").exists?
+    assert_not div(:id, "not_there").exists?
+    assert_exists(:div, "info")
   end
 
   it "assert_table" do
+    if is_firefox?
+      assert_text_present_in_table("alpha_table", "A B", :just_plain_text => true)  # => true
+    else 
+      assert_text_present_in_table("alpha_table", "AB", :just_plain_text => true)  # => true    
+    end
     assert_text_present_in_table("alpha_table", ">A<")  # => true
-    assert_text_present_in_table("alpha_table", "A B", :just_plain_text => true)  # => true
     assert_text_not_present_in_table("alpha_table", ">A<", :just_plain_text => true)  # => false
     # assert table(:id, :alpha_table).innerHTML.include?(">A<")
   end

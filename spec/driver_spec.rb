@@ -56,7 +56,7 @@ specification "Driver" do
 
   story "wait_util" do
     click_button("Transfer")
-    wait_until(11, 2) { label(:id, :date).exists? }
+    wait_until(11, 2) { label(:id, "date").exists? }
   end
 
   story "click button with image" do
