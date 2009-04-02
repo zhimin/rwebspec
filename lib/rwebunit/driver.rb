@@ -43,18 +43,25 @@ module RWebUnit
       options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
       ($ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
 
-      uri = URI.parse(base_url)
-      uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+      if base_url =~ /^file:/
+        uri_base = base_url
+      else
+        uri = URI.parse(base_url)
+        uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+      end
+
       if options[:start_new]
         @web_browser = WebBrowser.new(uri_base, nil, options)
       else
-        # Reuse existing browser
-        @web_browser = WebBrowser.reuse(uri_base, options)
+        @web_browser = WebBrowser.reuse(uri_base, options) # Reuse existing browser
       end
 
-      if options[:go]
-        (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path)
+      if base_url =~ /^file:/
+        goto_url(base_url) # for files, no base url
+      else
+        (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path) if options[:go]
       end
+
       return @web_browser
     end
     alias open_browser_with open_browser
@@ -256,6 +263,7 @@ module RWebUnit
     end
 
     alias enter_text set_form_element
+    alias set_hidden_field set_form_element
     alias click_link click_link_with_text
     alias click_button_with_text click_button_with_caption
     alias click_button click_button_with_caption
@@ -370,7 +378,7 @@ module RWebUnit
     end
 
     def is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin")
+      RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw32")
     end
 
     def is_linux?
@@ -417,6 +425,7 @@ module RWebUnit
       operation_performed_ok
     end
     alias shall_allow  allow
+    alias allowing  allow
 
     # try operation, ignore if errors occur
     #
@@ -478,9 +487,9 @@ module RWebUnit
       return false
     end
 
-	#Wait the element with given id to be present in web page
-	#
-	# Warning: this not working in Firefox, try use wait_util or try instead
+    #Wait the element with given id to be present in web page
+    #
+    # Warning: this not working in Firefox, try use wait_util or try instead
     def wait_for_element(element_id, timeout = @@default_timeout, interval = @@default_polling_interval)
       start_time = Time.now
       #TODO might not work with Firefox
@@ -526,7 +535,7 @@ module RWebUnit
 =end
 
     # Try the operation up to specified times, and sleep given interval (in seconds)
-    # Error will be ignored until timeout     
+    # Error will be ignored until timeout
     # Example
     #    repeat_try(3, 2) { click_button('Search' } # 3 times, 6 seconds in total
     #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
@@ -544,42 +553,40 @@ module RWebUnit
 
       # last try, throw error if still fails
       begin
-         yield
-       rescue => e
-         raise e.to_s + " after trying #{num_tries} times every #{interval} seconds"
-       end
+        yield
+      rescue => e
+        raise e.to_s + " after trying #{num_tries} times every #{interval} seconds"
+      end
       yield
     end
 
     # TODO: syntax
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
-    # Error will be ignored until timeout 
+    # Error will be ignored until timeout
     # Example
-    #    try { click_link('waiting')} # try 15 times, 2 seconds interval (default value)
-    #    try(3, 2) { click_button('Search' }
-    #    try { click_button('Search' } # using default 5 tries, 2 second interval
-    def try(timeout = @@default_timeout, interval = @@default_polling_interval || 1, &block)
-      num_tries = timeout / interval
-      num_tries = 1 if num_tries < 1
-      (num_tries - 1).times do |num|
+    #    try { click_link('waiting')}
+    #    try(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
+    #    try { click_button('Search' }
+    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+      start_time = Time.now
+      
+      last_error = nil
+      until (duration = Time.now - start_time) > timeout 
         begin
-          yield
-          return
+          return if yield
+          last_error = nil
         rescue => e
-          sleep interval
+          last_error = e
         end
+        sleep polling_interval
       end
-
-      # last try, throw error if still fails
-      begin
-        yield
-      rescue => e
-        raise e.to_s + " after trying #{timeout} seconds with polling interval #{interval}"
-      end
+            
+      raise "Timeout after #{duration.to_i} seconds with error: #{last_error}." if last_error
+      raise "Timeout after #{duration.to_i} seconds."
     end
     alias try_upto try
-    
+
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)

@@ -66,10 +66,17 @@ specification "Driver" do
   end
 
   story "try" do
+    try(100) { 2 > 1} # if will get out quickly
     begin
       try(2) { 1 / 0}
     rescue => e
-      assert_equal("divided by 0 after trying 2 seconds with polling interval 1", e.to_s)
+      assert_equal("Timeout after 2 seconds with error: divided by 0.", e.to_s)
+    end
+
+    begin
+      try(2) { 1 > 2}
+    rescue => e
+      assert_equal("Timeout after 2 seconds.", e.to_s)
     end
   end
 

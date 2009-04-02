@@ -1,5 +1,5 @@
 #***********************************************************
-#* Copyright (c) 2006, Zhimin Zhan.
+#* Copyright (c) 2006 - 2009, Zhimin Zhan.
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
@@ -13,7 +13,7 @@ end
 require 'active_support/core_ext'
 require 'spec'
 
-RWEBUNIT_VERSION = "1.2"
+RWEBUNIT_VERSION = "1.2.1"
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebunit/test_utils"

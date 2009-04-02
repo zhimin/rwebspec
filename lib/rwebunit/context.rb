@@ -1,5 +1,5 @@
 #***********************************************************
-#* Copyright (c) 2006, 2007 Zhimin Zhan.
+#* Copyright (c) 2006 - 2009 Zhimin Zhan.
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
