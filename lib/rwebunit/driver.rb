@@ -352,10 +352,12 @@ module RWebUnit
       Dir.mkdir(to_dir) unless File.exists?(to_dir)
       file = File.join(to_dir, file_name)
 
-      puts "about to save file: #{file}"
       content = page_source
-      if options[:replacement]
-        base_url = @web_browser.context.base_url
+      base_url = @web_browser.context.base_url
+      current_url = @web_browser.url
+      current_url =~ /(.*\/).*$/           
+      current_url_parent = $1      
+      if options[:replacement] && base_url =~ /^http:/
 
         # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
         # '<script type="text/javascript" src="http://www.jeroenwijering.com/embed/swfobject.js"></script>'
@@ -369,33 +371,43 @@ module RWebUnit
 
         content.each_line do |line|
           if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then   
-            script_src = $1    
-            unless script_src =~ /^["']?http:/
-              line.gsub!(script_src, "#{base_url}#{script_src}")
-            end              
+            script_src = $1
+            substitute_relative_path_in_src_line(line, script_src, base_url, current_url_parent)    
           elsif line =~ /<link\s+.*href=["'']?(.*)["'].*/i then
             link_href = $1
-            unless link_href =~ /^["']?http:/
-              line.gsub!(link_href, "#{base_url}#{link_href}")
-            end                          
+            substitute_relative_path_in_src_line(line, link_href, base_url, current_url_parent)    
           elsif line =~ /<img\s+.*src=["'']?(.*)["'].*/i then
             img_src = $1
-            unless img_src =~ /^["']?http:/
-              line.gsub!(img_src, "#{base_url}#{img_src}")
-            end                         
+            substitute_relative_path_in_src_line(line, img_src, base_url, current_url_parent)    
           end
           
            modified_content += line
         end
 
         File.new(file, "w").puts modified_content
-
       else
         File.new(file, "w").puts content
         
       end
 
 
+    end
+
+	# substut
+	def substitute_relative_path_in_src_line(line, script_src, host_url, page_parent_url) 
+	  unless script_src =~ /^["']?http:/ 
+	    host_url.slice!(-1) if ends_with?(host_url, "/")
+        if script_src =~ /^\s*\// # absolute_path            
+          line.gsub!(script_src, "#{host_url}#{script_src}")
+        else  #relative_path 
+          line.gsub!(script_src, "#{page_parent_url}#{script_src}")               
+        end
+      end    
+	end
+	
+	def ends_with?(str, suffix)
+      suffix = suffix.to_s
+      str[-suffix.length, suffix.length] == suffix      
     end
 
     # current web page title
