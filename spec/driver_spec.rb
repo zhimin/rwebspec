@@ -80,5 +80,9 @@ specification "Driver" do
     end
   end
 
+  story "save_current_page" do    
+    save_current_page(:dir => "/tmp", :filename => "rwebunit_dump.html", :replacement => true)
+  end
+
 end
 #END

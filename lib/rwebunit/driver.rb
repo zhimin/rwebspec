@@ -324,12 +324,78 @@ module RWebUnit
 
     # For current page souce to a file in specified folder for inspection
     #
-    #   save_current_page("C:\\mysite")
-    def save_current_page(to_dir = ENV['TEMP_DIR'] || "C:\\temp")
+    #   save_current_page(:dir => "C:\\mysite", filename => "abc", :replacement => true)
+    def save_current_page(options = {})
+      default_options = {:replacement => true}
+      options = default_options.merge(options)
+      if options[:dir]
+        # already defined the dir
+        to_dir = options[:dir]
+      elsif $ITEST2_RUNNING_SPEC_ID
+                
+        $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
+        FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
+
+        spec_run_id = $ITEST2_RUNNING_SPEC_ID
+        spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
+        to_dir = File.join($ITEST2_DUMP_DIR, spec_run_dir_name)
+      else
+        to_dir = ENV['TEMP_DIR'] || "C:\\temp"
+      end
+
+      if options[:filename]
+        file_name = options[:filename]
+      else
+        file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
+      end
+
       Dir.mkdir(to_dir) unless File.exists?(to_dir)
-      file_name = Time.now.strftime("%m%d%H%M%S") + ".html"
       file = File.join(to_dir, file_name)
-      File.new(file, "w").puts page_source
+
+      puts "about to save file: #{file}"
+      content = page_source
+      if options[:replacement]
+        base_url = @web_browser.context.base_url
+
+        # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
+        # '<script type="text/javascript" src="http://www.jeroenwijering.com/embed/swfobject.js"></script>'
+        # <script type="text/javascript" src="/javascripts/prototype.js"></script>
+        # <script type="text/javascript" src="/javascripts/scriptaculous.js?load=effects,builder"></script>
+        # <script type="text/javascript" src="/javascripts/extensions/gallery/lightbox.js"></script>
+        # <link href="/stylesheets/extensions/gallery/lightbox.css" rel="stylesheet" type="text/css" />
+        # <img src="images/mission_48.png" />
+
+        modified_content = ""
+
+        content.each_line do |line|
+          if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then   
+            script_src = $1    
+            unless script_src =~ /^["']?http:/
+              line.gsub!(script_src, "#{base_url}#{script_src}")
+            end              
+          elsif line =~ /<link\s+.*href=["'']?(.*)["'].*/i then
+            link_href = $1
+            unless link_href =~ /^["']?http:/
+              line.gsub!(link_href, "#{base_url}#{link_href}")
+            end                          
+          elsif line =~ /<img\s+.*src=["'']?(.*)["'].*/i then
+            img_src = $1
+            unless img_src =~ /^["']?http:/
+              line.gsub!(img_src, "#{base_url}#{img_src}")
+            end                         
+          end
+          
+           modified_content += line
+        end
+
+        File.new(file, "w").puts modified_content
+
+      else
+        File.new(file, "w").puts content
+        
+      end
+
+
     end
 
     # current web page title
@@ -570,9 +636,9 @@ module RWebUnit
     #    try { click_button('Search' }
     def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
       start_time = Time.now
-      
+
       last_error = nil
-      until (duration = Time.now - start_time) > timeout 
+      until (duration = Time.now - start_time) > timeout
         begin
           return if yield
           last_error = nil
@@ -581,7 +647,7 @@ module RWebUnit
         end
         sleep polling_interval
       end
-            
+
       raise "Timeout after #{duration.to_i} seconds with error: #{last_error}." if last_error
       raise "Timeout after #{duration.to_i} seconds."
     end
