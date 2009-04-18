@@ -459,6 +459,13 @@ module RWebUnit
       RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw32")
     end
 
+    def support_utf8
+      if is_windows?
+        require 'win32ole'
+        WIN32OLE.codepage = WIN32OLE::CP_UTF8
+      end
+    end
+    
     def is_linux?
       RUBY_PLATFORM.downcase.include?("linux")
     end

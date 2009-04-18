@@ -1,6 +1,9 @@
 CHANGELOG
 =========
-
+  1.2.3
+  New - support_utf8
+  More alias assert_select_label_not_present assert_option_not_present
+  
   1.2.2
 
   save_current_page save to ITEST2 

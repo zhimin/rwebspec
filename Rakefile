@@ -35,7 +35,7 @@ Rake::RDocTask.new { |rdoc|
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebunit"
-  s.version = "1.2.2"
+  s.version = "1.2.3"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
   # s.description = ""
 
