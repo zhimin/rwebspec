@@ -254,7 +254,7 @@ module RWebUnit
     # page.check_checkbox('bad_ones', 'Chicken Little')
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
     #
-    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
+    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
         dump_caller_stack
         operation_delay
