@@ -465,6 +465,7 @@ module RWebUnit
         WIN32OLE.codepage = WIN32OLE::CP_UTF8
       end
     end
+    alias support_unicode support_utf8
     
     def is_linux?
       RUBY_PLATFORM.downcase.include?("linux")
