@@ -83,6 +83,14 @@ module RWebUnit
       $ITEST2_DEBUGGING && $ITEST2_RUNNING_AS == "test_case"
     end
     
+    # RSpec Matchers
+    #   
+    # Example,
+    #   a_number.should be_odd_number
+    def be_odd_number
+       simple_matcher("must be odd number") { |actual| actual && actual.to_id % 2 == 1}
+    end
+  
   end
 
 end
