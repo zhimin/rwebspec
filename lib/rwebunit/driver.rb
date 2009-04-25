@@ -114,6 +114,10 @@ module RWebUnit
       @web_browser.context
     end
 
+    # Starting browser with a URL
+    #
+    # Example:
+    #    begin_at("http://www.itest2.com")
     def begin_at(url)
       dump_caller_stack
       @web_browser.begin_at(url)
@@ -311,6 +315,8 @@ module RWebUnit
       @web_browser.element_value(elem_id)
     end
 
+    # Identify DOM element by ID
+    # Warning: it is only supported on IE
     def element_by_id(elem_id)
       @web_browser.element_by_id(elem_id)
     end
@@ -459,6 +465,9 @@ module RWebUnit
       RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw32")
     end
 
+    # Support browser (IE) operations using unicode
+    #  Example:
+    #   click_button("Google 搜索")    
     def support_utf8
       if is_windows?
         require 'win32ole'
@@ -501,6 +510,10 @@ module RWebUnit
     end
     alias do_not_allow shall_not_allow
 
+    # Does not provide real function, other than make enhancing test syntax
+    #
+    # Example:
+    #   allow { click_button('Register') }
     def allow(&block)
       operation_performed_ok = false
       begin
