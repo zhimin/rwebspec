@@ -2,6 +2,9 @@ require 'rubygems'
 require 'spec/rake/spectask'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
+require 'rdoc' # require rdoc 2
+gem 'darkfish-rdoc'
+# require 'darkfish-rdoc'
 
 $:.unshift(File.dirname(__FILE__) + "/lib")
 #require 'rwebunit'
@@ -23,14 +26,26 @@ Spec::Rake::SpecTask.new('spec') do |t|
 end
 
 # Generate the RDoc documentation
-Rake::RDocTask.new { |rdoc|
+# Rake::RDocTask.new { |rdoc|
+#   rdoc.rdoc_dir = 'doc'
+#   rdoc.title = 'rWebUnit'
+#   rdoc.template = "#{ENV['template']}.rb" if ENV['template']
+#   rdoc.rdoc_files.include('README')
+#   rdoc.rdoc_files.include('lib/rwebunit.rb')
+#   rdoc.rdoc_files.include('lib/rwebunit/*.rb')
+# }
+
+# using DarkFish - http://deveiate.org/projects/Darkfish-Rdoc/
+Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = 'rWebUnit'
-  rdoc.template = "#{ENV['template']}.rb" if ENV['template']
-  rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/rwebunit.rb')
   rdoc.rdoc_files.include('lib/rwebunit/*.rb')
-}
+    rdoc.options += [
+        '-SHN',
+        '-f', 'darkfish',  # This is the important bit
+      ]
+end
 
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
