@@ -50,7 +50,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebunit"
-  s.version = "1.2.3.1"
+  s.version = "1.2.4"
   s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
   # s.description = ""
 

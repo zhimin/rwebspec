@@ -338,7 +338,7 @@ module RWebUnit
         # already defined the dir
         to_dir = options[:dir]
       elsif $ITEST2_RUNNING_SPEC_ID
-                
+
         $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
         FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
 
@@ -361,8 +361,8 @@ module RWebUnit
       content = page_source
       base_url = @web_browser.context.base_url
       current_url = @web_browser.url
-      current_url =~ /(.*\/).*$/           
-      current_url_parent = $1      
+      current_url =~ /(.*\/).*$/
+      current_url_parent = $1
       if options[:replacement] && base_url =~ /^http:/
 
         # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
@@ -376,44 +376,44 @@ module RWebUnit
         modified_content = ""
 
         content.each_line do |line|
-          if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then   
+          if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then
             script_src = $1
-            substitute_relative_path_in_src_line(line, script_src, base_url, current_url_parent)    
+            substitute_relative_path_in_src_line(line, script_src, base_url, current_url_parent)
           elsif line =~ /<link\s+.*href=["'']?(.*)["'].*/i then
             link_href = $1
-            substitute_relative_path_in_src_line(line, link_href, base_url, current_url_parent)    
+            substitute_relative_path_in_src_line(line, link_href, base_url, current_url_parent)
           elsif line =~ /<img\s+.*src=["'']?(.*)["'].*/i then
             img_src = $1
-            substitute_relative_path_in_src_line(line, img_src, base_url, current_url_parent)    
+            substitute_relative_path_in_src_line(line, img_src, base_url, current_url_parent)
           end
-          
-           modified_content += line
+
+          modified_content += line
         end
 
         File.new(file, "w").puts modified_content
       else
         File.new(file, "w").puts content
-        
+
       end
 
 
     end
 
-	# substut
-	def substitute_relative_path_in_src_line(line, script_src, host_url, page_parent_url) 
-	  unless script_src =~ /^["']?http:/ 
-	    host_url.slice!(-1) if ends_with?(host_url, "/")
-        if script_src =~ /^\s*\// # absolute_path            
+    # substut
+    def substitute_relative_path_in_src_line(line, script_src, host_url, page_parent_url)
+      unless script_src =~ /^["']?http:/
+        host_url.slice!(-1) if ends_with?(host_url, "/")
+        if script_src =~ /^\s*\// # absolute_path
           line.gsub!(script_src, "#{host_url}#{script_src}")
-        else  #relative_path 
-          line.gsub!(script_src, "#{page_parent_url}#{script_src}")               
+        else  #relative_path
+          line.gsub!(script_src, "#{page_parent_url}#{script_src}")
         end
-      end    
-	end
-	
-	def ends_with?(str, suffix)
+      end
+    end
+
+    def ends_with?(str, suffix)
       suffix = suffix.to_s
-      str[-suffix.length, suffix.length] == suffix      
+      str[-suffix.length, suffix.length] == suffix
     end
 
     # current web page title
@@ -467,7 +467,7 @@ module RWebUnit
 
     # Support browser (IE) operations using unicode
     #  Example:
-    #   click_button("Google 搜索")    
+    #   click_button("Google 搜索")
     def support_utf8
       if is_windows?
         require 'win32ole'
@@ -475,7 +475,7 @@ module RWebUnit
       end
     end
     alias support_unicode support_utf8
-    
+
     def is_linux?
       RUBY_PLATFORM.downcase.include?("linux")
     end

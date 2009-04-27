@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+  1.2.4
+  Generate new rdoc
+
   1.2.3
   New - support_unicode
   More alias assert_select_label_not_present assert_option_not_present
