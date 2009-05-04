@@ -1,5 +1,5 @@
 require 'rwebunit'
-Dir[File.join(File.dirname(__FILE__), 'pages', "*_page.rb")].each { |file| load(file) }
+# Dir[File.join(File.dirname(__FILE__), 'pages', "*_page.rb")].each { |file| load(file) }
 
 module NewtoursTestHelper
   include RWebUnit::RSpecHelper

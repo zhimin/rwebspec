@@ -8,7 +8,8 @@ load File.join(File.dirname(__FILE__), "newtours_test_helper.rb")
 #
 suite "Flight Reservation" do
   include NewtoursTestHelper
-
+  use :pages => :all
+  
   before(:all) do
     open_browser("http://newtours.demoaut.com")
   end

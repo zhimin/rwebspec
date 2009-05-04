@@ -21,6 +21,55 @@ module RWebUnit
     include RWebUnit::Utils
     include RWebUnit::Assert
 
+
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+
+      #
+      # Examples:
+      #   include RWebUnit::RSpecHelper
+      #
+      #   use :pages => [:login_page, :receipt_page]
+      #   use :pages => :all # will require all pages under page dir
+      #   use :pages => :all, :page_dir =>  File.join(File.dirname(__FILE__), "pages")  # provide page directory
+      #
+      # TODO:
+      #   :reload option seems not working
+      def use(options)
+        default_options = { :page_dir => File.join(File.dirname(__FILE__), "pages") }
+        default_options.merge!(options)
+
+        # use :pages => :all
+        if default_options[:pages].class == Symbol && default_options[:pages].class == :all
+          Dir[File.expand_path(default_options[:page_dir])+ "/*_page.rb"].each { |page_file|
+            require page_file
+          }
+          return
+        end
+
+        default_options[:pages].each do |page|
+          page_file = File.join(default_options[:page_dir], page.to_s)
+          if default_options[:reload]
+            if File.exists?(page_file)
+              #puts "loading page => #{page_file}"
+              load page_file
+            elsif File.exists?(page_file + ".rb")
+              #puts "loading page with .rb => #{page_file + '.rb'}"
+              load page_file + '.rb'
+            else
+              puts "unable to find the page to load: #{page_file}"
+            end
+          else
+            #puts "requiring pages: #{page_file}"
+            require page_file
+          end
+        end
+      end
+    end
+
     # --
     #  Content
     # --
@@ -71,26 +120,26 @@ module RWebUnit
     def save_page(file_name = nil)
       @web_browser.save_page(file_name)
     end
-    
-    def save_content_to_file(content, file_name = nil)      
+
+    def save_content_to_file(content, file_name = nil)
       file_name ||= Time.now.strftime("%Y%m%d%H%M%S") + ".html"
       puts "about to save page: #{File.expand_path(file_name)}"
       File.open(file_name, "w").puts content
     end
 
-    # When running 
+    # When running
     def debugging?
       $ITEST2_DEBUGGING && $ITEST2_RUNNING_AS == "test_case"
     end
-    
+
     # RSpec Matchers
-    #   
+    #
     # Example,
     #   a_number.should be_odd_number
     def be_odd_number
-       simple_matcher("must be odd number") { |actual| actual && actual.to_id % 2 == 1}
+      simple_matcher("must be odd number") { |actual| actual && actual.to_id % 2 == 1}
     end
-  
+
   end
 
 end
