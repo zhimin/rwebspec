@@ -90,6 +90,7 @@ module RWebUnit
         end
       }
     end
+	alias assert_checkbox_not_checked assert_checkbox_not_selected
 
     def assert_checkbox_selected(checkbox_name)
       @web_browser.checkboxes.each { |checkbox|
@@ -98,6 +99,7 @@ module RWebUnit
         end
       }
     end
+	alias assert_checkbox_checked assert_checkbox_selected
 
     ##
     # select
@@ -174,7 +176,7 @@ module RWebUnit
         end
       }
     end
-
+	
     def assert_radio_option_present(radio_group, radio_option)
       @web_browser.radios.each { |radio|
         return if (radio.name == radio_group) and (radio_option == radio.value)
@@ -189,7 +191,9 @@ module RWebUnit
         end
       }
     end
-
+	alias assert_radio_button_checked assert_radio_option_selected
+	alias assert_radio_option_checked assert_radio_option_selected
+	
     def assert_radio_option_not_selected(radio_group, radio_option)
       @web_browser.radios.each { |radio|
         if (radio.name == radio_group and radio_option == radio.value) then
@@ -197,7 +201,9 @@ module RWebUnit
         end
       }
     end
-
+    alias assert_radio_button_not_checked assert_radio_option_not_selected
+    alias assert_radio_option_not_checked assert_radio_option_not_selected
+	
     ##
     # Button
     def assert_button_not_present(button_id)
