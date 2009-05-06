@@ -28,6 +28,34 @@ module RWebUnit
 
     module ClassMethods
 
+      # Example
+      #  pages :all
+      #  pages :login_page, :payment_page
+      #  pages :login_page, :payment_page, :page_dir => "c:/tmp"             
+      def pages(*args)
+        return if args.nil? or args.empty?
+        default_page_dir =  File.join(File.dirname(__FILE__), "pages") 
+        page_dir = default_page_dir
+        
+        args.each do |x|
+          if x == Hash &&  x[:page_dir]
+            page_dir = x[:page_dir]
+          end          
+        end
+        
+        if args.size == 1 && args[0] == :all
+          Dir[File.expand_path(page_dir)+ "/*_page.rb"].each { |page_file|
+            load page_file
+          }
+          return
+        end
+
+        args.each do |page|
+          page_file = File.join(page_dir, page.to_s)
+          load page_file
+        end
+      end
+
       #
       # Examples:
       #   include RWebUnit::RSpecHelper
