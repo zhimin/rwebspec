@@ -1,4 +1,5 @@
 require 'uri'
+require File.dirname(__FILE__) + "/mixin_class_methods"
 
 # ZZ patches to RSpec 1.1.2 - 1.1.4
 #  - add to_s method to example_group
@@ -21,9 +22,16 @@ module RWebUnit
     include RWebUnit::Utils
     include RWebUnit::Assert
 
+    module ClassMethods; end
 
-    def self.included(base)
-      base.extend ClassMethods
+    def self.included(klass)
+      puts "#{self} included in #{base}"
+      case klass
+      when Class
+        klass.extend(ClassMethods)
+      when Module
+        #more work to include in a module
+      end
     end
 
     module ClassMethods
@@ -31,26 +39,29 @@ module RWebUnit
       # Example
       #  pages :all
       #  pages :login_page, :payment_page
-      #  pages :login_page, :payment_page, :page_dir => "c:/tmp"             
+      #  pages :login_page, :payment_page, :page_dir => "c:/tmp"
       def pages(*args)
         return if args.nil? or args.empty?
-        default_page_dir =  File.join(File.dirname(__FILE__), "pages") 
+        default_page_dir =  File.join(File.dirname(__FILE__), "pages")
         page_dir = default_page_dir
-        
+
+        page_files = []
         args.each do |x|
-          if x == Hash &&  x[:page_dir]
+          if x.class == Hash &&  x[:page_dir]
             page_dir = x[:page_dir]
-          end          
+          else
+            page_files << x
+          end
         end
-        
-        if args.size == 1 && args[0] == :all
+
+        if page_files.size == 1 && page_files[0] == :all
           Dir[File.expand_path(page_dir)+ "/*_page.rb"].each { |page_file|
             load page_file
           }
           return
         end
 
-        args.each do |page|
+        page_files.each do |page|
           page_file = File.join(page_dir, page.to_s)
           load page_file
         end
