@@ -29,7 +29,7 @@ module RWebUnit
     # page_text: text used to identify the page, title will be the first candidate
     attr_accessor :page_text
 
-    def initialize(the_browser, page_text=nil)
+    def initialize(the_browser, page_text = nil)
       @web_browser = the_browser
       @web_tester = the_browser
       @page_text = page_text
@@ -58,25 +58,30 @@ module RWebUnit
       @web_browser.dump_response(stream)
     end
 
+    
     def source
       @web_browser.page_source
     end
 
+    # return current page title
     def title
       @web_browser.page_title
     end
 
+    # return current page text
+    def text
+      @web_browser.text
+    end
+
     # TO validate
     def contains?(ary)
-      page_source = source
+      the_page_source = source
       found = false
       ary.each do |str|
-        found ||= page_source.include?(str)
+        found ||= the_page_source.include?(str)
       end
       return found
     end
-    alias include contains?
-
 
     def	snapshot(replace_css = false)    
       save_current_page(:filename => Time.now.strftime("%m%d%H%M%S") + "_" + self.class.name.gsub(" ", "") + ".html" )

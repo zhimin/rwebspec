@@ -1,5 +1,4 @@
 require 'uri'
-require File.dirname(__FILE__) + "/mixin_class_methods"
 
 # ZZ patches to RSpec 1.1.2 - 1.1.4
 #  - add to_s method to example_group
@@ -21,93 +20,6 @@ module RWebUnit
     include RWebUnit::Driver
     include RWebUnit::Utils
     include RWebUnit::Assert
-
-    module ClassMethods; end
-
-    def self.included(klass)
-      puts "#{self} included in #{base}"
-      case klass
-      when Class
-        klass.extend(ClassMethods)
-      when Module
-        #more work to include in a module
-      end
-    end
-
-    module ClassMethods
-
-      # Example
-      #  pages :all
-      #  pages :login_page, :payment_page
-      #  pages :login_page, :payment_page, :page_dir => "c:/tmp"
-      def pages(*args)
-        return if args.nil? or args.empty?
-        default_page_dir =  File.join(File.dirname(__FILE__), "pages")
-        page_dir = default_page_dir
-
-        page_files = []
-        args.each do |x|
-          if x.class == Hash &&  x[:page_dir]
-            page_dir = x[:page_dir]
-          else
-            page_files << x
-          end
-        end
-
-        if page_files.size == 1 && page_files[0] == :all
-          Dir[File.expand_path(page_dir)+ "/*_page.rb"].each { |page_file|
-            load page_file
-          }
-          return
-        end
-
-        page_files.each do |page|
-          page_file = File.join(page_dir, page.to_s)
-          load page_file
-        end
-      end
-
-      #
-      # Examples:
-      #   include RWebUnit::RSpecHelper
-      #
-      #   use :pages => [:login_page, :receipt_page]
-      #   use :pages => :all # will require all pages under page dir
-      #   use :pages => :all, :page_dir =>  File.join(File.dirname(__FILE__), "pages")  # provide page directory
-      #
-      # TODO:
-      #   :reload option seems not working
-      def use(options)
-        default_options = { :page_dir => File.join(File.dirname(__FILE__), "pages") }
-        default_options.merge!(options)
-
-        # use :pages => :all
-        if default_options[:pages].class == Symbol && default_options[:pages].class == :all
-          Dir[File.expand_path(default_options[:page_dir])+ "/*_page.rb"].each { |page_file|
-            require page_file
-          }
-          return
-        end
-
-        default_options[:pages].each do |page|
-          page_file = File.join(default_options[:page_dir], page.to_s)
-          if default_options[:reload]
-            if File.exists?(page_file)
-              #puts "loading page => #{page_file}"
-              load page_file
-            elsif File.exists?(page_file + ".rb")
-              #puts "loading page with .rb => #{page_file + '.rb'}"
-              load page_file + '.rb'
-            else
-              puts "unable to find the page to load: #{page_file}"
-            end
-          else
-            #puts "requiring pages: #{page_file}"
-            require page_file
-          end
-        end
-      end
-    end
 
     # --
     #  Content
