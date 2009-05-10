@@ -16,7 +16,7 @@ require 'spec'
 RWEBUNIT_VERSION = "1.3.0"
 
 # Extra full path to load libraries
-require File.dirname(__FILE__) + "/rwebunit/mixin_class_methods"
+require File.dirname(__FILE__) + "/rwebunit/using_pages"
 require File.dirname(__FILE__) + "/rwebunit/test_utils"
 require File.dirname(__FILE__) + "/rwebunit/web_page"
 require File.dirname(__FILE__) + "/rwebunit/assert"
