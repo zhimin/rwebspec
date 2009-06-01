@@ -1,12 +1,15 @@
 module RWebUnit
   module UsingPages
 
+    # support Ruby 1.9
     def self.extended(kclass)
-      file = caller[1][/(.*):\d+$/, 1] ## a bit fragile, maybe
-      dir = File.expand_path(File.dirname(file))
-      kclass.const_set "TestFileDir", dir
+      caller_file = caller[1]
+      if caller_file && caller_file =~ /^(.*):\d+.*$/ 
+        file = $1
+        dir = File.expand_path(File.dirname(file))
+        kclass.const_set "TestFileDir", dir
+      end
     end
-
 
     # Example
     #  pages :all
