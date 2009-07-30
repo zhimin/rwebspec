@@ -405,9 +405,9 @@ module RWebUnit
         require 'hpricot'
         doc = Hpricot(content)
         base_url.slice!(-1) if ends_with?(base_url, "/")
-        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) }
-        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) }
-        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) }        
+        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || ""}
+        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}        
+        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}
         return doc.to_html
       rescue => e
         absolutize_page(content, base_url, parent_url)
@@ -420,12 +420,12 @@ module RWebUnit
     # to
     #   <script type="text/javascript" src="http://itest2.com/javascripts/prototype.js"></script>
     def absolutify_url(src, base_url, parent_url)
-      if src.nil? || src.empty? || src == "//:" || src =~ /\s*http:\/\//
+      if src.nil? || src.empty? || src == "//:" || src =~ /\s*http:\/\//i
         return src
       end
       
-      return "#{base_url}#{src}"if src =~ /^\s*\//
-      return "#{parent_url}#{src}"if parent_url
+      return "#{base_url}#{src}" if src =~ /^\s*\//
+      return "#{parent_url}#{src}" if parent_url
       return src
     end
     
