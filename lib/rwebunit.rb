@@ -13,7 +13,7 @@ end
 require 'active_support/core_ext'
 require 'spec'
 
-RWEBUNIT_VERSION = "1.3.0"
+RWEBUNIT_VERSION = "1.3.1"
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebunit/using_pages"
