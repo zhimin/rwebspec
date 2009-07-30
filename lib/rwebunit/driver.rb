@@ -337,7 +337,7 @@ module RWebUnit
       if options[:dir]
         # already defined the dir
         to_dir = options[:dir]
-      elsif $ITEST2_RUNNING_SPEC_ID
+      elsif $ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR
 
         $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
         FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
@@ -364,41 +364,71 @@ module RWebUnit
       current_url =~ /(.*\/).*$/
       current_url_parent = $1
       if options[:replacement] && base_url =~ /^http:/
-
-        # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
-        # '<script type="text/javascript" src="http://www.jeroenwijering.com/embed/swfobject.js"></script>'
-        # <script type="text/javascript" src="/javascripts/prototype.js"></script>
-        # <script type="text/javascript" src="/javascripts/scriptaculous.js?load=effects,builder"></script>
-        # <script type="text/javascript" src="/javascripts/extensions/gallery/lightbox.js"></script>
-        # <link href="/stylesheets/extensions/gallery/lightbox.css" rel="stylesheet" type="text/css" />
-        # <img src="images/mission_48.png" />
-
-        modified_content = ""
-
-        content.each_line do |line|
-          if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then
-            script_src = $1
-            substitute_relative_path_in_src_line(line, script_src, base_url, current_url_parent)
-          elsif line =~ /<link\s+.*href=["'']?(.*)["'].*/i then
-            link_href = $1
-            substitute_relative_path_in_src_line(line, link_href, base_url, current_url_parent)
-          elsif line =~ /<img\s+.*src=["'']?(.*)["'].*/i then
-            img_src = $1
-            substitute_relative_path_in_src_line(line, img_src, base_url, current_url_parent)
-          end
-
-          modified_content += line
-        end
-
-        File.new(file, "w").puts modified_content
+        File.new(file, "w").puts absolutize_page_hpricot(content, base_url, current_url_parent)
       else
         File.new(file, "w").puts content
-
       end
-
 
     end
 
+
+    # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
+    # '<script type="text/javascript" src="http://www.jeroenwijering.com/embed/swfobject.js"></script>'
+    # <script type="text/javascript" src="/javascripts/prototype.js"></script>
+    # <script type="text/javascript" src="/javascripts/scriptaculous.js?load=effects,builder"></script>
+    # <script type="text/javascript" src="/javascripts/extensions/gallery/lightbox.js"></script>
+    # <link href="/stylesheets/extensions/gallery/lightbox.css" rel="stylesheet" type="text/css" />
+    # <img src="images/mission_48.png" />
+    def absolutize_page(content, base_url, current_url_parent)
+      modified_content = ""
+      content.each_line do |line|
+        if line =~ /<script\s+.*src=["'']?(.*)["'].*/i then
+          script_src = $1
+          substitute_relative_path_in_src_line(line, script_src, base_url, current_url_parent)
+        elsif line =~ /<link\s+.*href=["'']?(.*)["'].*/i then
+          link_href = $1
+          substitute_relative_path_in_src_line(line, link_href, base_url, current_url_parent)
+        elsif line =~ /<img\s+.*src=["'']?(.*)["'].*/i then
+          img_src = $1
+          substitute_relative_path_in_src_line(line, img_src, base_url, current_url_parent)
+        end
+
+        modified_content += line
+      end
+      return modified_content
+    end
+
+    # absolutize_page referencs using hpricot
+    #   
+    def absolutize_page_hpricot(content, base_url, parent_url)
+      begin
+        require 'hpricot'
+        doc = Hpricot(content)
+        base_url.slice!(-1) if ends_with?(base_url, "/")
+        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) }
+        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) }
+        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) }        
+        return doc.to_html
+      rescue => e
+        absolutize_page(content, base_url, parent_url)
+      end
+    end
+
+    ## 
+    # change 
+    #   <script type="text/javascript" src="/javascripts/prototype.js"></script>
+    # to
+    #   <script type="text/javascript" src="http://itest2.com/javascripts/prototype.js"></script>
+    def absolutify_url(src, base_url, parent_url)
+      if src.nil? || src.empty? || src == "//:" || src =~ /\s*http:\/\//
+        return src
+      end
+      
+      return "#{base_url}#{src}"if src =~ /^\s*\//
+      return "#{parent_url}#{src}"if parent_url
+      return src
+    end
+    
     # substut
     def substitute_relative_path_in_src_line(line, script_src, host_url, page_parent_url)
       unless script_src =~ /^["']?http:/
@@ -465,6 +495,10 @@ module RWebUnit
       RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw32")
     end
 
+    def is_linux?
+      RUBY_PLATFORM.downcase.include?("linux")
+    end
+
     # Support browser (IE) operations using unicode
     #  Example:
     #   click_button("Google 搜索")
@@ -475,10 +509,6 @@ module RWebUnit
       end
     end
     alias support_unicode support_utf8
-
-    def is_linux?
-      RUBY_PLATFORM.downcase.include?("linux")
-    end
 
     #= Convenient functions
     #
@@ -515,13 +545,7 @@ module RWebUnit
     # Example:
     #   allow { click_button('Register') }
     def allow(&block)
-      operation_performed_ok = false
-      begin
-        yield
-        operation_performed_ok  = true
-      rescue
-      end
-      operation_performed_ok
+      yield
     end
     alias shall_allow  allow
     alias allowing  allow

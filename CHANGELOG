@@ -1,6 +1,9 @@
 CHANGELOG
 =========
-
+  1.3.1
+   [Enhancement] better absolutize the hyperlinks in dumped page source
+   [Fixes] logic in allowing method
+ 
   1.3
    add new syntax for including pages
    extend RWebUnit::UsingPages

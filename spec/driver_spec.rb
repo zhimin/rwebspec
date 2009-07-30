@@ -48,6 +48,15 @@ specification "Driver" do
     shall_not_allow {1 / 0}
   end
 
+  story "allowing" do
+    begin
+      allowing { 1 / 0}
+      fail "error should have been thrown"    
+    rescue ZeroDivisionError => e
+      # puts "Y: #{e.class}"
+    end
+  end
+
   story "symbol_to_sequence" do
     assert_equal 1, symbol_to_sequence(:first)
     assert_equal 2, symbol_to_sequence(:second)
@@ -80,8 +89,17 @@ specification "Driver" do
     end
   end
 
-  story "save_current_page" do    
+  story "save_current_page" do
     save_current_page(:dir => "/tmp", :filename => "rwebunit_dump.html", :replacement => true)
+  end
+
+  story "absolutize_page hprioct" do
+    html = File.read(File.join(File.dirname(__FILE__), "0730161114_MyOrganizedMainPage.html"))
+    base_url = "http://myorganized.agileway.net"
+    current_url_parent = "/"
+    ret_page = absolutize_page_hpricot(html, base_url, current_url_parent)
+    ret_page.should include("http://myorganized.agileway.net/stylesheets/wenji.css")
+    # File.open("tmp.html", "w").puts ret_page
   end
 
 end
