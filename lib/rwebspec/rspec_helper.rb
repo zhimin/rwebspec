@@ -15,11 +15,11 @@ end
 # example
 #   should link_by_text(text, options).size > 0
 
-module RWebUnit
+module RWebSpec
   module RSpecHelper
-    include RWebUnit::Driver
-    include RWebUnit::Utils
-    include RWebUnit::Assert
+    include RWebSpec::Driver
+    include RWebSpec::Utils
+    include RWebSpec::Assert
 
     # --
     #  Content

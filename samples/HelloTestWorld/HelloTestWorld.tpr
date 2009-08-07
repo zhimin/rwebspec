@@ -16,7 +16,7 @@
   <spec_template>require 'rwebspec'
 
 spec "TEST_SUITE_NAME" do
-  include RWebUnit::RSpecHelper
+  include RWebSpec::RSpecHelper
 
   before(:all) do
     open_browser("http://MYCOOLSITE.COM")

@@ -7,12 +7,12 @@ require 'test/unit'
 require File.join(File.dirname(__FILE__), 'assert')
 require File.join(File.dirname(__FILE__), 'driver')
 
-module RWebUnit
+module RWebSpec
 
   class WebTestCase < Test::Unit::TestCase
-    include RWebUnit::Driver
-    include RWebUnit::Assert
-    include RWebUnit::Utils
+    include RWebSpec::Driver
+    include RWebSpec::Assert
+    include RWebSpec::Utils
 
     attr_reader :web_tester
 

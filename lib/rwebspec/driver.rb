@@ -10,10 +10,10 @@ require File.join(File.dirname(__FILE__), 'popup')
 require 'timeout'
 require 'uri'
 
-module RWebUnit
+module RWebSpec
   module Driver
-    include RWebUnit::ITestPlugin
-    include RWebUnit::Popup
+    include RWebSpec::ITestPlugin
+    include RWebSpec::Popup
 
     @@default_polling_interval = 1 # second
     @@default_timeout = 30 # seconds
@@ -33,10 +33,10 @@ module RWebUnit
       raise "base_url must be set" if base_url.nil?
 
       default_options = {:speed => "fast",
-        :visible => true,
-        :highlight_colour => 'yellow',
-        :close_others => true,
-        :start_new => false, 	# start a new browser always
+          :visible => true,
+          :highlight_colour => 'yellow',
+          :close_others => true,
+          :start_new => false,   # start a new browser always
       :go => true}
 
       options = default_options.merge options
@@ -50,7 +50,7 @@ module RWebUnit
         uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
       end
 
-      if options[:start_new]
+      if options[:start_new] || $celerity_loaded
         @web_browser = WebBrowser.new(uri_base, nil, options)
       else
         @web_browser = WebBrowser.reuse(uri_base, options) # Reuse existing browser
@@ -66,7 +66,7 @@ module RWebUnit
     end
     alias open_browser_with open_browser
 
-    # return the underlying RWebUnit::Browser object
+    # return the underlying RWebSpec::Browser object
     def browser
       @web_browser
     end
@@ -406,7 +406,7 @@ module RWebUnit
         doc = Hpricot(content)
         base_url.slice!(-1) if ends_with?(base_url, "/")
         (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || ""}
-        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}        
+        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}
         (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}
         return doc.to_html
       rescue => e
@@ -423,12 +423,12 @@ module RWebUnit
       if src.nil? || src.empty? || src == "//:" || src =~ /\s*http:\/\//i
         return src
       end
-      
+
       return "#{base_url}#{src}" if src =~ /^\s*\//
       return "#{parent_url}#{src}" if parent_url
       return src
     end
-    
+
     # substut
     def substitute_relative_path_in_src_line(line, script_src, host_url, page_parent_url)
       unless script_src =~ /^["']?http:/
@@ -714,16 +714,16 @@ module RWebUnit
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
       value = { :zero => 0,
-        :first => 1,
-        :second => 2,
-        :third => 3,
-        :fourth => 4,
-        :fifth => 5,
-        :sixth => 6,
-        :seventh => 7,
-        :eighth => 8,
-        :ninth => 9,
-      :tenth => 10 }[symb]
+          :first => 1,
+          :second => 2,
+          :third => 3,
+          :fourth => 4,
+          :fifth => 5,
+          :sixth => 6,
+          :seventh => 7,
+          :eighth => 8,
+          :ninth => 9,
+          :tenth => 10 }[symb]
       return value || symb.to_i
     end
 

@@ -6,7 +6,7 @@ require File.join(File.dirname(__FILE__), 'assert')
 require File.join(File.dirname(__FILE__), 'driver')
 require 'fileutils'
 
-module RWebUnit
+module RWebSpec
 
   # WebPage (children of AbstractWebPage) encapsulates a real web page.
   # For example,
@@ -22,8 +22,8 @@ module RWebUnit
   # So you only need change in LoingPage class if UI changes, which happen quite often.
   class AbstractWebPage
 
-    include RWebUnit::Assert
-    include RWebUnit::Driver
+    include RWebSpec::Assert
+    include RWebSpec::Driver
 
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate

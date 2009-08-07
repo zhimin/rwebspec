@@ -1,10 +1,10 @@
 # This is a comment (ignored),  line starting with #
-# Simple Spec shows using RWebUnit write easy-to-read automated test scripts (or specification)
+# Simple Spec shows using RWebSpec write easy-to-read automated test scripts (or specification)
 
 require 'rwebspec'
 
 spec "google search" do
-  include RWebUnit::RSpecHelper
+  include RWebSpec::RSpecHelper
 
   before(:all) do
     open_browser "http://www.google.com"

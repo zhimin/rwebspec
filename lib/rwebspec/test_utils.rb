@@ -5,7 +5,7 @@
 
 # useful hekoer methods for testing
 #
-module RWebUnit
+module RWebSpec
   module Utils
 
     # default date format returned is 29/12/2007.

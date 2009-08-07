@@ -13,15 +13,13 @@ end
 require 'active_support/core_ext'
 require 'spec'
 
-RWEBUNIT_VERSION = "1.3.1"
+RWEBUNIT_VERSION = "1.4.0"
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebspec/using_pages"
 require File.dirname(__FILE__) + "/rwebspec/test_utils"
 require File.dirname(__FILE__) + "/rwebspec/web_page"
 require File.dirname(__FILE__) + "/rwebspec/assert"
-#This cause some unit test loaded, to use it, load specifiically
-#require File.dirname(__FILE__) + "/rwebspec/web_testcase"
 require File.dirname(__FILE__) + "/rwebspec/itest_plugin"
 require File.dirname(__FILE__) + "/rwebspec/web_browser"
 require File.dirname(__FILE__) + "/rwebspec/driver"

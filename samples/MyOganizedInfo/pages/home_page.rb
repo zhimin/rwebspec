@@ -1,4 +1,4 @@
-class HomePage < RWebUnit::AbstractWebPage
+class HomePage < RWebSpec::AbstractWebPage
 
   def initialize(browser, text='')    
     super(browser)        

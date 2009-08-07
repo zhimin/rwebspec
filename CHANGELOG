@@ -9,7 +9,7 @@ CHANGELOG
  
   1.3
    add new syntax for including pages
-   extend RWebUnit::UsingPages
+   extend RWebSpec::UsingPages
    pages :login_page, :receipt_page, :page_dir => 'c:/temp'
 
   1.2.4

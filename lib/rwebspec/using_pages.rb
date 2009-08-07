@@ -1,4 +1,4 @@
-module RWebUnit
+module RWebSpec
   module UsingPages
 
     # support Ruby 1.9

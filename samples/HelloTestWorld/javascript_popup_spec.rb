@@ -1,7 +1,7 @@
 require 'rwebspec'
 
 spec "JavaScript Popup Window" do
-  include RWebUnit::RSpecHelper
+  include RWebSpec::RSpecHelper
 
   # Remeber to allow turn on allowing popup window setting in IE
   scenario "Click javascript confirmation popup in IE" do

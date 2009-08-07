@@ -1,8 +1,8 @@
-module RWebUnit
+module RWebSpec
   module TestScript
-    include RWebUnit::Driver
-    include RWebUnit::Utils
-    include RWebUnit::Assert
+    include RWebSpec::Driver
+    include RWebSpec::Utils
+    include RWebSpec::Assert
     
   end
 end

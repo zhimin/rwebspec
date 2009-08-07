@@ -1,6 +1,6 @@
 require 'test/unit/assertions'
 
-module RWebUnit
+module RWebSpec
   module Assert
 
     include Test::Unit::Assertions

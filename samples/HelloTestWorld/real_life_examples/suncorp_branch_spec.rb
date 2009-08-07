@@ -1,7 +1,7 @@
 require 'rwebspec'
 
 spec "Locate a Suncorp Branch" do
-  include RWebUnit::RSpecHelper
+  include RWebSpec::RSpecHelper
 
   before(:all) do
     open_browser_with("http://suncorp.com.au/")

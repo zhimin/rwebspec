@@ -1,6 +1,6 @@
 require 'socket'
 
-module RWebUnit
+module RWebSpec
   module ITestPlugin
 
     def connect_to_itest(message_type, body)

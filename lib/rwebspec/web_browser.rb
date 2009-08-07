@@ -22,9 +22,17 @@ rescue LoadError => e
   $firewatir_loaded = false
 end
 
-raise "You have must at least Watir or Firewatir installed" unless $watir_loaded || $firewatir_loaded
+begin
+  require "rubygems";
+  require "celerity";
+  $celerity_loaded = true
+rescue LoadError => e
+  $celerity_loaded = false
+end
 
-module RWebUnit
+raise "You have must at least Watir or Firewatir installed" unless $watir_loaded || $firewatir_loaded || $celerity_loaded
+
+module RWebSpec
 
   ##
   #  Wrapping WATIR IE and FireWatir Firefox
@@ -35,27 +43,33 @@ module RWebUnit
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
       default_options = {:speed => "zippy", :visible => true,
-      :highlight_colour => 'yellow',  :close_others => true}
+          :highlight_colour => 'yellow',  :close_others => true}
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
-      if (existing_browser) then
-        @browser = existing_browser
+      if $celerity_loaded
+        @browser = Celerity::Browser.new(:proxy => options[:proxy])
+        @browser.goto(base_url)
       else
-        if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
-          # JSSH is running, 9997
-          begin
-            require 'net/telnet'
-            firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
-            FireWatir::Firefox.firefox_started = true
-          rescue => e
-            # puts "debug: XXX #{e}"
-            sleep 1
+        if (existing_browser) then
+          @browser = existing_browser
+        else
+          if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
+            # JSSH is running, 9997
+            begin
+              require 'net/telnet'
+              firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
+              FireWatir::Firefox.firefox_started = true
+            rescue => e
+              # puts "debug: XXX #{e}"
+              sleep 1
+            end
+            @browser = FireWatir::Firefox.start(base_url)
+          elsif $watir_loaded
+            @browser = Watir::IE.new
           end
-          @browser = FireWatir::Firefox.start(base_url)
-        elsif $watir_loaded
-          @browser = Watir::IE.new
         end
+
       end
 
       raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
@@ -68,7 +82,12 @@ module RWebUnit
         end
         @browser.activeObjectHighLightColor = options[:highlight_colour]
         @browser.visible = options[:visible] unless $HIDE_IE
-        @browser.close_others if options[:close_others]
+
+        if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
+          puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
+          @browser.close_others
+        end
+
       end
 
     end
@@ -158,6 +177,7 @@ module RWebUnit
     end
 
     def is_firefox?
+      return false unless $firewatir_loaded
       begin
         @browser.class == FireWatir::Firefox
       rescue => e
@@ -210,7 +230,11 @@ module RWebUnit
     # performed.  Most action methods in Watir::Simple already call this before
     # and after.
     def wait_for_browser
-      @browser.waitForIE unless is_firefox?
+      if $celerity_loaded then
+        # puts "ignore, using celerity"
+      else
+        @browser.waitForIE unless is_firefox?
+      end
     end
 
 
@@ -448,7 +472,7 @@ module RWebUnit
 
 
     def self.is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin")
+      RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
     end
 
   end

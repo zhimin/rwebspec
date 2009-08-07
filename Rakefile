@@ -10,7 +10,8 @@ $:.unshift(File.dirname(__FILE__) + "/lib")
 #require 'rwebspec'
 
 desc "Default task"
-task :default => [ :clean, :spec, :rdoc, :gem]
+task :default => [ :clean, :spec, :gem]
+# task :default => [ :clean, :spec, :rdoc, :gem]
 
 desc "Clean generated files"
 task :clean do

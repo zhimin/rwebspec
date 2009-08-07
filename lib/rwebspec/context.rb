@@ -3,7 +3,7 @@
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
-module RWebUnit
+module RWebSpec
 
   ##
   #  Store test optionns

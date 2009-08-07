@@ -1,4 +1,4 @@
-module RWebUnit
+module RWebSpec
   module Popup
 
     #= Popup

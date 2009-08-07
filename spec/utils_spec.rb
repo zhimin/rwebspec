@@ -6,8 +6,8 @@ require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/test_utils.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/assert.rb")
 
 test_suite "Utils" do
-  include RWebUnit::Utils
-  include RWebUnit::Assert
+  include RWebSpec::Utils
+  include RWebSpec::Assert
 
   story "today" do
     today_str = sprintf("%02d/%02d/%04d", Time.now.day, Time.now.month, Time.now.year)

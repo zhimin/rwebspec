@@ -1,7 +1,7 @@
 require 'rwebspec'
 
 spec "Brisbane Library User Authentications" do
-  include RWebUnit::RSpecHelper
+  include RWebSpec::RSpecHelper
 
   scenario "[001] Deny access if user name is not correct" do
     open_browser_with("http://elibcat.library.brisbane.qld.gov.au/uhtbin/webcat/")
