@@ -1,4 +1,4 @@
-require 'rwebunit'
+require 'rwebspec'
 
 spec "JavaScript Popup Window" do
   include RWebUnit::RSpecHelper

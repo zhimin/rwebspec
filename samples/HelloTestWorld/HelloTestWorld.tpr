@@ -13,7 +13,7 @@
   <exclude_dirs></exclude_dirs>
   <exclude_files></exclude_files>
   <test_named_as>specification</test_named_as>
-  <spec_template>require 'rwebunit'
+  <spec_template>require 'rwebspec'
 
 spec "TEST_SUITE_NAME" do
   include RWebUnit::RSpecHelper

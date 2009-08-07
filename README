@@ -3,7 +3,7 @@ rWebUnit wraps the popular web testing framework WATIR with RSpec Syntax to prov
 
 Sample rWebUnit Test:
 
-require 'rwebunit'
+require 'rwebspec'
 
 spec "Locate a Suncorp Branch" do
   include RWebUnit::RSpecHelper

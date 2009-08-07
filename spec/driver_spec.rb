@@ -3,15 +3,15 @@ require "spec"
 require 'uri'
 
 require File.join(File.dirname(__FILE__), "..", "lib/rspec_extensions.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/driver.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/context.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/web_browser.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/web_page.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebunit/assert.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/driver.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/context.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_browser.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_page.rb")
+require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/assert.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/watir_extensions.rb")
 require 'test/unit/assertions'
 
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
+$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebspec")
 
 require File.dirname(__FILE__) + "/stack"
 require File.dirname(__FILE__) + "/mock_page"
@@ -90,7 +90,7 @@ specification "Driver" do
   end
 
   story "save_current_page" do
-    save_current_page(:dir => "/tmp", :filename => "rwebunit_dump.html", :replacement => true)
+    save_current_page(:dir => "/tmp", :filename => "rwebspec_dump.html", :replacement => true)
   end
 
   story "absolutize_page hprioct" do

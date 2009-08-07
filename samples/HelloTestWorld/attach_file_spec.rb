@@ -1,4 +1,4 @@
-require 'rwebunit'
+require 'rwebspec'
 
 spec "File attachment" do
   include RWebUnit::RSpecHelper

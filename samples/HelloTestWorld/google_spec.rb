@@ -1,7 +1,7 @@
 # This is a comment (ignored),  line starting with #
 # Simple Spec shows using RWebUnit write easy-to-read automated test scripts (or specification)
 
-require 'rwebunit'
+require 'rwebspec'
 
 spec "google search" do
   include RWebUnit::RSpecHelper

@@ -1,4 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
+$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebspec")
 
 require File.dirname(__FILE__) + "/stack"
 

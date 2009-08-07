@@ -7,7 +7,7 @@ gem 'darkfish-rdoc'
 # require 'darkfish-rdoc'
 
 $:.unshift(File.dirname(__FILE__) + "/lib")
-#require 'rwebunit'
+#require 'rwebspec'
 
 desc "Default task"
 task :default => [ :clean, :spec, :rdoc, :gem]
@@ -31,16 +31,16 @@ end
 #   rdoc.title = 'rWebUnit'
 #   rdoc.template = "#{ENV['template']}.rb" if ENV['template']
 #   rdoc.rdoc_files.include('README')
-#   rdoc.rdoc_files.include('lib/rwebunit.rb')
-#   rdoc.rdoc_files.include('lib/rwebunit/*.rb')
+#   rdoc.rdoc_files.include('lib/rwebspec.rb')
+#   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
 # }
 
 # using DarkFish - http://deveiate.org/projects/Darkfish-Rdoc/
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = 'rWebUnit'
-  rdoc.rdoc_files.include('lib/rwebunit.rb')
-  rdoc.rdoc_files.include('lib/rwebunit/*.rb')
+  rdoc.rdoc_files.include('lib/rwebspec.rb')
+  rdoc.rdoc_files.include('lib/rwebspec/*.rb')
     rdoc.options += [
         '-SHN',
         '-f', 'darkfish',  # This is the important bit
@@ -49,20 +49,20 @@ end
 
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
-  s.name = "rwebunit"
-  s.version = "1.3.1"
-  s.summary = "An wrap of WATIR/FireWatir for functional testing of web applications"
+  s.name = "rwebspec"
+  s.version = "1.4.0"
+  s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
   # s.description = ""
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.net"
-  s.homepage= "http://github.com/zhimin/rwebunit/tree/master"
-  s.rubyforge_project = "rwebunit"
+  s.homepage= "http://github.com/zhimin/rwebspec/tree/master"
+  s.rubyforge_project = "rwebspec"
 
   s.has_rdoc    = true
   s.requirements << 'none'
   s.require_path    = "lib"
-  s.autorequire     = "rwebunit"
+  s.autorequire     = "rwebspec"
 
   s.files = [ "Rakefile", "README", "CHANGELOG", "MIT-LICENSE" ]
   s.files = s.files + Dir.glob( "lib/**/*" )

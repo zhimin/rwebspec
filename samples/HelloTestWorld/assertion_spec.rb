@@ -1,4 +1,4 @@
-require 'rwebunit'
+require 'rwebspec'
 
 begin
   FireWatir::Firefox.firefox_started = true

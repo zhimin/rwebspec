@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + "/stack"
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebunit")
+$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebspec")
 gem "rspec"
 require File.join(File.dirname(__FILE__), "..", "lib/rspec_extensions.rb")
 

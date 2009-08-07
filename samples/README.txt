@@ -2,7 +2,7 @@ This folder contains some sample rWebUnit test suites.
 
 To Run those tests, You need install 
   Ruby (1.8.6 or 1.9.x) and required libraries (called gems) 
-     * rwebunit
+     * rwebspec
      * watir
 or 
   pre-packaged PRoR (http://www.itest2.com/downloads/) for Windows users.

@@ -1,4 +1,4 @@
-require 'rwebunit'
+require 'rwebspec'
 
 spec "Locate a Suncorp Branch" do
   include RWebUnit::RSpecHelper

@@ -1,4 +1,4 @@
-require 'rwebunit'
+require 'rwebspec'
 
 spec "Brisbane Library User Authentications" do
   include RWebUnit::RSpecHelper
