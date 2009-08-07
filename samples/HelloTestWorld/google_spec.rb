@@ -21,13 +21,13 @@ spec "google search" do
   scenario "Page navigations" do
     enter_text("q", "iTest2")
     click_button("Google Search")
-    click_link("iTest2 - Automated Testing Made Easy")
-    page_title.should == "iTest2 - Automated Testing Made Easy"
+    click_link("iTest2 - Watir IDE and more ...")
+    page_title.should == "iTest2 - Watir IDE and more ..."
     refresh
-    click_link("Wiki")
+    click_link("Features")
     go_back
     go_forward
-    page_source.should include("What makes iTest different?")
+    page_source.should include("Professional Edition adds ...")
   end
   
 end
