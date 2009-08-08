@@ -62,6 +62,7 @@ module RWebSpec
     def source
       @web_browser.page_source
     end
+    alias html source
 
     # return current page title
     def title

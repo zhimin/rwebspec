@@ -346,7 +346,7 @@ module RWebSpec
         spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
         to_dir = File.join($ITEST2_DUMP_DIR, spec_run_dir_name)
       else
-        to_dir = ENV['TEMP_DIR'] || "C:\\temp"
+        to_dir = ENV['TEMP_DIR'] || (is_windows? ? "C:\\temp" : "/tmp") 
       end
 
       if options[:filename]
@@ -401,6 +401,7 @@ module RWebSpec
     # absolutize_page referencs using hpricot
     #   
     def absolutize_page_hpricot(content, base_url, parent_url)
+      return  absolutize_page(content, base_url, parent_url) if RUBY_PLATFORM == 'java'
       begin
         require 'hpricot'
         doc = Hpricot(content)
