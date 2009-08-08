@@ -43,12 +43,16 @@ module RWebSpec
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
       default_options = {:speed => "zippy", :visible => true,
-          :highlight_colour => 'yellow',  :close_others => true}
+          :highlight_colour => 'yellow',  :close_others => true
+          }
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
       if $celerity_loaded
-        @browser = Celerity::Browser.new(:proxy => options[:proxy], :resynchronize => options[:resynchronize])
+        default_celerity_options = { :browser => :firefox, :resynchronize => true, :log_level => :off }
+        options = default_celerity_options.merge options
+        options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
+        @browser = Celerity::Browser.new(options)
         @browser.goto(base_url)
       else
         if (existing_browser) then

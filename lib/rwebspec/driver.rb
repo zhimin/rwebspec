@@ -503,6 +503,7 @@ module RWebSpec
     # Support browser (IE) operations using unicode
     #  Example:
     #   click_button("Google 搜索")
+    # Reference: http://jira.openqa.org/browse/WTR-219
     def support_utf8
       if is_windows?
         require 'win32ole'
