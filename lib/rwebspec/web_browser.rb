@@ -48,7 +48,7 @@ module RWebSpec
       @context = Context.new base_url if base_url
 
       if $celerity_loaded
-        @browser = Celerity::Browser.new(:proxy => options[:proxy])
+        @browser = Celerity::Browser.new(:proxy => options[:proxy], :resynchronize => options[:resynchronize])
         @browser.goto(base_url)
       else
         if (existing_browser) then
