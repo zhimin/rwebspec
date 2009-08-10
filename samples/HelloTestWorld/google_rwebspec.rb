@@ -1,13 +1,13 @@
 # This is a comment (ignored),  line starting with #
 # Simple Spec shows using RWebSpec write easy-to-read automated test scripts (or specification)
-
+require 'rubygems'
 require 'rwebspec'
 
 spec "google search" do
   include RWebSpec::RSpecHelper
 
   before(:all) do
-    open_browser "http://www.google.com"
+    open_browser "http://www.google.com", :firefox => true
   end
 
   before(:each) do

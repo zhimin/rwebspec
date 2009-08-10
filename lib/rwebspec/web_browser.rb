@@ -42,58 +42,93 @@ module RWebSpec
     attr_accessor :context
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
-      default_options = {:speed => "zippy", :visible => true,
-          :highlight_colour => 'yellow',  :close_others => true
-          }
+      default_options = {:speed => "zippy",
+                         :visible => true,
+                         :highlight_colour => 'yellow',
+                         :close_others => true
+      }
       options = default_options.merge options
+      options[:existing_browser] = existing_browser
       @context = Context.new base_url if base_url
 
-      if $celerity_loaded
-        default_celerity_options = { :browser => :firefox, :resynchronize => true, :log_level => :off }
-        options = default_celerity_options.merge options
-        options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
-        @browser = Celerity::Browser.new(options)
-        @browser.goto(base_url)
-      else
-        if (existing_browser) then
-          @browser = existing_browser
-        else
-          if (options[:firefox] &&  $firewatir_loaded) || ($firewatir_loaded and !$watir_loaded)
-            # JSSH is running, 9997
-            begin
-              require 'net/telnet'
-              firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
-              FireWatir::Firefox.firefox_started = true
-            rescue => e
-              # puts "debug: XXX #{e}"
-              sleep 1
+      case RUBY_PLATFORM
+        when /java/i
+          # Java, maybe firewatir or celerity
+          puts "Ruby java platform"
+          raise "Not supported, no FireWatir or Celerity detected" unless $firewatir_loaded || $celerity_loaded
+          if $firewatir_loaded && $celerity_loaded then
+            # choose one out of two, :default to celerity
+            if options[:firefox] then
+              initialize_firefox_browser(base_url, options)
+            else
+              initialize_celerity_browser(base_url, options)
             end
-            @browser = FireWatir::Firefox.start(base_url)
-          elsif $watir_loaded
-            @browser = Watir::IE.new
+          elsif $firewatir_loaded
+            initialize_firefox_browser(base_url, options)
+          else
+            initialize_celerity_browser(base_url, options)
           end
-        end
 
-      end
-
-      raise "rWebUnit initialiazation error, most likely Watir or Firewatir not present" if @browser.nil?
-      if  $watir_loaded && @browser.class == Watir::IE
-        if $ITEST2_EMULATE_TYPING  &&  $ITEST2_TYPING_SPEED then
-          @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
-          @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+        when /mswin|windows|mingw/i
+          puts "Ruby windows platform"
+          raise "Not supported, no Watir or FireWatir detected" unless $watir_loaded || $firewatir_loaded
+          if $firewatir_loaded && options[:firefox] then
+            initialize_firefox_browser(base_url, options)
+          else
+            initialize_ie_browser(options)
+          end
         else
-          @browser.speed = :zippy
-        end
-        @browser.activeObjectHighLightColor = options[:highlight_colour]
-        @browser.visible = options[:visible] unless $HIDE_IE
+          raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
+          puts "Ruby Linux or Mac platform: firefox"
+          initialize_firefox_browser(base_url, options)
+      end
+    end
 
-        if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
-          puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
-          @browser.close_others
-        end
+    def initialize_firefox_browser(base_url, options)
+      if options[:existing_browser] then
+        @browser = existing_browser
+        return
+      end
+      # JSSH is running, 9997
+      begin
+        require 'net/telnet'
+        firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
+        FireWatir::Firefox.firefox_started = true
+      rescue => e
+        # puts "debug: XXX #{e}"
+        sleep 1
+      end
+      @browser = FireWatir::Firefox.start(base_url)
+    end
 
+    def initialize_celerity_browser(base_url, options)
+      default_celerity_options = { :browser => :firefox, :resynchronize => true, :log_level => :off }
+      options = default_celerity_options.merge options
+      options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
+      @browser = Celerity::Browser.new(options)
+      @browser.goto(base_url)
+    end
+
+    def initialize_ie_browser(options)
+      if options[:existing_browser] then
+        @browser = existing_browser
+        return
       end
 
+      @browser = Watir::IE.new
+      if $ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED then
+        @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
+        @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+      else
+        @browser.speed = :zippy
+      end
+      @browser.activeObjectHighLightColor = options[:highlight_colour]
+      @browser.visible = options[:visible] unless $HIDE_IE
+      #NOTE: close_others fails
+      if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
+        puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
+        @browser.close_others
+      end
     end
 
     def self.reuse(base_url, options)
@@ -143,6 +178,7 @@ module RWebSpec
       @browser.html()
       #@browser.document.body
     end
+
     alias html_body page_source
 
     def html
@@ -199,6 +235,7 @@ module RWebSpec
       end
       sleep 2
     end
+
     alias close close_browser
 
     #TODO determine browser type, check FireWatir support or not
@@ -277,6 +314,7 @@ module RWebSpec
         wait_before_and_after { text_field(:name, name).set(text) }
       end
     end
+
     alias set_form_element enter_text_into_field_with_name
     alias enter_text enter_text_into_field_with_name
 
