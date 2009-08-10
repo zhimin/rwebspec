@@ -10,13 +10,13 @@ $:.unshift(File.dirname(__FILE__) + "/lib")
 #require 'rwebspec'
 
 desc "Default task"
-task :default => [ :clean, :spec, :gem]
-# task :default => [ :clean, :spec, :rdoc, :gem]
+task :default => [ :clean, :spec, :rdoc, :chm, :gem]
 
 desc "Clean generated files"
 task :clean do
   rm_rf 'pkg'
   rm_rf 'doc'
+  rm_rf 'chm'
 end
 
 desc 'Run all specs'
@@ -39,7 +39,7 @@ end
 # using DarkFish - http://deveiate.org/projects/Darkfish-Rdoc/
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
-  rdoc.title = 'rWebUnit'
+  rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
     rdoc.options += [
@@ -47,6 +47,18 @@ Rake::RDocTask.new do |rdoc|
         '-f', 'darkfish',  # This is the important bit
       ]
 end
+
+Rake::RDocTask.new("chm") do |rdoc|
+  rdoc.rdoc_dir = 'chm'
+  rdoc.title = 'RWebSpec'
+  rdoc.rdoc_files.include('lib/rwebspec.rb')
+  rdoc.rdoc_files.include('lib/rwebspec/*.rb')
+    rdoc.options += [
+        '-SHN',
+        '-f', 'chm',  # This is the important bit
+      ]
+end
+
 
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY

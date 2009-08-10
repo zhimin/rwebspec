@@ -76,9 +76,10 @@ module RWebSpec
 
     # TO validate
     def contains?(ary)
+      return true if ary.nil?
       the_page_source = source
       found = false
-      ary.each do |str|
+      ary.each_line do |str|
         found ||= the_page_source.include?(str)
       end
       return found
