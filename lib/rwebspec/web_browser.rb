@@ -102,9 +102,10 @@ module RWebSpec
     end
 
     def initialize_celerity_browser(base_url, options)
-      default_celerity_options = { :browser => :firefox, :resynchronize => true, :log_level => :off }
+      default_celerity_options = { :proxy => nil,  :browser => :firefox, :resynchronize => true, :log_level => :off }
       options = default_celerity_options.merge options
       options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
+      puts "Starting Celerity: #{options.inspect}"
       @browser = Celerity::Browser.new(options)
       @browser.goto(base_url)
     end
@@ -190,10 +191,13 @@ module RWebSpec
     end
 
     def page_title
-      if is_firefox?
+  	  case @browser.class.to_s
+ 	  when "FireWatir::Firefox" 	  
         @browser.title
-      else
+      when "Watir::IE"
         @browser.document.title
+      else
+        @browser.title
       end
     end
 
@@ -228,10 +232,13 @@ module RWebSpec
     # Close the browser window.  Useful for automated test suites to reduce
     # test interaction.
     def close_browser
-      if is_firefox? then
+ 	  case @browser.class.to_s
+ 	  when "FireWatir::Firefox" 	  
         @browser.close
+      when "Watir::IE"
+        @browser.getIE.quit      
       else
-        @browser.getIE.quit
+        puts "#{@browser.class} can't close, ignore"
       end
       sleep 2
     end
