@@ -48,7 +48,6 @@ module RWebSpec
                          :close_others => true
       }
       options = default_options.merge options
-      options[:existing_browser] = existing_browser
       @context = Context.new base_url if base_url
 
       case RUBY_PLATFORM
@@ -59,12 +58,12 @@ module RWebSpec
           if $firewatir_loaded && $celerity_loaded then
             # choose one out of two, :default to celerity
             if options[:firefox] then
-              initialize_firefox_browser(base_url, options)
+              initialize_firefox_browser(existing_browser, base_url, options)
             else
               initialize_celerity_browser(base_url, options)
             end
           elsif $firewatir_loaded
-            initialize_firefox_browser(base_url, options)
+            initialize_firefox_browser(existing_browser, base_url, options)
           else
             initialize_celerity_browser(base_url, options)
           end
@@ -73,9 +72,9 @@ module RWebSpec
           puts "Ruby windows platform"
           raise "Not supported, no Watir or FireWatir detected" unless $watir_loaded || $firewatir_loaded
           if $firewatir_loaded && options[:firefox] then
-            initialize_firefox_browser(base_url, options)
+            initialize_firefox_browser(existing_browser, base_url, options)
           else
-            initialize_ie_browser(options)
+            initialize_ie_browser(existing_browser, options)
           end
         else
           raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
@@ -84,8 +83,8 @@ module RWebSpec
       end
     end
 
-    def initialize_firefox_browser(base_url, options)
-      if options[:existing_browser] then
+    def initialize_firefox_browser(existing_browser, base_url, options)
+      if existing_browser then
         @browser = existing_browser
         return
       end
@@ -110,8 +109,8 @@ module RWebSpec
       @browser.goto(base_url)
     end
 
-    def initialize_ie_browser(options)
-      if options[:existing_browser] then
+    def initialize_ie_browser(existing_browser, options)
+      if existing_browser then
         @browser = existing_browser
         return
       end
