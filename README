@@ -1,5 +1,5 @@
 
-rWebUnit wraps the popular web testing framework WATIR with RSpec Syntax to provide better easy to read automated web test cases. By using iTest/Watir recorder, the rWebUnit test scripts can be recorded in Firefox. iTest2 makes editing/executing test cases with ease. 
+RWebSpec wraps the popular web testing framework WATIR with RSpec Syntax to provide better easy to read automated web test cases. By using iTest/Watir recorder, the rWebUnit test scripts can be recorded in Firefox. iTest2 makes editing/executing test cases with ease. 
 
 Sample rWebUnit Test:
 
