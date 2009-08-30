@@ -3,6 +3,8 @@
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
+# Deprecated, use RSpec syntax instead
+
 require 'test/unit'
 require File.join(File.dirname(__FILE__), 'assert')
 require File.join(File.dirname(__FILE__), 'driver')

@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+ 1.4.0.2
+   Fixed: reuse browser does not work
+   Add gem dependency (Watir/Firewatir) depends on platforms
+   More rdoc update
+
  1.4.0
   Renamed to rwebspec
   1.9 compliance

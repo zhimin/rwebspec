@@ -42,10 +42,16 @@ module RWebSpec
       assert_on_page
     end
 
+    # return the browser instance in page objects 
     def browser
       @web_browser
     end
 
+    # Assert is on current page
+    # Example
+    #   home_page = HomePage.new("Welcome to iTest2")
+    #   ....
+    #   home_page.assert_on_page # will check the text 'Welcome to iTest2' still present on the page
     def assert_on_page()
       assert_text_present(@page_text) if @page_text
     end
@@ -58,7 +64,7 @@ module RWebSpec
       @web_browser.dump_response(stream)
     end
 
-    
+    # Page source (html)
     def source
       @web_browser.page_source
     end
@@ -85,6 +91,10 @@ module RWebSpec
       return found
     end
 
+    # Will save current page source to a file
+    #  home_page = HomePage.new("Welcome to iTest2")
+    #  ...
+    #  home_page.snapshot() # => save to 20090830100102_HomePage.html 
     def	snapshot(replace_css = false)    
       save_current_page(:filename => Time.now.strftime("%m%d%H%M%S") + "_" + self.class.name.gsub(" ", "") + ".html" )
     end

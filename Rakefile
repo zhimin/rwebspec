@@ -41,11 +41,14 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
-  rdoc.rdoc_files.include('lib/rwebspec/*.rb')
-    rdoc.options += [
+  rdoc.rdoc_files.include('lib/rwebspec/*.rb')  
+  rdoc.rdoc_files.delete("lib/rwebspec/test_utils.rb")
+  rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
+  rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
+  rdoc.options += [
         '-SHN',
         '-f', 'darkfish',  # This is the important bit
-      ]
+  ]
 end
 
 Rake::RDocTask.new("chm") do |rdoc|
@@ -53,6 +56,9 @@ Rake::RDocTask.new("chm") do |rdoc|
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
+  rdoc.rdoc_files.delete("lib/rwebspec/test_utils.rb")
+  rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
+  rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
     rdoc.options += [
         '-SHN',
         '-f', 'chm',  # This is the important bit
@@ -63,7 +69,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "1.4.0.1"
+  s.version = "1.4.0.2"
   s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
   # s.description = ""
 
@@ -83,10 +89,14 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, ["= 1.1.12"])
+  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+    s.add_dependency("watir", ">= 1.6.2")
+  else
+    s.add_dependency("firewatir", ">= 1.6.2")
+  end
+    
   s.add_dependency("commonwatir", ">= 1.6.2")
   s.add_dependency("test-unit", ">= 2.0.2")
-  #  s.add_dependency("watir", ">= 1.6.2")
-  #  s.add_dependency("firewatir", ">= 1.6.2")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

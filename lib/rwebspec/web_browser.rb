@@ -43,43 +43,42 @@ module RWebSpec
 
     def initialize(base_url = nil, existing_browser = nil, options = {})
       default_options = {:speed => "zippy",
-                         :visible => true,
-                         :highlight_colour => 'yellow',
-                         :close_others => true
+        :visible => true,
+        :highlight_colour => 'yellow',
+        :close_others => true
       }
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
       case RUBY_PLATFORM
-        when /java/i
-          # Java, maybe firewatir or celerity
-          puts "Ruby java platform"
-          raise "Not supported, no FireWatir or Celerity detected" unless $firewatir_loaded || $celerity_loaded
-          if $firewatir_loaded && $celerity_loaded then
-            # choose one out of two, :default to celerity
-            if options[:firefox] then
-              initialize_firefox_browser(existing_browser, base_url, options)
-            else
-              initialize_celerity_browser(base_url, options)
-            end
-          elsif $firewatir_loaded
+      when /java/i
+        # Java, maybe firewatir or celerity
+        puts "Ruby java platform"
+        raise "Not supported, no FireWatir or Celerity detected" unless $firewatir_loaded || $celerity_loaded
+        if $firewatir_loaded && $celerity_loaded then
+          # choose one out of two, :default to celerity
+          if options[:firefox] then
             initialize_firefox_browser(existing_browser, base_url, options)
           else
             initialize_celerity_browser(base_url, options)
           end
-
-        when /mswin|windows|mingw/i
-          puts "Ruby windows platform"
-          raise "Not supported, no Watir or FireWatir detected" unless $watir_loaded || $firewatir_loaded
-          if $firewatir_loaded && options[:firefox] then
-            initialize_firefox_browser(existing_browser, base_url, options)
-          else
-            initialize_ie_browser(existing_browser, options)
-          end
-        else
-          raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
-          puts "Ruby Linux or Mac platform: firefox"
+        elsif $firewatir_loaded
           initialize_firefox_browser(existing_browser, base_url, options)
+        else
+          initialize_celerity_browser(base_url, options)
+        end
+
+      when /mswin|windows|mingw/i
+        raise "Not supported, no Watir or FireWatir detected" unless $watir_loaded || $firewatir_loaded
+        if $firewatir_loaded && options[:firefox] then
+          initialize_firefox_browser(existing_browser, base_url, options)
+        else
+          initialize_ie_browser(existing_browser, options)
+        end
+      else
+        raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
+        puts "Ruby Linux or Mac platform: firefox"
+        initialize_firefox_browser(existing_browser, base_url, options)
       end
     end
 
@@ -133,7 +132,7 @@ module RWebSpec
     end
 
     def self.reuse(base_url, options)
-      if RUBY_PLATFORM.downcase.include?("mswin") && $ITEST2_BROWSER != "Firefox"
+      if self.is_windows? && $ITEST2_BROWSER != "Firefox"
         Watir::IE.each do |browser_window|
           return WebBrowser.new(base_url, browser_window, options)
         end
@@ -162,7 +161,9 @@ module RWebSpec
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
 
-    # FireWatir does not support area directly, treat it as text_field
+    # Wrapp of Watir's area to support Firefox and Watir
+    #
+    # Note: FireWatir does not support area directly, treat it as text_field
     def area(*args)
       if is_firefox?
         text_field(*args)
@@ -175,24 +176,23 @@ module RWebSpec
       @browser.contains_text(text);
     end
 
+    # return HTML of current web page
     def page_source
       @browser.html()
       #@browser.document.body
     end
-
     alias html_body page_source
+    alias html page_source
 
-    def html
-      @browser.html
-    end
 
+    # return plain text of current web page
     def text
       @browser.text
     end
 
     def page_title
-  	  case @browser.class.to_s
- 	  when "FireWatir::Firefox" 	  
+      case @browser.class.to_s
+      when "FireWatir::Firefox"
         @browser.title
       when "Watir::IE"
         @browser.document.title
@@ -232,11 +232,11 @@ module RWebSpec
     # Close the browser window.  Useful for automated test suites to reduce
     # test interaction.
     def close_browser
- 	  case @browser.class.to_s
- 	  when "FireWatir::Firefox" 	  
+      case @browser.class.to_s
+      when "FireWatir::Firefox"
         @browser.close
       when "Watir::IE"
-        @browser.getIE.quit      
+        @browser.getIE.quit
       else
         puts "#{@browser.class} can't close, ignore"
       end
@@ -304,10 +304,17 @@ module RWebSpec
     alias go_back back
     alias go_forward forward
 
+    # Go to a page
+    #  Usage:
+    #    open_browser("http://www.itest2.com"
+    #    ....
+    #    goto_page("/purchase")  # full url => http://www.itest.com/purchase
     def goto_page(page)
       @browser.goto full_url(page);
     end
 
+    # Go to a URL directly
+    #  goto_url("http://www.itest2.com/downloads")
     def goto_url(url)
       @browser.goto url
     end
@@ -334,25 +341,37 @@ module RWebSpec
       wait_before_and_after { link(:text, text).click }
     end
 
-    ##
-    # buttons
-
+    # Click a button with give HTML id
+    # Usage:
+    #   click_button_with_id("btn_sumbit")
     def click_button_with_id(id)
       wait_before_and_after { button(:id, id).click }
     end
 
+    # Click a button with give name
+    # Usage:
+    #   click_button_with_name("confirm")
     def click_button_with_name(name)
       wait_before_and_after { button(:name, name).click }
     end
 
+    # Click a button with caption
+    # Usage:
+    #   click_button_with_caption("Confirm payment")
     def click_button_with_caption(caption)
       wait_before_and_after { button(:caption, caption).click }
     end
 
+    # Click a button with value
+    # Usage:
+    #   click_button_with_value("Confirm payment")
     def click_button_with_value(value)
       wait_before_and_after { button(:value, value).click }
     end
 
+    # Select a dropdown list by name
+    # Usage:
+    #   select_option("country", "Australia")
     def select_option(selectName, option)
       select_list(:name, selectName).select(option)
     end
@@ -370,7 +389,10 @@ module RWebSpec
       end
     end
 
-    # checkbox
+    # Check a checkbox
+    # Usage:
+    #   check_checkbox("agree")
+    #   check_checkbox("agree", "true")
     def check_checkbox(checkBoxName, values=nil)
       if values
         values.class == Array ? arys = values : arys = [values]
@@ -382,6 +404,10 @@ module RWebSpec
       end
     end
 
+    # Check a checkbox
+    # Usage:
+    #   uncheck_checkbox("agree")
+    #   uncheck_checkbox("agree", "false")
     def uncheck_checkbox(checkBoxName, values = nil)
       if values
         values.class == Array ? arys = values : arys = [values]
@@ -394,15 +420,21 @@ module RWebSpec
     end
 
 
-    # the method is protected in JWebUnit
+    # Click a radio button
+    #  Usage:
+    #    click_radio_option("country", "Australia")
     def click_radio_option(radio_group, radio_option)
       radio(:name, radio_group, radio_option).set
     end
 
+    # Clear a radio button
+    #  Usage:
+    #    click_radio_option("country", "Australia")
     def clear_radio_option(radio_group, radio_option)
       radio(:name, radio_group, radio_option).clear
     end
 
+    # Deprecated: using Watir style directly instead
     def element_by_id(elem_id)
       if is_firefox?
         # elem = @browser.document.getElementById(elem_id)
@@ -508,18 +540,24 @@ module RWebSpec
       @browser
     end
 
+    # return underlying firefox browser object, raise error if not running using Firefox
     def firefox
       raise "can't call this as it is configured to use IE" unless is_firefox?
       @browser
     end
 
+    # Save current web page source to file
+    #   usage:
+    #      save_page("/tmp/01.html")
+    #      save_page()  => # will save to "20090830112200.html"
     def save_page(file_name = nil)
       file_name ||= Time.now.strftime("%Y%m%d%H%M%S") + ".html"
-      puts "about to save page: #{File.expand_path(file_name)}"
+      puts "about to save page: #{File.expand_path(file_name)}" if $DEBUG
       File.open(file_name, "w").puts page_source
     end
 
 
+    # is it running in MS Windows platforms?
     def self.is_windows?
       RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
     end

@@ -13,7 +13,7 @@ end
 require 'active_support/core_ext'
 require 'spec'
 
-RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.4.0.1"
+RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.4.0.2"
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebspec/using_pages"
