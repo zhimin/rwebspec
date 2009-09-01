@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>samples/HelloTestWorld/google_rwebunit_spec.rb</string>
+	<string>lib/rwebspec/web_browser.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -18,10 +18,24 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>334</integer>
+	<integer>279</integer>
 	<key>metaData</key>
 	<dict>
 		<key>CHANGELOG</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>17</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>MIT-LICENSE</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -40,9 +54,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>17</integer>
+				<integer>1</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -54,16 +68,74 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>57</integer>
 				<key>line</key>
-				<integer>11</integer>
+				<integer>60</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>44</integer>
+		</dict>
+		<key>SolutionLog</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>SolutionLog</key>
+		<key>doc/RWebSpec.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>185</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>178</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>185</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>185</integer>
+			</dict>
+		</dict>
+		<key>doc/lib/rwebspec/context_rb.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lib/rspec_extensions.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -82,9 +154,23 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>56</integer>
 				<key>line</key>
-				<integer>22</integer>
+				<integer>18</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lib/rwebspec/clickJSDialog.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>3</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -96,16 +182,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>38</integer>
 				<key>line</key>
-				<integer>130</integer>
+				<integer>55</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>112</integer>
+			<integer>36</integer>
 		</dict>
 		<key>lib/rwebspec/itest_plugin.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>7</integer>
+				<key>line</key>
+				<integer>24</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>10</integer>
+		</dict>
+		<key>lib/rwebspec/popup.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -124,6 +224,64 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>15</integer>
+			</dict>
+		</dict>
+		<key>lib/rwebspec/test_script.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lib/rwebspec/test_utils.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lib/rwebspec/using_pages.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
@@ -138,23 +296,37 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>9</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>142</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>119</integer>
+		</dict>
+		<key>lib/rwebspec/web_page.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>9</integer>
+				<key>line</key>
+				<integer>89</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>66</integer>
 		</dict>
 		<key>lib/rwebspec/web_testcase.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>28</integer>
+				<integer>27</integer>
 				<key>line</key>
-				<integer>13</integer>
+				<integer>16</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -194,9 +366,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>22</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -208,9 +380,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>3</integer>
+				<integer>20</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -221,12 +393,21 @@
 	<key>openDocuments</key>
 	<array>
 		<string>Rakefile</string>
+		<string>lib/rwebspec/using_pages.rb</string>
 		<string>lib/rwebspec/web_browser.rb</string>
+		<string>lib/rwebspec/web_page.rb</string>
 		<string>lib/rwebspec/web_testcase.rb</string>
+		<string>lib/rwebspec/clickJSDialog.rb</string>
 		<string>lib/rwebspec/rspec_helper.rb</string>
+		<string>doc/RWebSpec.html</string>
+		<string>doc/lib/rwebspec/context_rb.html</string>
+		<string>lib/rwebspec/test_utils.rb</string>
+		<string>lib/rwebspec/popup.rb</string>
+		<string>lib/rwebspec/test_script.rb</string>
 		<string>lib/rwebspec/itest_plugin.rb</string>
 		<string>lib/rwebspec/driver.rb</string>
 		<string>README</string>
+		<string>MIT-LICENSE</string>
 		<string>SolutionLog</string>
 		<string>CHANGELOG</string>
 		<string>lib/watir_extensions.rb</string>
@@ -234,10 +415,11 @@
 		<string>rwebspec.gemspec</string>
 		<string>samples/HelloTestWorld/google_rwebunit_spec.rb</string>
 		<string>lib/rwebspec.rb</string>
+		<string>lib/rspec_extensions.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{655, 143}, {1079, 756}}</string>
+	<string>{{1, 268}, {1079, 756}}</string>
 </dict>
 </plist>

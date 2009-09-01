@@ -28,6 +28,13 @@ module RWebSpec
     #   2. If running using iTest2, used as confiured
     #   3. Use default value set
     def open_browser(base_url = nil, options = {})
+    
+      begin      
+        support_unicode        
+      rescue => e
+        puts "Unicode may not work in IE, #{e}"
+      end
+      
       base_url ||= $ITEST2_PROJECT_BASE_URL
       base_url ||= $BASE_URL
       raise "base_url must be set" if base_url.nil?

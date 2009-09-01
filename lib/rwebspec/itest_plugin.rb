@@ -46,19 +46,30 @@ module RWebSpec
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
       return unless $ITEST2_TRACE_EXECUTION
-      begin
+      begin      
+        trace_lines = []
+		    trace_file = nil
+        found_first_spec_reference = false
         caller.each_with_index do |position, idx|
           next unless position =~ /\A(.*?):(\d+)/
-          file = $1
+          trace_file = $1          
+		      if trace_file =~ /(_spec|_test|_rwebspec)\.rb\s*$/
+		        found_first_spec_reference = true
+            trace_lines << position
+		        break
+		      end
+          trace_lines << position
+          break if trace_file =~ /example\/example_methods\.rb$/ or trace_file =~ /example\/example_group_methods\.rb$/
+		      break if trace_lines.size > 10
           # TODO: send multiple trace to be parse with pages.rb
-          # next if file =~ /example\/example_methods\.rb$/ or file =~ /example\/example_group_methods\.rb$/ or file =~ /driver\.rb$/ or file =~ /timeout\.rb$/ # don't include rspec or ruby trace
-
-          if file.include?("_spec.rb") || file.include?("_test.rb") || file.include?("_cmd.rb")
-            connect_to_itest(" TRACE", position)
-          end
-
-          break if idx > 4 or file =~ /"_spec\.rb$/
+          # break if trace_file =~ /example\/example_methods\.rb$/ or trace_file =~ /example\/example_group_methods\.rb$/ or trace_file =~ /driver\.rb$/ or trace_file =~ /timeout\.rb$/ # don't include rspec or ruby trace
         end
+
+        #  (trace_file.include?("_spec.rb") || trace_file.include?("_rwebspec.rb") || trace_file.include?("_test.rb") || trace_file.include?("_cmd.rb"))
+        if !trace_lines.empty?
+           connect_to_itest(" TRACE", trace_lines.reverse.join("|"))
+        end
+
       rescue => e
         puts "failed to capture log: #{e}"
       end

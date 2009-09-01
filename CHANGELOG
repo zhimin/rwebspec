@@ -3,6 +3,7 @@ CHANGELOG
  1.4.0.2
    Fixed: reuse browser does not work
    Add gem dependency (Watir/Firewatir) depends on platforms
+   Patch Unicode by default
    More rdoc update
 
  1.4.0
