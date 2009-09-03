@@ -361,6 +361,7 @@ module RWebSpec
     def click_button_with_caption(caption)
       wait_before_and_after { button(:caption, caption).click }
     end
+    alias click_button click_button_with_caption
 
     # Click a button with value
     # Usage:
