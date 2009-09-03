@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>samples/HelloTestWorld/google_rwebunit_spec.rb</string>
+	<string>lib/rwebspec/web_browser.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -138,14 +138,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>55</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>81</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>59</integer>
 		</dict>
 		<key>lib/rwebspec/web_testcase.rb</key>
 		<dict>
@@ -208,9 +208,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>37</integer>
+				<integer>5</integer>
 				<key>line</key>
-				<integer>3</integer>
+				<integer>19</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -238,6 +238,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{655, 143}, {1079, 756}}</string>
+	<string>{{10, 54}, {1079, 756}}</string>
 </dict>
 </plist>
