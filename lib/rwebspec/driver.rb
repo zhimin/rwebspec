@@ -111,9 +111,9 @@ module RWebSpec
     #   expect_page HomePage
     def expect_page(page_clazz, argument = nil)
       if argument
-        page_clazz.new(@web_browser, argument)
+        @web_browser.expect_page(page_clazz, argument)
       else
-        page_clazz.new(@web_browser)
+        @web_browser.expect_page(page_clazz)
       end
     end
 

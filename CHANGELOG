@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+ 1.4.1
+   Added LoadTestHelper
+   add expect_page to web_browser
+
+
  1.4.0.2
    Fixed: reuse browser does not work
    Add gem dependency (Watir/Firewatir) depends on platforms

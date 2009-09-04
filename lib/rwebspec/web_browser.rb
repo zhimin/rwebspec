@@ -558,6 +558,18 @@ module RWebSpec
     end
 
 
+    # Verify the next page following an operation.
+    #
+    # Typical usage:
+    #   browser.expect_page HomePage
+    def expect_page(page_clazz, argument = nil)
+      if argument
+        page_clazz.new(self, argument)
+      else
+        page_clazz.new(self)
+      end
+    end
+
     # is it running in MS Windows platforms?
     def self.is_windows?
       RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
