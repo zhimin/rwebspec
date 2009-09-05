@@ -1,4 +1,5 @@
 pkg
 doc/*
 chm/*
+rwebspec.tmproj
 .DS_Store
