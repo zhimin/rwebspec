@@ -81,9 +81,9 @@ module RWebSpec
     # 
     # Usage
     #  log_time { browser.click_button('Confirm') }
-    def log_time(msg, &block)
+    def log_time(msg, &block)      
       start_time = Time.now
-      yield
+      yield        
       Thread.current[:log] ||= []
       Thread.current[:log] << [File.basename(__FILE__), msg, Time.now, Time.now - start_time]
     end

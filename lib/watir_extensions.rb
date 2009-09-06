@@ -18,8 +18,14 @@ else
         end
 
         waitTime = options[:waitTime] || 2
-
-        case RUBY_PLATFORM
+        
+        os = RUBY_PLATFORM
+        if RUBY_PLATFORM =~ /java/ then
+          require 'rbconfig'
+          os = Config::CONFIG['host_os']
+        end
+        
+        case os
         when /mswin/
           # Get the path to Firefox.exe using Registry.
           require 'win32/registry.rb'
@@ -38,8 +44,8 @@ else
           path_to_bin = `which firefox`.strip
         when /darwin/i
           path_to_bin = '/Applications/Firefox.app/Contents/MacOS/firefox'
-        when /java/
-          raise "Not implemented: Create a browser finder in JRuby"
+        when /java/          
+          raise "Error, should have set using rbconfig: #{os}"
         end
 
         @t = Thread.new { system("#{path_to_bin} -jssh #{profile_opt}")} unless @@firefox_started
