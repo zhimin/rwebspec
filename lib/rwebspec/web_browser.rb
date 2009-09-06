@@ -93,7 +93,7 @@ module RWebSpec
         firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
         FireWatir::Firefox.firefox_started = true
       rescue => e
-        # puts "debug: XXX #{e}"
+        puts "The firefox brower with JSSH is not available, #{e}"
         sleep 1
       end
       @browser = FireWatir::Firefox.start(base_url)
