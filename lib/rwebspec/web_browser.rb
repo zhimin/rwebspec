@@ -120,7 +120,7 @@ module RWebSpec
         @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
       else
         @browser.speed = :zippy
-      end
+      ends
       @browser.activeObjectHighLightColor = options[:highlight_colour]
       @browser.visible = options[:visible] unless $HIDE_IE
       #NOTE: close_others fails
@@ -331,6 +331,7 @@ module RWebSpec
 
     alias set_form_element enter_text_into_field_with_name
     alias enter_text enter_text_into_field_with_name
+    alias set_hidden_field set_form_element
 
     #links
     def click_link_with_id(link_id)
@@ -340,7 +341,9 @@ module RWebSpec
     def click_link_with_text(text)
       wait_before_and_after { link(:text, text).click }
     end
+    alias click_link click_link_with_text
 
+    
     # Click a button with give HTML id
     # Usage:
     #   click_button_with_id("btn_sumbit")
@@ -362,6 +365,7 @@ module RWebSpec
       wait_before_and_after { button(:caption, caption).click }
     end
     alias click_button click_button_with_caption
+    alias click_button_with_text click_button_with_caption
 
     # Click a button with value
     # Usage:
@@ -427,6 +431,7 @@ module RWebSpec
     def click_radio_option(radio_group, radio_option)
       radio(:name, radio_group, radio_option).set
     end
+    alias click_radio_button click_radio_option
 
     # Clear a radio button
     #  Usage:
@@ -434,6 +439,7 @@ module RWebSpec
     def clear_radio_option(radio_group, radio_option)
       radio(:name, radio_group, radio_option).clear
     end
+    alias clear_radio_button clear_radio_option
 
     # Deprecated: using Watir style directly instead
     def element_by_id(elem_id)
