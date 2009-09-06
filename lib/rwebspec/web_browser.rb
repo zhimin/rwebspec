@@ -120,7 +120,7 @@ module RWebSpec
         @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
       else
         @browser.speed = :zippy
-      ends
+      end
       @browser.activeObjectHighLightColor = options[:highlight_colour]
       @browser.visible = options[:visible] unless $HIDE_IE
       #NOTE: close_others fails
