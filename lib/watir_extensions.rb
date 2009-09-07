@@ -25,17 +25,21 @@ module FireWatir
 
       case os
       when /mswin/
-        # Get the path to Firefox.exe using Registry.
-        require 'win32/registry.rb'
-        path_to_bin = ""
-        Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Mozilla\Mozilla Firefox') do |reg|
-          keys = reg.keys
-          reg1 = Win32::Registry::HKEY_LOCAL_MACHINE.open("SOFTWARE\\Mozilla\\Mozilla Firefox\\#{keys[0]}\\Main")
-          reg1.each do |subkey, type, data|
-            if(subkey =~ /pathtoexe/i)
-              path_to_bin = data
+        begin
+          # Get the path to Firefox.exe using Registry.
+          require 'win32/registry.rb'
+          path_to_bin = ""
+          Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Mozilla\Mozilla Firefox') do |reg|
+            keys = reg.keys
+            reg1 = Win32::Registry::HKEY_LOCAL_MACHINE.open("SOFTWARE\\Mozilla\\Mozilla Firefox\\#{keys[0]}\\Main")
+            reg1.each do |subkey, type, data|
+              if(subkey =~ /pathtoexe/i)
+                path_to_bin = data
+              end
             end
           end
+        rescue LoadError => e
+          path_to_bin = '"C:\Program Files\Mozilla Firefox\firefox.exe"'
         end
 
       when /linux/i
