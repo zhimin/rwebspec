@@ -76,8 +76,11 @@ module RWebSpec
     end
 
     def random_char(lowercase = true)
-      sprintf("%c", random_number(97, 122)) if lowercase
-      sprintf("%c", random_number(65, 90)) unless lowercase
+      if lowercase
+        sprintf("%c", random_number(97, 122)) 
+      else
+        sprintf("%c", random_number(65, 90))
+      end
     end
 
     def random_digit()

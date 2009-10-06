@@ -28,6 +28,28 @@ test_suite "Utils" do
     assert_equal(tomorrow_str, days_from_now(1))
     assert_equal(tomorrow_str, tomorrow)
   end
+  
+  story "random string" do
+    str = random_str(20)
+    assert_equal(20, str.size)
+  end
+  
+  story "random string in collection" do
+    str = random_string_in(["abc", "def"])
+    assert str.class == String
+    assert str == "abc" || str == "def"
+  end
+  
+  story "random word" do
+    word = words(2) # => sit aliquam
+    assert_equal 2, word.split(" ").size    
+  end
+  
+  story "random number" do
+    100.times do
+      a_number =  random_number(10, 20)
+      assert a_number <= 20 && a_number >= 10
+    end      
+  end
+  
 end
-
-#END
