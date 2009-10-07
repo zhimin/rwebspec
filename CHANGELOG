@@ -4,6 +4,7 @@ CHANGELOG
    [New] Added LoadTestHelper
    [New] add expect_page to web_browser
    [Fix] nil error in random_str (test_utils.rb) 
+   [New] Add alias methods for select_list (alias)
 
  1.4.0.2
    Fixed: reuse browser does not work
