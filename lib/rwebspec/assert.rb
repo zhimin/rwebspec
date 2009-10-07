@@ -133,6 +133,7 @@ module RWebSpec
       assert(false, "can't find the combob box with value: #{option_value}")
     end
     alias assert_select_value_present assert_option_value_present
+    alias assert_menu_value_present assert_option_value_present
 
     def assert_option_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
@@ -144,6 +145,7 @@ module RWebSpec
       assert(false, "can't find the combob box: #{select_name} with value: #{option_label}")
     end
     alias assert_select_label_present assert_option_present
+    alias assert_menu_label_present assert_option_present
 
     def assert_option_equals(select_name, option_label)
       @web_browser.select_lists.each { |select|
@@ -156,6 +158,7 @@ module RWebSpec
       }
     end
     alias assert_select_label assert_option_equals
+    alias assert_menu_label assert_option_equals
 
     def assert_option_value_equals(select_name, option_value)
       @web_browser.select_lists.each { |select|
@@ -164,6 +167,7 @@ module RWebSpec
       }
     end
     alias assert_select_value assert_option_value_equals
+    alias assert_menu_value assert_option_value_equals
     
     ##
     # radio
