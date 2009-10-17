@@ -12,6 +12,9 @@ $:.unshift(File.dirname(__FILE__) + "/lib")
 desc "Default task"
 task :default => [ :clean, :spec, :rdoc, :chm, :gem]
 
+desc "Continous build"
+task :build => [:clean, :spec]
+
 desc "Clean generated files"
 task :clean do
   rm_rf 'pkg'
