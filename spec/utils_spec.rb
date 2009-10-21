@@ -52,4 +52,14 @@ test_suite "Utils" do
     end      
   end
   
+  story "sum" do
+      assert_equal 10, [1, 2, 3, 4].sum      
+      assert_equal 15.5, [1, 2, 3, 4, 5.5].sum      
+  end
+  
+  story "average" do
+      assert_equal 2.5, [1, 2, 3, 4].average
+  end
+  
+  
 end

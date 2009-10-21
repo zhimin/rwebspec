@@ -3,6 +3,18 @@
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
+
+class Array 
+  
+  def sum
+    inject(0.0) { |sum, e| sum + e }
+  end
+  
+  def average
+    inject(0.0) { |sum, e| sum + e } / length
+  end
+end
+
 # useful hekoer methods for testing
 #
 module RWebSpec
@@ -172,3 +184,5 @@ module RWebSpec
 
   end
 end
+
+
