@@ -750,7 +750,7 @@ module RWebSpec
           sleep 1
           autoit = WIN32OLE.new('AutoItX3.Control')
             # Look for window with given title. Give up after 1 second.
-              ret = autoit.WinWait(win_title, '', )
+              ret = autoit.WinWait(win_title, '', seconds)
               #
               # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
               if ret == 1 then
