@@ -750,7 +750,6 @@ module RWebSpec
           sleep 1
           autoit = WIN32OLE.new('AutoItX3.Control')
             # Look for window with given title. Give up after 1 second.
-            [, ].each do |win_title|
               ret = autoit.WinWait(win_title, '', )
               #
               # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
@@ -759,7 +758,6 @@ module RWebSpec
                 button_id = yes ? "Button1" : "Button2" # Yes or No
                 autoit.ControlClick(win_title, '',  button_id) 
               end
-            end
             sleep(0.5)
       else
           raise "Currently supported only on Windows"
