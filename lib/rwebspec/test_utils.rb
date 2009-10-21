@@ -4,12 +4,12 @@
 #***********************************************************
 
 
-class Array 
-  
+class Array
+
   def sum
     inject(0.0) { |sum, e| sum + e }
   end
-  
+
   def average
     inject(0.0) { |sum, e| sum + e } / length
   end
@@ -51,32 +51,33 @@ module RWebSpec
     #  %Z - Time zone name
     #  %% - Literal ``%'' character
 
-    def today(format = '%d/%m/%Y')
-      format_date(Time.now, format)
+    def today(format = nil)                
+      format_date(Time.now, date_format(format))
     end
     alias getToday_AU today
     alias getToday_US today
     alias getToday today
 
 
-    def days_before(days, format = '%d/%m/%Y')
-      nil if !(days.instance_of?(Fixnum))
-      format_date(Time.now - days * 24 * 3600, format)
+    def days_before(days, format = nil)        
+      return nil if !(days.instance_of?(Fixnum))
+      format_date(Time.now - days * 24 * 3600, date_format(format))
     end
 
-    def yesterday
-      days_before(1)
+    def yesterday(format = nil)
+      days_before(1, date_format(format))
     end
 
-    def days_from_now(days, format = '%d/%m/%Y')
-      nil if !(days.instance_of?(Fixnum))
-      format_date(Time.now + days * 24 * 3600, format)
+    def days_from_now(days, format = nil)
+      return nil if !(days.instance_of?(Fixnum))
+      format_date(Time.now + days * 24 * 3600, date_format(format))
     end
     alias days_after days_from_now
 
-    def tomorrow
-      days_from_now(1)
+    def tomorrow(format = nil)
+      days_from_now(1, date_format(format))
     end
+
 
     # return a random number >= min, but <= max
     def random_number(min, max)
@@ -89,7 +90,7 @@ module RWebSpec
 
     def random_char(lowercase = true)
       if lowercase
-        sprintf("%c", random_number(97, 122)) 
+        sprintf("%c", random_number(97, 122))
       else
         sprintf("%c", random_number(65, 90))
       end
@@ -131,7 +132,7 @@ module RWebSpec
     # Generate a given number of words. If a range is passed, it will generate
     # a random number of words within that range.
     def words(total)
-      (1..interpret_value(total)).map { WORDS.rand }.join(' ')
+      (1..interpret_value(total)).map { WORDS[random_number(0, total)] }.join(' ')
     end
 
     # Generate a given number of sentences. If a range is passed, it will generate
@@ -163,7 +164,7 @@ module RWebSpec
     private
 
     def time_in_range(range)
-      Time.at number_in_range(Range.new(range.first.to_i, range.last.to_i, range.exclude_end?))
+      Time.at number_in_range(Range.new(range.first.to_i, range.last.to_i, rangee.exclude_end?))
     end
 
     def date_in_range(range)
@@ -182,7 +183,34 @@ module RWebSpec
       date.strftime(date_format)
     end
 
+    def date_format(format_argument)
+      if format_argument.nil? then
+        get_locale_date_format(default_locale)        
+      elsif format_argument.class == Symbol then
+        get_locale_date_format(format_argument)
+      elsif format_argument.class == String then
+        format_argument
+      else
+        # invalid input, use default
+        get_locale_date_format(default_date_format)
+      end
+
+    end
+
+    def get_locale_date_format(locale)
+      case locale
+      when :us
+        "%m/%d/%Y"
+      when :au, :uk
+        "%d/%m/%Y"
+      else
+        "%Y-%m-%d"
+      end
+    end
+
+    def default_locale
+      return :au
+    end
+
   end
 end
-
-

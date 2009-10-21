@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+ 1.4.2
+   [New] average, sum for array objects, such as [1,2,3,4].average
+   [New] support date format with today(:us), yesterday("%d/%m/%Y")
+   [TODO] click security alerts
+
  1.4.1
    [New] Added LoadTestHelper
    [New] add expect_page to web_browser

@@ -5,7 +5,7 @@ require File.join(File.dirname(__FILE__), "..", "lib/rspec_extensions.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/test_utils.rb")
 require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/assert.rb")
 
-test_suite "Utils" do
+describe "Utils" do
   include RWebSpec::Utils
   include RWebSpec::Assert
 
@@ -13,6 +13,12 @@ test_suite "Utils" do
     today_str = sprintf("%02d/%02d/%04d", Time.now.day, Time.now.month, Time.now.year)
     assert_equal(today_str, today)
     assert_equal(sprintf("%02d/%02d/%04d", Time.now.month, Time.now.day,  Time.now.year), today("%m/%d/%Y"))
+    # puts "us: " + yesterday(:us)
+    # puts "uk: " + tomorrow(:uk)
+    # puts "cn: " + today(:cn)
+    assert today(:us) =~ /^\d{2}\/\d{2}\/\d{4}$/
+    assert today(:uk) =~ /^\d{2}\/\d{2}\/\d{4}$/
+    assert today(:cn) =~ /^\d{4}-\d{2}-\d{2}/
   end
 
   story "yesterday and days_before"  do
@@ -20,6 +26,7 @@ test_suite "Utils" do
     yesterday_str = sprintf("%02d/%02d/%04d", yesterday_date.day, yesterday_date.month, yesterday_date.year)
     assert_equal(yesterday_str, days_before(1))
     assert_equal(yesterday_str, yesterday)
+    
   end
 
   story "future date" do
@@ -42,7 +49,7 @@ test_suite "Utils" do
   
   story "random word" do
     word = words(2) # => sit aliquam
-    assert_equal 2, word.split(" ").size    
+    assert_equal 2, word.split(" ").size        
   end
   
   story "random number" do
