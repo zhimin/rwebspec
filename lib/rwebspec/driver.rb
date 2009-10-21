@@ -500,7 +500,7 @@ module RWebSpec
     end
 
     def is_windows?
-      RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw32")
+      RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
     end
 
     def is_linux?
@@ -736,6 +736,37 @@ module RWebSpec
       return value || symb.to_i
     end
 
+    # Clear popup windows such as 'Security Alert' or 'Security Information' popup window,
+    #
+    # Screenshot see http://kb2.adobe.com/cps/165/tn_16588.html
+    # 
+    # You can  also by pass security alerts by change IE setting, http://kb.iu.edu/data/amuj.html 
+    #
+    # Example
+    #   clear_popup("Security Information", 5, true) # check for Security Information for 5 seconds, click Yes
+    def clear_popup(popup_win_title, seconds = 10, yes = true)
+      # commonly "Security Alert", "Security Information"
+      if is_windows? 
+          sleep 1
+          autoit = WIN32OLE.new('AutoItX3.Control')
+            # Look for window with given title. Give up after 1 second.
+            [, ].each do |win_title|
+              ret = autoit.WinWait(win_title, '', )
+              #
+              # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
+              if ret == 1 then
+                puts "about to send click Yes" if debugging?
+                button_id = yes ? "Button1" : "Button2" # Yes or No
+                autoit.ControlClick(win_title, '',  button_id) 
+              end
+            end
+            sleep(0.5)
+      else
+          raise "Currently supported only on Windows"
+      end
+    end
+    
+    
   end
 
 end
