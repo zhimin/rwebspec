@@ -750,13 +750,13 @@ module RWebSpec
           sleep 1
           autoit = WIN32OLE.new('AutoItX3.Control')
             # Look for window with given title. Give up after 1 second.
-              ret = autoit.WinWait(win_title, '', seconds)
+              ret = autoit.WinWait(popup_win_title, '', seconds)
               #
               # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
               if ret == 1 then
                 puts "about to send click Yes" if debugging?
                 button_id = yes ? "Button1" : "Button2" # Yes or No
-                autoit.ControlClick(win_title, '',  button_id) 
+                autoit.ControlClick(popup_win_title, '',  button_id) 
               end
             sleep(0.5)
       else
