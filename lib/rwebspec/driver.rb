@@ -28,23 +28,23 @@ module RWebSpec
     #   2. If running using iTest2, used as confiured
     #   3. Use default value set
     def open_browser(base_url = nil, options = {})
-    
-      begin      
-        support_unicode        
+
+      begin
+        support_unicode
       rescue => e
         puts "Unicode may not work in IE, #{e}"
       end
-      
+
       base_url ||= $ITEST2_PROJECT_BASE_URL
       base_url ||= $BASE_URL
       raise "base_url must be set" if base_url.nil?
 
       default_options = {:speed => "fast",
-          :visible => true,
-          :highlight_colour => 'yellow',
-          :close_others => true,
-          :start_new => false,   # start a new browser always
-      :go => true}
+                         :visible => true,
+                         :highlight_colour => 'yellow',
+                         :close_others => true,
+                         :start_new => false,   # start a new browser always
+                         :go => true}
 
       options = default_options.merge options
       options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
@@ -66,11 +66,12 @@ module RWebSpec
       if base_url =~ /^file:/
         goto_url(base_url) # for files, no base url
       else
-        (uri.path.length == 0) ?  begin_at("/") :  begin_at(uri.path) if options[:go]
+        (uri.path.length == 0) ? begin_at("/") : begin_at(uri.path) if options[:go]
       end
 
       return @web_browser
     end
+
     alias open_browser_with open_browser
 
     # return the underlying RWebSpec::Browser object
@@ -91,6 +92,7 @@ module RWebSpec
         WebBrowser.close_all_browsers
       end
     end
+
     alias close_ie close_browser
 
 
@@ -157,6 +159,7 @@ module RWebSpec
       dump_caller_stack
       @web_browser.goto_page(page) if @web_browser
     end
+
     alias visit goto_page
 
     # Go to another web site, normally different site being tested on
@@ -239,14 +242,14 @@ module RWebSpec
       end
     end
     alias td cell
-    alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
+    alias check_box checkbox # seems watir doc is wrong, checkbox not check_box
     alias tr row
 
     [:back, :forward, :refresh].each do |method|
       define_method(method) do
         dump_caller_stack
         operation_delay
-        @web_browser.send(method)  if @web_browser
+        @web_browser.send(method) if @web_browser
       end
     end
     alias refresh_page refresh
@@ -256,7 +259,7 @@ module RWebSpec
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do
         dump_caller_stack
-        @web_browser.send(method)  if @web_browser
+        @web_browser.send(method) if @web_browser
       end
     end
 
@@ -265,11 +268,11 @@ module RWebSpec
     # page.check_checkbox('bad_ones', 'Chicken Little')
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
     #
-    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :select_file_for_upload, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
+    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
         dump_caller_stack
         operation_delay
-        @web_browser.send(method, *args)  if @web_browser
+        @web_browser.send(method, *args) if @web_browser
       end
     end
 
@@ -302,7 +305,7 @@ module RWebSpec
       found = nil
       raise "no buttons in this page" if buttons.length <= 0
       buttons.each { |btn|
-        if btn && btn.src  && btn.src.include?(image_filename) then
+        if btn && btn.src && btn.src.include?(image_filename) then
           found = btn
           break
         end
@@ -310,6 +313,7 @@ module RWebSpec
       raise "not image button with src: #{image_filename} found" if found.nil?
       found.click
     end
+
     alias click_button_with_image click_button_with_image_src_contains
 
     def new_popup_window(options)
@@ -353,7 +357,7 @@ module RWebSpec
         spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
         to_dir = File.join($ITEST2_DUMP_DIR, spec_run_dir_name)
       else
-        to_dir = ENV['TEMP_DIR'] || (is_windows? ? "C:\\temp" : "/tmp") 
+        to_dir = ENV['TEMP_DIR'] || (is_windows? ? "C:\\temp" : "/tmp")
       end
 
       if options[:filename]
@@ -408,7 +412,7 @@ module RWebSpec
     # absolutize_page referencs using hpricot
     #   
     def absolutize_page_hpricot(content, base_url, parent_url)
-      return  absolutize_page(content, base_url, parent_url) if RUBY_PLATFORM == 'java'
+      return absolutize_page(content, base_url, parent_url) if RUBY_PLATFORM == 'java'
       begin
         require 'hpricot'
         doc = Hpricot(content)
@@ -443,7 +447,7 @@ module RWebSpec
         host_url.slice!(-1) if ends_with?(host_url, "/")
         if script_src =~ /^\s*\// # absolute_path
           line.gsub!(script_src, "#{host_url}#{script_src}")
-        else  #relative_path
+        else #relative_path
           line.gsub!(script_src, "#{page_parent_url}#{script_src}")
         end
       end
@@ -492,6 +496,7 @@ module RWebSpec
     def cell_with_id(cell_id)
       cell(:id, cell_id).text
     end
+
     alias table_data_with_id cell_with_id
 
 
@@ -517,6 +522,7 @@ module RWebSpec
         WIN32OLE.codepage = WIN32OLE::CP_UTF8
       end
     end
+
     alias support_unicode support_utf8
 
     #= Convenient functions
@@ -542,11 +548,12 @@ module RWebSpec
       operation_performed_ok = false
       begin
         yield
-        operation_performed_ok  = true
+        operation_performed_ok = true
       rescue
       end
       raise "Operation shall not be allowed" if operation_performed_ok
     end
+
     alias do_not_allow shall_not_allow
 
     # Does not provide real function, other than make enhancing test syntax
@@ -556,8 +563,9 @@ module RWebSpec
     def allow(&block)
       yield
     end
-    alias shall_allow  allow
-    alias allowing  allow
+
+    alias shall_allow allow
+    alias allowing allow
 
     # try operation, ignore if errors occur
     #
@@ -569,6 +577,7 @@ module RWebSpec
       rescue =>e
       end
     end
+
     alias fail_safe failsafe
 
 
@@ -632,6 +641,7 @@ module RWebSpec
         end
       end
     end
+
 =begin
 
     # TODO: Firewatir does not suport retrieving style or outerHtml
@@ -717,22 +727,23 @@ module RWebSpec
       raise "Timeout after #{duration.to_i} seconds with error: #{last_error}." if last_error
       raise "Timeout after #{duration.to_i} seconds."
     end
+
     alias try_upto try
 
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
       value = { :zero => 0,
-          :first => 1,
-          :second => 2,
-          :third => 3,
-          :fourth => 4,
-          :fifth => 5,
-          :sixth => 6,
-          :seventh => 7,
-          :eighth => 8,
-          :ninth => 9,
-          :tenth => 10 }[symb]
+                :first => 1,
+                :second => 2,
+                :third => 3,
+                :fourth => 4,
+                :fifth => 5,
+                :sixth => 6,
+                :seventh => 7,
+                :eighth => 8,
+                :ninth => 9,
+                :tenth => 10 }[symb]
       return value || symb.to_i
     end
 
@@ -746,25 +757,66 @@ module RWebSpec
     #   clear_popup("Security Information", 5, true) # check for Security Information for 5 seconds, click Yes
     def clear_popup(popup_win_title, seconds = 10, yes = true)
       # commonly "Security Alert", "Security Information"
-      if is_windows? 
-          sleep 1
-          autoit = WIN32OLE.new('AutoItX3.Control')
-            # Look for window with given title. Give up after 1 second.
-              ret = autoit.WinWait(popup_win_title, '', seconds)
-              #
-              # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
-              if ret == 1 then
-                puts "about to send click Yes" if debugging?
-                button_id = yes ? "Button1" : "Button2" # Yes or No
-                autoit.ControlClick(popup_win_title, '',  button_id) 
-              end
-            sleep(0.5)
+      if is_windows?
+        sleep 1
+        autoit = WIN32OLE.new('AutoItX3.Control')
+        # Look for window with given title. Give up after 1 second.
+        ret = autoit.WinWait(popup_win_title, '', seconds)
+        #
+        # If window found, send appropriate keystroke (e.g. {enter}, {Y}, {N}).
+        if ret == 1 then
+          puts "about to send click Yes" if debugging?
+          button_id = yes ? "Button1" : "Button2" # Yes or No
+          autoit.ControlClick(popup_win_title, '',  button_id)
+        end
+        sleep(0.5)
       else
-          raise "Currently supported only on Windows"
+        raise "Currently supported only on Windows"
       end
     end
-    
-    
+
+    def select_file_for_upload(file_field_name, file_path)
+      if is_windows?
+        normalized_file_path = file_path.gsub("/", "\\")
+        if $support_ie8 && check_ie_version && @ie_version >= 8
+          # puts "IE8"
+          file_field(:name, file_field).set(normalized_file_path)
+          choose_file_dialog(normalized_file_path)
+        else
+          @web_browser.file_field(:name, file_field).set(normalized_file_path)
+        end
+      else
+        # for firefox, just call file_field, it may fail
+        @web_browser.file_field(:name, file_field).set(normalized_file_path)
+      end
+    end
+
+    def choose_file_dialog(file_path)
+        Watir.autoit.WinWaitActive("Choose File to Upload", '', 10)
+        Watir.autoit.ControlSetText("Choose File to Upload", "", 1148, file_path)
+        Watir.autoit.ControlClick("Choose File to Upload", "", "&Open")
+    end
+
+    def check_ie_version
+      if is_windows? && @ie_version.nil?
+        begin
+          cmd = 'reg query "HKLM\SOFTWARE\Microsoft\Internet Explorer" /v Version';
+          result = `#{cmd}`
+          version_line = nil
+          result.each do |line|
+            if (line =~ /Version\s+REG_SZ\s+([\d\.]+)/)
+              version_line = $1
+            end
+          end
+
+          if version_line =~ /^\s*(\d+)\./
+            @ie_version = $1.to_i
+          end
+        rescue => e
+        end
+      end
+    end
+
   end
 
 end

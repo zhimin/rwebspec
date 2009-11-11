@@ -5,10 +5,11 @@
 
 begin
   require 'watir'
-  require 'watir/ie'
   require 'watir/contrib/enabled_popup'
-  require 'watir/contrib/visible'
   require 'watir/close_all'
+  # NO need any more
+  # require 'watir/ie'
+  # require 'watir/contrib/visible'
   $watir_loaded = true
 rescue LoadError => e
   $watir_loaded = false
