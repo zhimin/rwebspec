@@ -92,11 +92,11 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, ["= 1.1.12"])
-  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
-    s.add_dependency("watir", ">= 1.6.5")
-  else
-    s.add_dependency("firewatir", ">= 1.6.5")
-  end
+#  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+#    s.add_dependency("watir", ">= 1.6.5")
+#  else
+#    s.add_dependency("firewatir", ">= 1.6.5")
+#  end
     
   s.add_dependency("commonwatir", ">= 1.6.5")
   s.add_dependency("test-unit", ">= 2.0.2")
