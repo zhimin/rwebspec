@@ -15,22 +15,30 @@ module RWebSpec
 
     # Connect to databse, example
     #   mysql_db(:host => "localhost", :database => "lavabuild_local", :user => "root", :password => "")
-    def connect_to_database(db_settings, force = false) 
-        # only setup database connection once
-        if force || ActiveRecord::Base.connection.nil?
+    def connect_to_database(db_settings, force = false)
+      # only setup database connection once
+      if force
+        ActiveRecord::Base.establish_connection(db_settings)
+      else
+        begin
+          ActiveRecord::Base.connection
+        rescue => e
           ActiveRecord::Base.establish_connection(db_settings)
-        end        
+        end
+      end
     end
-    
+
     def load_table(table_name)
-      raise "No database connection setup yet, use connect_to_database() method" unless ActiveRecord::Base.connection
+      begin
+         ActiveRecord::Base.connection    
+      rescue =>e 
+        raise "No database connection setup yet, use connect_to_database() method" 
+      end
       class_name = table_name.classify
-      # define the class, so can use ActiveRecord in 
-      # such as 
+      # define the class, so can use ActiveRecord in
+      # such as
       #   Perosn.count.should == 2
-      def_class = "class #{class_name} < ActiveRecord::Base; end"
-      eval(def_class);
-      return class_name
+      def_class = "class #{class_name} < ActiveRecord::Base; end"        
     end
 
   end
