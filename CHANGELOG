@@ -1,5 +1,11 @@
 CHANGELOG
 =========
+ 1.5
+   [New] Supports Watir 1.6.5 
+   [Fixes] Array@sum conflicts with ActiveSupport
+   [New] New database_checker
+   [Other] load_table define class under ITEST::Module
+
  1.4.2
    [New] average, sum for array objects, such as [1,2,3,4].average
    [New] support date format with today(:us), yesterday("%d/%m/%Y")

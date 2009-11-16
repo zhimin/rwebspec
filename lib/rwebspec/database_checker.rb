@@ -38,7 +38,9 @@ module RWebSpec
       # define the class, so can use ActiveRecord in
       # such as
       #   Perosn.count.should == 2
-      def_class = "class #{class_name} < ActiveRecord::Base; end"        
+      def_class = "class ::#{class_name} < ActiveRecord::Base; end"    
+      eval def_class
+      return def_class        
     end
 
   end
