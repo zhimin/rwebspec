@@ -15,7 +15,7 @@ module RWebSpec
 
     # Connect to databse, example
     #   mysql_db(:host => "localhost", :database => "lavabuild_local", :user => "root", :password => "")
-    def connect_to_database(db_settings, force => false) 
+    def connect_to_database(db_settings, force = false) 
         # only setup database connection once
         if force || ActiveRecord::Base.connection.nil?
           ActiveRecord::Base.establish_connection(db_settings)
