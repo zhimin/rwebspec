@@ -3,14 +3,28 @@ require 'active_record' # change rwebspec/database
 module RWebSpec
   module DatabaseChecker
 
+	# Example
+	#   connect_to_database mysql_db(:host => "localhost", :database => "lavabuild_local", :user => "root", :password => ""), true
     def mysql_db(settings)
       options = {:adapter => "mysql"}
       options.merge!(settings)
     end
 
+    # connect_to_database sqlite3_db(:database => File.join(File.dirname(__FILE__), "testdata", "sample.sqlite3")), true
     def sqlite3_db(settings)
       options = {:adapter => "sqlite3"}
       options.merge!(settings)
+    end
+
+    def sqlserver_db(settings)
+      settings = {:adapter => "sqlserver"}
+      settings[:username] ||= settings[:user]
+      options.merge!(settings)
+    end
+	
+    def sqlserver_db_dbi(options)
+      conn_str = "DBI:ADO:Provider=SQLOLEDB;Data Source=#{options[:host]};Initial Catalog=#{options[:database]};User ID=\"#{options[:user]}\";password=\"#{options[:password]}\" "
+      dbh = DBI.connect(conn_str)
     end
 
     # Connect to databse, example
