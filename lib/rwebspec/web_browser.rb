@@ -112,6 +112,12 @@ module RWebSpec
     def initialize_ie_browser(existing_browser, options)
       if existing_browser then
         @browser = existing_browser
+        if $ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED then
+          @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
+          @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+        else
+          @browser.speed = :zippy
+        end
         return
       end
 
