@@ -143,7 +143,7 @@ module RWebSpec
         Watir::IE.each do |browser_window|
           return WebBrowser.new(base_url, browser_window, options)
         end
-        puts "no browser instance found"
+        #puts "no browser instance found"
         WebBrowser.new(base_url, nil, options)
       else
         WebBrowser.new(base_url, nil, options)

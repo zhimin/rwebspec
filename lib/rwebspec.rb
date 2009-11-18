@@ -13,7 +13,9 @@ end
 require 'active_support/core_ext'
 require 'spec'
 
-RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.5"
+unless defined? RWEBSPEC_VERSION
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.5"
+end
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebspec/using_pages"
