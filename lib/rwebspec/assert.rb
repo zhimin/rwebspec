@@ -28,16 +28,29 @@ module RWebSpec
     alias assert_title assert_title_equals
 
     # Assert text present in page source (html)
-    #   assert_text_present("<h1>iTest2</h1>")
-    def assert_text_present(text)
+    #   assert_text_in_page_source("<b>iTest2</b>  Cool") # <b>iTest2</b>  Cool
+    def assert_text_in_page_source(text)
       assert((@web_browser.page_source.include? text), 'expected text: ' + text + ' not found')
     end
 
     # Assert text not present in page source (html)
-    #   assert_text_not_present("<h1>iTest2</h1>")
-    def assert_text_not_present(text)
+    #   assert_text_not_in_page_source("<b>iTest2</b>  Cool") # <b>iTest2</b>  Cool
+    def assert_text_not_in_page_source(text)
       assert(!(@web_browser.page_source.include? text), 'expected text: ' + text + ' found')
     end
+
+    # Assert text present in page source (html)
+    #   assert_text_present("iTest2 Cool") # <b>iTest2</b>  Cool
+    def assert_text_present(text)
+      assert((@web_browser.page_text.include? text), 'expected text: ' + text + ' not found')
+    end
+
+    # Assert text not present in page source (html)
+    #   assert_text_not_present("iTest2 Cool") # <b>iTest2</b>  Cool
+    def assert_text_not_present(text)
+      assert(!(@web_browser.page_text.include? text), 'expected text: ' + text + ' found')
+    end
+
 
 
     ##

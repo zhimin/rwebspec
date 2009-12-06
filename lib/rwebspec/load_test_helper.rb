@@ -7,6 +7,7 @@ module RWebSpec
 
     # only support firefox or Celerity
     def open_browser(base_url, options)
+      options[:firefox] ||= (ENV['ILOAD2_PREVIEW'] == true)
       RWebSpec::WebBrowser.new(base_url, nil, options)
     end
 
@@ -33,7 +34,6 @@ module RWebSpec
       end
     end
     alias fail_safe failsafe
-
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
     # Error will be ignored until timeout
@@ -87,6 +87,24 @@ module RWebSpec
       Thread.current[:log] ||= []
       Thread.current[:log] << [File.basename(__FILE__), msg, Time.now, Time.now - start_time]
     end
+
+	def run_with_virtual_users(virtual_user_count = 2, &block)		
+	  	raise "too many virtual users" if virtual_user_count > 100 #TODO
+	  	if (virtual_user_count <= 1) 
+	  		yield	  	
+	  	else 
+		threads = [] 
+		virtual_user_count.times do |idx|
+  			threads[idx] = Thread.new do
+    			start_time = Time.now 
+    			yield
+    			puts "Thread[#{idx+1}] #{Time.now - start_time}s"
+  			end
+		end
+
+		threads.each {|t| t.join }
+		end
+	end
 
   end
 end

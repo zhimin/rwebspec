@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+ 1.5.1 
+   [Load Test helper
+   assert_text_present changed to check text view of web pages
+   detect ILOAD2 environment to determin to preivew load test or not
+
  1.5
    [New] Supports Watir 1.6.5 
    [Fixes] Array@sum conflicts with ActiveSupport

@@ -104,7 +104,6 @@ module RWebSpec
       default_celerity_options = { :proxy => nil,  :browser => :firefox, :resynchronize => true, :log_level => :off }
       options = default_celerity_options.merge options
       options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
-      puts "Starting Celerity: #{options.inspect}"
       @browser = Celerity::Browser.new(options)
       @browser.goto(base_url)
     end
