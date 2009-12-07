@@ -42,13 +42,13 @@ module RWebSpec
     # Assert text present in page source (html)
     #   assert_text_present("iTest2 Cool") # <b>iTest2</b>  Cool
     def assert_text_present(text)
-      assert((@web_browser.page_text.include? text), 'expected text: ' + text + ' not found')
+      assert((@web_browser.text.include? text), 'expected text: ' + text + ' not found')
     end
 
     # Assert text not present in page source (html)
     #   assert_text_not_present("iTest2 Cool") # <b>iTest2</b>  Cool
     def assert_text_not_present(text)
-      assert(!(@web_browser.page_text.include? text), 'expected text: ' + text + ' found')
+      assert(!(@web_browser.text.include? text), 'expected text: ' + text + ' found')
     end
 
 
