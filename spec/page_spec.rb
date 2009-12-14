@@ -43,7 +43,8 @@ specification "Driver" do
   
   story "assertion" do
     @test_page.text.should contains("iTest2/Watir Test Page") 
-    @test_page.text.should_not contains("iTest/Watir Test Page") 
+    @test_page.text.should contain("iTest2/Watir Test Page") 
+    @test_page.text.should_not contain("iTest/Watir Test Page") 
     @test_page.html.should  contains("Text (with name, just <i>id</i>):") 
     @test_page.text.should_not contains("Text (with name, just <i>id</i>):")     
   end

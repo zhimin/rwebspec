@@ -90,14 +90,6 @@ module RWebSpec
       end
       return found
     end
-
-    # In pages, can't use include, text.should include("abc") won't work
-    # Instead,
-    #   text.should contains("abc"
-    def contains(str)
-      ContainsText.new(str)
-    end
-    alias contain contains
     
     # Will save current page source to a file
     #  home_page = HomePage.new("Welcome to iTest2")
