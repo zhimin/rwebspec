@@ -101,6 +101,12 @@ specification "Driver" do
     ret_page.should include("http://myorganized.agileway.net/stylesheets/wenji.css")
     # File.open("tmp.html", "w").puts ret_page
   end
-
+  
+  story "assertion" do
+    page_text.should include("iTest2/Watir Test Page")
+    page_text.should contains("iTest2/Watir Test Page") 
+    page_text.should_not contains("iTest/Watir Test Page") 
+    page_text.should_not contains("iTest/Watir Test Page") 
+  end
 end
 #END

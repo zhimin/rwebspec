@@ -7,6 +7,8 @@
 #
 require File.join(File.dirname(__FILE__), 'itest_plugin')
 require File.join(File.dirname(__FILE__), 'popup')
+require File.join(File.dirname(__FILE__), 'matchers', "contains_text.rb")
+
 require 'timeout'
 require 'uri'
 
@@ -294,6 +296,14 @@ module RWebSpec
     def contains_text(text)
       @web_browser.contains_text(text)
     end
+    
+    # In pages, can't use include, text.should include("abc") won't work
+    # Instead,
+    #   text.should contains("abc"
+    def contains(str)
+      ContainsText.new(str)
+    end
+    alias contain contains
 
     # Click image buttion with image source name
     #

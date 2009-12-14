@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+ 1.5.2
+  add contains matcher to driver and page
+  in page, page_text renamed to page_specific_text
+  more unit tests
+
  1.5.1 
    [Load Test helper
    assert_text_present changed to check text view of web pages

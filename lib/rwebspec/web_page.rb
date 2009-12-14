@@ -27,12 +27,12 @@ module RWebSpec
 
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
-    attr_accessor :page_text
+    attr_accessor :page_specific_text
 
-    def initialize(the_browser, page_text = nil)
+    def initialize(the_browser, page_specific_text = nil)
       @web_browser = the_browser
       @web_tester = the_browser
-      @page_text = page_text
+      @page_specific_text = page_specific_text
       begin
         snapshot if $ITEST2_DUMP_PAGE
         delay = $ITEST2_PAGE_DELAY
@@ -53,11 +53,11 @@ module RWebSpec
     #   ....
     #   home_page.assert_on_page # will check the text 'Welcome to iTest2' still present on the page
     def assert_on_page()
-      assert_text_present(@page_text) if @page_text
+      assert_text_present(@page_specific_text) if @page_specific_text
     end
 
     def assert_not_on_page()
-      assert_text_not_present(@page_text) if @page_text
+      assert_text_not_present(@page_specific_text) if @page_specific_text
     end
 
     def dump(stream = nil)
@@ -91,6 +91,14 @@ module RWebSpec
       return found
     end
 
+    # In pages, can't use include, text.should include("abc") won't work
+    # Instead,
+    #   text.should contains("abc"
+    def contains(str)
+      ContainsText.new(str)
+    end
+    alias contain contains
+    
     # Will save current page source to a file
     #  home_page = HomePage.new("Welcome to iTest2")
     #  ...
