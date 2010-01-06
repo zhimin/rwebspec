@@ -72,7 +72,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "1.5.2"
+  s.version = "1.5.3"
   s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
   # s.description = ""
 
@@ -94,7 +94,6 @@ spec = Gem::Specification.new do |s|
   s.add_dependency(%q<rspec>, ["= 1.1.12"])
 
   s.add_dependency("commonwatir", ">= 1.6.5")
-  s.add_dependency("test-unit", ">= 2.0.2")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
