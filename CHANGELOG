@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+ 1.5.3 (2010-01-06)
+  rename itest_plugin -> testwise_plugin
+  remove dependency on test-unit
+
  1.5.2
   add contains matcher to driver and page
   in page, page_text renamed to page_specific_text
