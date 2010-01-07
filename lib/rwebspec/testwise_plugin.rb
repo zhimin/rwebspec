@@ -3,25 +3,8 @@ require 'socket'
 module RWebSpec
   module TestWisePlugin
 
-    def connect_to_itest(message_type, body)
-      begin
-        the_message = message_type + "|" + body
-        if @last_message == the_message then # ignore the message same as preivous one
-          return
-        end
-        itest_port = $ITEST2_TRACE_PORT || 7025
-        itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
-        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, '127.0.0.1'))
-        itest_socket.puts(the_message)
-        @last_message = the_message
-        itest_socket.close
-      rescue => e
-      end
-    end
-    alias connect_to_itest2 connect_to_itest
-
     def debug(message)
-      connect_to_itest(" DEBUG", message + "\r\n") if $RUN_IN_ITEST
+      connect_to_testwise(" DEBUG", message + "\r\n") if $RUN_IN_TESTWISE
     end
 
 
@@ -67,7 +50,7 @@ module RWebSpec
 
         #  (trace_file.include?("_spec.rb") || trace_file.include?("_rwebspec.rb") || trace_file.include?("_test.rb") || trace_file.include?("_cmd.rb"))
         if !trace_lines.empty?
-           connect_to_itest(" TRACE", trace_lines.reverse.join("|"))
+           connect_to_testwise(" TRACE", trace_lines.reverse.join("|"))
         end
 
       rescue => e
@@ -75,5 +58,22 @@ module RWebSpec
       end
     end
 
+
+    def connect_to_testwise (message_type, body)
+      begin
+        the_message = message_type + "|" + body
+        if @last_message == the_message then # ignore the message same as preivous one
+          return
+        end
+        itest_port = $ITEST2_TRACE_PORT || 7025
+        itest_socket = Socket.new(Socket::AF_INET,Socket::SOCK_STREAM,0)
+        itest_socket.connect(Socket.pack_sockaddr_in(itest_port, '127.0.0.1'))
+        itest_socket.puts(the_message)
+        @last_message = the_message
+        itest_socket.close
+      rescue => e
+      end
+    end
+    
   end
 end
