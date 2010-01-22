@@ -340,12 +340,20 @@ module RWebSpec
     alias set_hidden_field set_form_element
 
     #links
-    def click_link_with_id(link_id)
-      wait_before_and_after { link(:id, link_id).click }
+    def click_link_with_id(link_id, opts = {})
+      if opts && opts[:index]
+        wait_before_and_after { link(:id => link_id, :index => opts[:index]).click }
+      else
+        wait_before_and_after { link(:id, link_id).click }
+      end 
     end
 
-    def click_link_with_text(text)
-      wait_before_and_after { link(:text, text).click }
+    def click_link_with_text(text, opts = {})
+      if opts && opts[:index]
+        wait_before_and_after { link(:text => text, :index => opts[:index]).click }
+      else
+        wait_before_and_after { link(:text, text).click }          
+      end 
     end
     alias click_link click_link_with_text
 
@@ -353,22 +361,34 @@ module RWebSpec
     # Click a button with give HTML id
     # Usage:
     #   click_button_with_id("btn_sumbit")
-    def click_button_with_id(id)
-      wait_before_and_after { button(:id, id).click }
+    def click_button_with_id(id, opts = {})
+      if opts && opts[:index]
+          wait_before_and_after { button(:id => id,  :index => opts[:index]).click  }
+      else
+          wait_before_and_after { button(:id, id).click }
+      end
     end
 
     # Click a button with give name
     # Usage:
     #   click_button_with_name("confirm")
-    def click_button_with_name(name)
-      wait_before_and_after { button(:name, name).click }
+    def click_button_with_name(name, opts={})
+      if opts && opts[:index]
+        wait_before_and_after { button(:name => name, :index => opts[:index]).click }
+      else
+        wait_before_and_after { button(:name, name).click }
+      end
     end
 
     # Click a button with caption
     # Usage:
     #   click_button_with_caption("Confirm payment")
-    def click_button_with_caption(caption)
-      wait_before_and_after { button(:caption, caption).click }
+    def click_button_with_caption(caption, opts={})
+        if opts && opts[:index]
+          wait_before_and_after { button(:caption => caption, :index => opts[:index]).click }
+        else
+          wait_before_and_after { button(:caption, caption).click }
+        end
     end
     alias click_button click_button_with_caption
     alias click_button_with_text click_button_with_caption
@@ -376,8 +396,12 @@ module RWebSpec
     # Click a button with value
     # Usage:
     #   click_button_with_value("Confirm payment")
-    def click_button_with_value(value)
-      wait_before_and_after { button(:value, value).click }
+    def click_button_with_value(value, opts={})
+        if opts && opts[:index]
+          wait_before_and_after { button(:value => value, :index => opts[:index]).click }
+        else
+          wait_before_and_after { button(:value, value).click }
+        end
     end
 
     # Select a dropdown list by name

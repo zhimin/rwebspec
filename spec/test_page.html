@@ -194,7 +194,9 @@ background: #f4f4ed;
 
 			<h2>Special</h2>
 
-			<a name="here"></a><p><b>Same links</b>: <a href="#here" onclick="$('for_link_1').show(); $('for_link_2').hide(); ">Click Me</a> <a href="#here" onclick="$('for_link_1').hide(); $('for_link_2').show(); ">Click Me</a><br/>
+			<a name="here"></a><p><b>Same links</b>: <a href="#here" id="alink" onclick="$('for_link_1').show(); $('for_link_2').hide(); ">Click Me</a> <a id="alink" href="#here" onclick="$('for_link_1').hide(); $('for_link_2').show(); ">Click Me</a> | 
+				 <input type="button" id="abutton" onclick="$('for_link_1').show(); $('for_link_2').hide(); " value="Click Button"/>  <input type="button" id="abutton" onclick="$('for_link_1').hide(); $('for_link_2').show(); " value="Click Button"/>
+				<br/>
 			<div id="for_link_1" style="display:none;">
 			  iTest2 is good
 			</div>
@@ -235,7 +237,10 @@ background: #f4f4ed;
 </table>
 
 <hr>
-
+<p><b>Duplicated IDs</b><br/>
+<strong>Label</strong>: <label id="label1">First Label<labeL> | <label id="label1">Actually Second Label<labeL>, &nbsp;
+<strong>Span</strong>: <span id="span1">First Span</span> | <span id="span1">Actually Second Span</span>, &nbsp;
+</p>
 <hr/>
 <input type="button" id="complete_btn" value="I made it to last operation">
 </form>

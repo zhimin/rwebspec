@@ -27,7 +27,7 @@ module RWebSpec
     #
     # There are 3 ways to set base url
     #   1. pass as first argument
-    #   2. If running using iTest2, used as confiured
+    #   2. If running using TestWise, used as confiured
     #   3. Use default value set
     def open_browser(base_url = nil, options = {})
 
@@ -87,7 +87,7 @@ module RWebSpec
     #
     def close_browser
       if @web_browser
-        # Old iTest2 version
+        # Old TestWise version
         # @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
         @web_browser.close_browser
       else
@@ -188,7 +188,7 @@ module RWebSpec
     # Reuse current an opened browser window instead of opening a new one
     #	example:
     #     use_current_browser(:title, /.*/) # use what ever browser window
-    #     use_current_browser(:title, "iTest2") # use browser window with title "iTest2"
+    #     use_current_browser(:title, "TestWise") # use browser window with title "TestWise"
     def use_current_browser(how = :title, what = /.*/)
       @web_browser = WebBrowser.attach_browser(how, what)
     end
@@ -485,28 +485,40 @@ module RWebSpec
 
     # return the text of specific (identified by attribute "id") label tag
     # For page containing
-    #     <label id="preferred_ide">iTest2</label>
-    # label_with_id("preferred_ids") # => iTest2
-    def label_with_id(label_id)
-      label(:id, label_id.to_s).text
+    #     <label id="preferred_ide">TestWise</label>
+    # label_with_id("preferred_ids") # => TestWise
+    # label_with_id("preferred_ids", :index => 2) # => TestWise
+    def label_with_id(label_id, options = {})
+      if options && options[:index] then
+        label(:id => label_id.to_s, :index => options[:index]).text        
+      else     
+        label(:id, label_id.to_s).text
+      end
     end
 
     # return the text of specific (identified by attribute "id") span tag
     # For page containing
     #     <span id="preferred_recorder">iTest2/Watir Recorder</span>
     # span_with_id("preferred_recorder") # => iTest2/Watir Recorder
-    def span_with_id(span_id)
-      span(:id, span_id).text
+    def span_with_id(span_id, options = {})
+      if options && options[:index] then
+        span(:id => span_id.to_s, :index => options[:index]).text        
+      else     
+        span(:id, span_id).text
+      end
     end
 
     # return the text of specific (identified by attribute "id") ta tag
     # For page containing
     #     <td id="preferred_recorder">iTest2/Watir Recorder</span>
     # td_with_id("preferred_recorder") # => iTest2/Watir Recorder
-    def cell_with_id(cell_id)
-      cell(:id, cell_id).text
+    def cell_with_id(cell_id, options = {})
+      if options && options[:index] then
+        cell(:id => cell_id.to_s, :index => options[:index]).text        
+      else     
+        cell(:id, cell_id).text
+      end
     end
-
     alias table_data_with_id cell_with_id
 
 

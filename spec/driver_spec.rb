@@ -108,5 +108,33 @@ specification "Driver" do
     page_text.should_not contains("iTest/Watir Test Page") 
     page_text.should_not contains("iTest/Watir Test Page") 
   end
+  
+  story "with index options" do
+    label_with_id("label1").should == "First Label"
+    label_with_id("label1", :index => 2).should == "Actually Second Label"
+    span_with_id("span1").should == "First Span"
+    span_with_id("span1", :index => 2).should == "Actually Second Span"
+    
+    click_link("Click Me", :index => 2)
+    assert_visible(:div, "for_link_2")
+    click_link("Click Me", :index => 1)
+    assert_visible(:div, "for_link_1") 
+
+    click_link_with_id("alink", :index => 2)
+    assert_visible(:div, "for_link_2")
+    click_link_with_id("alink",:index => 1)
+    assert_visible(:div, "for_link_1") 
+    
+    click_button("Click Button", :index => 2)
+    assert_visible(:div, "for_link_2")
+    click_button("Click Button", :index => 1)
+    assert_visible(:div, "for_link_1") 
+    
+    click_button_with_id("abutton", :index => 2)
+    assert_visible(:div, "for_link_2")
+    click_button_with_id("abutton",:index => 1)
+    assert_visible(:div, "for_link_1") 
+  end
+  
 end
 #END
