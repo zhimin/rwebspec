@@ -4,7 +4,7 @@ module RWebSpec
   module TestWisePlugin
 
     def debug(message)
-      connect_to_testwise(" DEBUG", message + "\r\n") if $RUN_IN_TESTWISE
+      connect_to_testwise(" DEBUG", message.to_s + "\r\n") if $RUN_IN_TESTWISE && message
     end
 
 
