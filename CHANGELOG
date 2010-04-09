@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 1.6 
+   Include ScreenCapture
+
  1.5.4
    Add syntax click_link("Duplicate Link", :index => 2) # second link
 

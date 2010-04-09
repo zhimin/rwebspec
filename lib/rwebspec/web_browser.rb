@@ -7,6 +7,7 @@ begin
   require 'watir'
   require 'watir/contrib/enabled_popup'
   require 'watir/close_all'
+  require 'watir/screen_capture' 
   # NO need any more
   # require 'watir/ie'
   # require 'watir/contrib/visible'

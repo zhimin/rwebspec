@@ -103,7 +103,6 @@ module RWebSpec
       }
       randomStr
     end
-    alias random_string random_str
 
     # Return a random string in a rangeof pre-defined strings
     def random_string_in(arr)

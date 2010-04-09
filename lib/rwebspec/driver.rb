@@ -1,4 +1,5 @@
 # convenient methods to drive the browser.
+# convenient methods to drive the browser.
 #
 # Instead of
 #    browser.click_button("submit")
@@ -12,10 +13,13 @@ require File.join(File.dirname(__FILE__), 'matchers', "contains_text.rb")
 require 'timeout'
 require 'uri'
 
+require 'watir/screen_capture'  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+
 module RWebSpec
   module Driver
     include RWebSpec::TestWisePlugin
     include RWebSpec::Popup
+    include Watir::ScreenCapture  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
 
     @@default_polling_interval = 1 # second
     @@default_timeout = 30 # seconds
@@ -45,7 +49,7 @@ module RWebSpec
                          :visible => true,
                          :highlight_colour => 'yellow',
                          :close_others => true,
-                         :start_new => false,   # start a new browser always
+                         :start_new => false, # start a new browser always
                          :go => true}
 
       options = default_options.merge options
@@ -157,9 +161,9 @@ module RWebSpec
     #  goto_page("/demo")  # visit page http://www.itest2.com/demo
     #
     def goto_page(page)
-      operation_delay
-      dump_caller_stack
-      @web_browser.goto_page(page) if @web_browser
+      perform_operation {
+        @web_browser.goto_page(page) if @web_browser
+      }
     end
 
     alias visit goto_page
@@ -238,9 +242,7 @@ module RWebSpec
     # p 	<p> (paragraph) tags, because
     [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
-        dump_caller_stack
-        # add check for @web_browser, in case the moudule included without init browser
-        @web_browser.send(method, *args) if @web_browser
+        perform_operation { @web_browser.send(method, *args) if @web_browser }
       end
     end
     alias td cell
@@ -249,9 +251,7 @@ module RWebSpec
 
     [:back, :forward, :refresh].each do |method|
       define_method(method) do
-        dump_caller_stack
-        operation_delay
-        @web_browser.send(method) if @web_browser
+        perform_operation { @web_browser.send(method) if @web_browser }
       end
     end
     alias refresh_page refresh
@@ -260,8 +260,7 @@ module RWebSpec
 
     [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
       define_method method do
-        dump_caller_stack
-        @web_browser.send(method) if @web_browser
+        perform_operation { @web_browser.send(method) if @web_browser }
       end
     end
 
@@ -272,9 +271,7 @@ module RWebSpec
     #
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
       define_method method do |*args|
-        dump_caller_stack
-        operation_delay
-        @web_browser.send(method, *args) if @web_browser
+        perform_operation { @web_browser.send(method, *args) if @web_browser }
       end
     end
 
@@ -288,21 +285,33 @@ module RWebSpec
 
     # for text field can be easier to be identified by attribute "id" instead of "name", not recommended though
     def enter_text_with_id(textfield_id, value)
-      dump_caller_stack
-      operation_delay
-      text_field(:id, textfield_id).set(value)
+      perform_operation { text_field(:id, textfield_id).set(value) }
+    end
+
+    def perform_operation(&block)
+      begin
+        dump_caller_stack
+        operation_delay
+        yield
+      rescue RuntimeError => re
+        puts "[DEBUG] operation error: #{re}"
+        raise re
+        #      ensure
+        #        puts "[DEBUG] ensure #{perform_ok}" unless perform_ok
+      end
     end
 
     def contains_text(text)
       @web_browser.contains_text(text)
     end
-    
+
     # In pages, can't use include, text.should include("abc") won't work
     # Instead,
     #   text.should contains("abc"
     def contains(str)
       ContainsText.new(str)
     end
+
     alias contain contains
 
     # Click image buttion with image source name
@@ -310,18 +319,18 @@ module RWebSpec
     # For an image submit button <input name="submit" type="image" src="/images/search_button.gif">
     #  click_button_with_image("search_button.gif")
     def click_button_with_image_src_contains(image_filename)
-      dump_caller_stack
-      operation_delay
-      found = nil
-      raise "no buttons in this page" if buttons.length <= 0
-      buttons.each { |btn|
-        if btn && btn.src && btn.src.include?(image_filename) then
-          found = btn
-          break
-        end
+      perform_operation {
+        found = nil
+        raise "no buttons in this page" if buttons.length <= 0
+        buttons.each { |btn|
+          if btn && btn.src && btn.src.include?(image_filename) then
+            found = btn
+            break
+          end
+        }
+        raise "not image button with src: #{image_filename} found" if found.nil?
+        found.click
       }
-      raise "not image button with src: #{image_filename} found" if found.nil?
-      found.click
     end
 
     alias click_button_with_image click_button_with_image_src_contains
@@ -349,16 +358,8 @@ module RWebSpec
       @web_browser.dump_response(stream)
     end
 
-    # For current page souce to a file in specified folder for inspection
-    #
-    #   save_current_page(:dir => "C:\\mysite", filename => "abc", :replacement => true)
-    def save_current_page(options = {})
-      default_options = {:replacement => true}
-      options = default_options.merge(options)
-      if options[:dir]
-        # already defined the dir
-        to_dir = options[:dir]
-      elsif $ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR
+    def default_dump_dir
+      if $ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR
 
         $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
         FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
@@ -369,6 +370,15 @@ module RWebSpec
       else
         to_dir = ENV['TEMP_DIR'] || (is_windows? ? "C:\\temp" : "/tmp")
       end
+    end
+
+    # For current page souce to a file in specified folder for inspection
+    #
+    #   save_current_page(:dir => "C:\\mysite", filename => "abc", :replacement => true)
+    def save_current_page(options = {})
+      default_options = {:replacement => true}
+      options = default_options.merge(options)
+      to_dir = options[:dir] || default_dump_dir
 
       if options[:filename]
         file_name = options[:filename]
@@ -490,8 +500,8 @@ module RWebSpec
     # label_with_id("preferred_ids", :index => 2) # => TestWise
     def label_with_id(label_id, options = {})
       if options && options[:index] then
-        label(:id => label_id.to_s, :index => options[:index]).text        
-      else     
+        label(:id => label_id.to_s, :index => options[:index]).text
+      else
         label(:id, label_id.to_s).text
       end
     end
@@ -502,8 +512,8 @@ module RWebSpec
     # span_with_id("preferred_recorder") # => iTest2/Watir Recorder
     def span_with_id(span_id, options = {})
       if options && options[:index] then
-        span(:id => span_id.to_s, :index => options[:index]).text        
-      else     
+        span(:id => span_id.to_s, :index => options[:index]).text
+      else
         span(:id, span_id).text
       end
     end
@@ -514,11 +524,12 @@ module RWebSpec
     # td_with_id("preferred_recorder") # => iTest2/Watir Recorder
     def cell_with_id(cell_id, options = {})
       if options && options[:index] then
-        cell(:id => cell_id.to_s, :index => options[:index]).text        
-      else     
+        cell(:id => cell_id.to_s, :index => options[:index]).text
+      else
         cell(:id, cell_id).text
       end
     end
+
     alias table_data_with_id cell_with_id
 
 
@@ -789,7 +800,7 @@ module RWebSpec
         if ret == 1 then
           puts "about to send click Yes" if debugging?
           button_id = yes ? "Button1" : "Button2" # Yes or No
-          autoit.ControlClick(popup_win_title, '',  button_id)
+          autoit.ControlClick(popup_win_title, '', button_id)
         end
         sleep(0.5)
       else
@@ -814,9 +825,9 @@ module RWebSpec
     end
 
     def choose_file_dialog(file_path)
-        Watir.autoit.WinWaitActive("Choose File to Upload", '', 10)
-        Watir.autoit.ControlSetText("Choose File to Upload", "", 1148, file_path)
-        Watir.autoit.ControlClick("Choose File to Upload", "", "&Open")
+      Watir.autoit.WinWaitActive("Choose File to Upload", '', 10)
+      Watir.autoit.ControlSetText("Choose File to Upload", "", 1148, file_path)
+      Watir.autoit.ControlClick("Choose File to Upload", "", "&Open")
     end
 
     def check_ie_version
@@ -838,6 +849,29 @@ module RWebSpec
         end
       end
     end
+
+
+    # take_screenshot to save the current active window
+    # TODO can't move mouse
+    def take_screenshot
+      if is_windows? && $ITEST2_DUMP_PAGE
+        begin
+          puts "[DEBUG] Capturing screenshots..."
+          screenshot_image_filename =  "rwebspec_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
+          the_dump_dir = default_dump_dir
+          FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
+          screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
+
+          screenshot_image_filepath.gsub!("/", "\\") if is_windows?
+          screen_capture(screenshot_image_filepath, true)
+
+          notify_screenshot_location(screenshot_image_filepath)
+        rescue
+          puts "error: #{Failed to capture screen}"
+        end
+      end
+    end
+
 
   end
 

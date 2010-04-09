@@ -19,12 +19,12 @@ class ContainsText
 
   # error message for should
   def failure_message
-    "expected #{actual_text} not to contains #{@expected}, but it did't"
+    "expected '#{actual_text}' to contain '#{@expected}', but it did't"
   end
 
   # error message for should_not
   def negative_failure_message
-    "expected #{actual_text} not to contains #{@expected}, but it did"
+    "expected '#{actual_text}' not to contain '#{@expected}', but it did"
   end
 
 end
