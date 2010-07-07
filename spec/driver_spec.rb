@@ -110,6 +110,7 @@ specification "Driver" do
   end
   
   story "with index options" do
+    label(:id, "label1").text.should == label_with_id("label1")
     label_with_id("label1").should == "First Label"
     label_with_id("label1", :index => 2).should == "Actually Second Label"
     span_with_id("span1").should == "First Span"
