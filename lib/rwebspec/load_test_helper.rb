@@ -5,9 +5,13 @@ module RWebSpec
     include RWebSpec::Utils
     include RWebSpec::Assert
 
+    MAX_VU = 1000
+    
     # only support firefox or Celerity
-    def open_browser(base_url, options)
-      options[:firefox] ||= (ENV['ILOAD2_PREVIEW'] == true)
+    def open_browser(base_url, options = {})
+      default_options = {:resynchronize => false, :firefox => false }      
+      options = default_options.merge(options)
+      options[:firefox] ||= (ENV['LOADWISE_PREVIEW'] || $LOADWISE_PREVIEW)
       RWebSpec::WebBrowser.new(base_url, nil, options)
     end
 
@@ -78,33 +82,91 @@ module RWebSpec
     end
 
     # monitor current execution using
-    # 
+    #
     # Usage
     #  log_time { browser.click_button('Confirm') }
-    def log_time(msg, &block)      
+    def log_time(msg, &block)
       start_time = Time.now
-      yield        
+      yield
+      end_time = Time.now
+      
       Thread.current[:log] ||= []
-      Thread.current[:log] << [File.basename(__FILE__), msg, Time.now, Time.now - start_time]
+      Thread.current[:log] << {:file => File.basename(__FILE__),
+        :message => msg,
+        :start_time => Time.now,
+        :duration => Time.now - start_time}
+        
+      if $LOADWISE_MONITOR
+      begin
+         require 'java'
+         puts "Calling Java 1"         
+         java_import com.loadwise.db.MemoryDatabase
+         #puts "Calling Java 2: #{MemoryDatabase.count}"         
+         MemoryDatabase.addEntry(1, "zdfa01", "a_spec.rb", msg, start_time, end_time);           
+         puts "Calling Java Ok: #{MemoryDatabase.count}"
+      rescue NameError => ne
+         puts "Name Error: #{ne}"
+         # failed to load Java class
+      rescue => e
+         puts "Failed to calling Java: #{e.class.name}"
+      end
+      end
+      # How to notify LoadWise at real time
+      # LoadWise to collect CPU 
     end
 
-	def run_with_virtual_users(virtual_user_count = 2, &block)		
-	  	raise "too many virtual users" if virtual_user_count > 100 #TODO
-	  	if (virtual_user_count <= 1) 
-	  		yield	  	
-	  	else 
-		threads = [] 
-		virtual_user_count.times do |idx|
-  			threads[idx] = Thread.new do
-    			start_time = Time.now 
-    			yield
-    			puts "Thread[#{idx+1}] #{Time.now - start_time}s"
-  			end
-		end
+    def run_with_virtual_users(virtual_user_count = 2, preview = false, &block)
+      raise "too many virtual users" if virtual_user_count > MAX_VU
+      
+      begin
+        if defined?(LOADWISE_PREVIEW)
+          preview = LOADWISE_PREVIEW
+        end
+      rescue => e1
+      end
+      
+      if preview
+        virtual_user_count = 1 
+        $LOADWISE_PREVIEW = true
+      end
+      
+      if (virtual_user_count <= 1)
+        yield
+      else
+        threads = []
+        vu_reports = {}
+        virtual_user_count.times do |idx|
+          threads[idx] = Thread.new do
+            start_time = Time.now
+            vu_reports[idx] ||= []
+            begin
+              yield
+              vu_reports[idx] =  Thread.current[:log]
+            rescue => e
+              vu_reports[idx] =  Thread.current[:log]
+              vu_reports[idx] ||= []
+              vu_reports[idx] << { :error => e }
+            end
+            vu_reports[idx] ||= []
+            vu_reports[idx] << { :message => "Total Duration", :duration => Time.now - start_time }            
+            puts "VU[#{idx+1}] #{Time.now - start_time}s"
+          end
+        end
 
-		threads.each {|t| t.join }
-		end
-	end
+        threads.each {|t| t.join; }
+        vu_reports.each do |key, value|
+          value.each do |entry|
+            if entry[:error] then
+              puts "Error: #{entry[:error]}"
+            else
+              puts "[#{key}] #{entry[:message]}, #{entry[:duration]}"
+            end
+          end
+        end
+
+        return vu_reports
+      end
+    end
 
   end
 end

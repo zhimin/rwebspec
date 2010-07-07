@@ -14,7 +14,7 @@ require 'active_support/core_ext'
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.6"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.6.1"
 end
 
 # Extra full path to load libraries
@@ -30,6 +30,7 @@ require File.dirname(__FILE__) + "/rwebspec/rspec_helper"
 require File.dirname(__FILE__) + "/rwebspec/load_test_helper"
 require File.dirname(__FILE__) + "/rspec_extensions"
 require File.dirname(__FILE__) + "/watir_extensions"
+require File.dirname(__FILE__) + "/window_script_extensions.rb"
 require File.dirname(__FILE__) + "/rwebspec/matchers/contains_text"
 require File.dirname(__FILE__) + "/rwebspec/testwise_plugin"
 
