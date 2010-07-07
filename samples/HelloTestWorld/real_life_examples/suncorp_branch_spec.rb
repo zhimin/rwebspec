@@ -1,6 +1,6 @@
 require 'rwebspec'
 
-spec "Locate a Suncorp Branch" do
+specification "Locate a Suncorp Branch" do
   include RWebSpec::RSpecHelper
 
   before(:all) do

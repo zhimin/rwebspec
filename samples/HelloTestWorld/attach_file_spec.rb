@@ -1,6 +1,6 @@
 require 'rwebspec'
 
-spec "File attachment" do
+specification "File attachment" do
   include RWebSpec::RSpecHelper
 
   @@test_page = File.join(File.dirname(File.expand_path(__FILE__)), "test_page.html")

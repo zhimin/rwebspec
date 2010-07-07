@@ -4,7 +4,7 @@
 # using old framework name 'rwebunit' still works
 require 'rwebunit'
 
-spec "google search" do
+specification "google search" do
   include RWebSpec::RSpecHelper
 
   before(:all) do

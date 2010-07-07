@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'rwebspec'
 
-spec "google search" do
+specification "google search" do
   include RWebSpec::RSpecHelper
 
   before(:all) do
