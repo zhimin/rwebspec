@@ -30,7 +30,10 @@ require File.dirname(__FILE__) + "/rwebspec/rspec_helper"
 require File.dirname(__FILE__) + "/rwebspec/load_test_helper"
 require File.dirname(__FILE__) + "/rspec_extensions"
 require File.dirname(__FILE__) + "/watir_extensions"
-require File.dirname(__FILE__) + "/window_script_extensions.rb"
+if  RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
+  require File.dirname(__FILE__) + "/window_script_extensions.rb"
+end
+
 require File.dirname(__FILE__) + "/rwebspec/matchers/contains_text"
 require File.dirname(__FILE__) + "/rwebspec/testwise_plugin"
 
