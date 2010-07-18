@@ -13,13 +13,13 @@ require File.join(File.dirname(__FILE__), 'matchers', "contains_text.rb")
 require 'timeout'
 require 'uri'
 
-require 'watir/screen_capture'  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+require 'watir/screen_capture' if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
 
 module RWebSpec
   module Driver
     include RWebSpec::TestWisePlugin
     include RWebSpec::Popup
-    include Watir::ScreenCapture  if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+    include Watir::ScreenCapture if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
 
     @@default_polling_interval = 1 # second
     @@default_timeout = 30 # seconds
@@ -180,11 +180,11 @@ module RWebSpec
     #
     #  attach_browser(:title,    )
     def attach_browser(how, what, options = {})
-      options.merge!(:browser => is_firefox? ? "Firefox" : "IE")
+      options.merge!(:browser => is_firefox? ? "Firefox" : "IE") unless options[:browser]
       begin
         options.merge!(:base_url => browser.context.base_url)
       rescue => e
-        puts "error to attach to browser: #{e}"
+        puts "failed to set base_url, ignore : #{e}"
       end
       WebBrowser.attach_browser(how, what, options)
     end
@@ -241,8 +241,8 @@ module RWebSpec
     # text_field 	<input> tags with the type=text (single-line), type=textarea (multi-line), and type=password
     # p 	<p> (paragraph) tags, because
     [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
-      define_method method do |*args|
-        perform_operation { @web_browser.send(method, *args) if @web_browser }
+      define_method method do |* args|
+        perform_operation { @web_browser.send(method, * args) if @web_browser }
       end
     end
     alias td cell
@@ -270,8 +270,8 @@ module RWebSpec
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
     #
     [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
-      define_method method do |*args|
-        perform_operation { @web_browser.send(method, *args) if @web_browser }
+      define_method method do |* args|
+        perform_operation { @web_browser.send(method, * args) if @web_browser }
       end
     end
 
@@ -288,7 +288,7 @@ module RWebSpec
       perform_operation { text_field(:id, textfield_id).set(value) }
     end
 
-    def perform_operation(&block)
+    def perform_operation(& block)
       begin
         dump_caller_stack
         operation_delay
@@ -437,9 +437,9 @@ module RWebSpec
         require 'hpricot'
         doc = Hpricot(content)
         base_url.slice!(-1) if ends_with?(base_url, "/")
-        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || ""}
-        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}
-        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || ""}
+        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || "" }
+        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || "" }
+        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || "" }
         return doc.to_html
       rescue => e
         absolutize_page(content, base_url, parent_url)
@@ -569,7 +569,7 @@ module RWebSpec
     #    i.enter_text('btn1')
     #    i.click_button('btn1')
     #  end
-    def on(page, &block)
+    def on(page, & block)
       yield page
     end
 
@@ -577,7 +577,7 @@ module RWebSpec
     #
     # Example:
     #  shall_not_allow { 1/0 }
-    def shall_not_allow(&block)
+    def shall_not_allow(& block)
       operation_performed_ok = false
       begin
         yield
@@ -593,7 +593,7 @@ module RWebSpec
     #
     # Example:
     #   allow { click_button('Register') }
-    def allow(&block)
+    def allow(& block)
       yield
     end
 
@@ -604,7 +604,7 @@ module RWebSpec
     #
     # Example:
     #   failsafe { click_link("Logout") }  # try logout, but it still OK if not being able to (already logout))
-    def failsafe(&block)
+    def failsafe(& block)
       begin
         yield
       rescue =>e
@@ -624,7 +624,7 @@ module RWebSpec
     #   wait_until {puts 'hello'}
     #   wait_until { div(:id, :receipt_date).exists? }
     #
-    def wait_until(timeout = @@default_timeout || 30, polling_interval = @@default_polling_interval || 1, &block)
+    def wait_until(timeout = @@default_timeout || 30, polling_interval = @@default_polling_interval || 1, & block)
       waiter = Watir::Waiter.new(timeout, polling_interval)
       waiter.wait_until { yield }
     end
@@ -714,7 +714,7 @@ module RWebSpec
     # Example
     #    repeat_try(3, 2) { click_button('Search' } # 3 times, 6 seconds in total
     #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
-    def repeat_try(num_tries = @@default_timeout || 30, interval = @@default_polling_interval || 1, &block)
+    def repeat_try(num_tries = @@default_timeout || 30, interval = @@default_polling_interval || 1, & block)
       num_tries ||= 1
       (num_tries - 1).times do |num|
         begin
@@ -743,7 +743,7 @@ module RWebSpec
     #    try { click_link('waiting')}
     #    try(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
     #    try { click_button('Search' }
-    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, & block)
       start_time = Time.now
 
       last_error = nil
@@ -766,17 +766,17 @@ module RWebSpec
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
-      value = { :zero => 0,
-                :first => 1,
-                :second => 2,
-                :third => 3,
-                :fourth => 4,
-                :fifth => 5,
-                :sixth => 6,
-                :seventh => 7,
-                :eighth => 8,
-                :ninth => 9,
-                :tenth => 10 }[symb]
+      value = {:zero => 0,
+               :first => 1,
+               :second => 2,
+               :third => 3,
+               :fourth => 4,
+               :fifth => 5,
+               :sixth => 6,
+               :seventh => 7,
+               :eighth => 8,
+               :ninth => 9,
+               :tenth => 10}[symb]
       return value || symb.to_i
     end
 
@@ -850,6 +850,43 @@ module RWebSpec
       end
     end
 
+    # Use AutoIT3 to send password
+    # title starts with "Connect to ..."
+    def basic_authentication_ie(title, username, password)
+      full_title = "Connect to #{title}" unless title =~ /^Connect\sto/
+      require 'rformspec'
+      login_win = RFormSpec::Window.new("Connect to #{full_title}")
+      login_win.send_control_text("Edit2", username)
+      login_win.send_control_text("Edit3", password)
+      login_win.click_button("Button3")
+    end
+
+    # Use JSSH to pass authentication
+    #  Window title "Authentication required"
+    def basic_authentication_firefox(username, password, wait = 3)
+      jssh_command = "
+    var length = getWindows().length;
+    var win;
+    var found = false;
+    for (var i = 0; i < length; i++) {
+      win = getWindows()[i];
+      if(win.document.title == \"Authentication Required\") {
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      var jsdocument = win.document;
+      var dialog = jsdocument.getElementsByTagName(\"dialog\")[0];
+      jsdocument.getElementsByTagName(\"textbox\")[0].value = \"#{username}\";
+      jsdocument.getElementsByTagName(\"textbox\")[1].value = \"#{password}\";
+      dialog.getButton(\"accept\").click();
+    }
+    \n"
+      sleep(wait)
+      $jssh_socket.send(jssh_command, 0)
+      # read_socket()
+    end
 
     # take_screenshot to save the current active window
     # TODO can't move mouse

@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 1.6.2
+  add helper method: basic_authentication for IE and Firefox
+
  1.6.1 (2010-07-08)
   Update load test installer
   Extend Watir to suppoort calling JScript/VBscript in IE

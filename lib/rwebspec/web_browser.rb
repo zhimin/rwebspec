@@ -519,7 +519,8 @@ module RWebSpec
       options = default_options.merge(options)
       site_context = Context.new(options[:base_url]) if options[:base_url]
       if (options[:browser] == "Firefox")
-        return WebBrowser.new_from_existing(FireWatir::Firefox.new.attach(how, what), site_context)
+        ff = FireWatir::Firefox.attach(how, what)        
+        return WebBrowser.new_from_existing(ff, site_context)
       else
         return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
       end
