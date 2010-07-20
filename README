@@ -1,33 +1,41 @@
 
-RWebSpec wraps the popular web testing framework WATIR with RSpec Syntax to provide better easy to read automated web test cases. By using iTest/Watir recorder, the rWebUnit test scripts can be recorded in Firefox. iTest2 makes editing/executing test cases with ease. 
+RWebSpec wraps the popular web testing framework WATIR with RSpec Syntax to provide better easy to read automated web test cases. By using TestWise/Watir recorder, the RWebSpec test scripts can be recorded in Firefox. TestWise, The Next-Generation Functional Testing IDE,  makes editing/executing test cases with ease. 
 
-Sample rWebUnit Test:
+Sample RWebSpec Test:
 
-require 'rwebspec'
+load File.dirname(__FILE__) + '/test_helper.rb'
 
-spec "Locate a Suncorp Branch" do
-  include RWebSpec::RSpecHelper
+specification "User Profile" do
+  include TestHelper
 
   before(:all) do
-    open_browser_with("http://suncorp.com.au/")
-  end
-
-  before(:each) do
-    goto_page("/locator")
+    open_browser("http://demo.adminwise.com")
+    reset_database
   end
 
   after(:all) do
-    close_browser
+    fail_safe { logout }
   end
 
-  scenario "Find by extended trading hours" do
-    checkbox(:id, "OpenExtendedTradingHoursSerivceId").click # using Watir directly
-    enter_text("Postcode_Locator__Postcode", "4061") 
-    click_button_with_image("search_button.gif")
-    page_source.should include("Queen St Mall")  
+  story "[8] User can change password" do
+    login_as("bob", "password")
+    click_link("Profile")
+    click_link("Change password")
+    
+    password_change_page = expect_page PasswordChangePage
+    password_change_page.enter_current("password")
+    password_change_page.enter_new("newpass")
+    password_change_page.enter_confirm("newpass")
+    password_change_page.click_button("Change")
+    
+    logout
+    login_as("bob", "newpass")
+    assert_link_present_with_text("Profile") # login Ok
   end
+
 end
 
 
-iTest2 Homepage: http://www.itest2.com
+
+TestWise Homepage: http://www.testwisely.com/en/testwise
   
