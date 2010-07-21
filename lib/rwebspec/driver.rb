@@ -865,7 +865,7 @@ module RWebSpec
       login_win = RFormSpec::Window.new("Connect to #{full_title}")
       login_win.send_control_text(options[:textctrl_username], username)
       login_win.send_control_text(options[:textctrl_password], password)
-      login_win.click_button(options[:button_ok])
+      login_win.click_button("OK")
     end
 
     # Use JSSH to pass authentication
