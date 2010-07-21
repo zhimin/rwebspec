@@ -852,13 +852,20 @@ module RWebSpec
 
     # Use AutoIT3 to send password
     # title starts with "Connect to ..."
-    def basic_authentication_ie(title, username, password)
+    def basic_authentication_ie(title, username, password, options = {})
+      default_options = {:textctrl_username => "Edit2",
+                         :textctrl_password => "Edit3",
+                         :button_ok => 'Button1'
+      }
+
+      options = default_options.merge(options)
+
       full_title = "Connect to #{title}" unless title =~ /^Connect\sto/
       require 'rformspec'
       login_win = RFormSpec::Window.new("Connect to #{full_title}")
-      login_win.send_control_text("Edit2", username)
-      login_win.send_control_text("Edit3", password)
-      login_win.click_button("Button3")
+      login_win.send_control_text(options[:textctrl_username], username)
+      login_win.send_control_text(options[:textctrl_password], password)
+      login_win.click_button(options[:button_ok])
     end
 
     # Use JSSH to pass authentication
