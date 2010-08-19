@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+ 1.6.3
+   Add base_authentication for Celerity
+   should contains only return maxium 256 chracters in error stack trace, for full using should include
+    
  1.6.2
   add helper method: basic_authentication for IE and Firefox
 

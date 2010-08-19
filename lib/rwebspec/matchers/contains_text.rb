@@ -14,12 +14,12 @@ class ContainsText
   end
 
   def actual_text
-    @actual.to_s.length > 1000000 ? @actual[0, 1000] : @actual
+    @actual.to_s.length > 256 ? @actual[0, 255] : @actual
   end
 
   # error message for should
   def failure_message
-    "expected '#{actual_text}' to contain '#{@expected}', but it did't"
+    "expected '#{actual_text}' to contain '#{@expected}', but it didn't"
   end
 
   # error message for should_not

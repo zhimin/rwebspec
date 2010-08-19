@@ -154,6 +154,9 @@ module RWebSpec
       @web_browser.is_firefox? if @web_browser
     end
 
+    def is_celerity? 
+      RUBY_PLATFORM =~ /java/ && @web_browser
+    end
 
     # Go to another page on the testing site.
     #
@@ -898,6 +901,20 @@ module RWebSpec
       sleep(wait)
       $jssh_socket.send(jssh_command, 0)
       # read_socket()
+    end
+
+    def basic_authentication_celerity(username, password)
+      @web_browser.celerity.credentials = "#{username}:#{password}"
+    end
+
+    def basic_authentication(username, password, options = {})
+      if is_celerity?
+        basic_authentication_celerity(username, password)
+      elsif is_firefox?
+        basic_authentication_firefox(username, password)
+      else
+        basic_authentication_ie(options[:title], username, password, options)
+      end
     end
 
     # take_screenshot to save the current active window

@@ -585,6 +585,11 @@ module RWebSpec
       @browser
     end
 
+    def celerity
+      raise "can't call this as it is configured to use Celerity" unless RUBY_PLATFORM =~ /java/
+      @browser
+    end
+
     # Save current web page source to file
     #   usage:
     #      save_page("/tmp/01.html")
