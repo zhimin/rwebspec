@@ -45,7 +45,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec/*.rb')  
-  rdoc.rdoc_files.delete("lib/rwebspec/test_utils.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
   rdoc.options += [
@@ -59,7 +58,6 @@ Rake::RDocTask.new("chm") do |rdoc|
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
-  rdoc.rdoc_files.delete("lib/rwebspec/test_utils.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
     rdoc.options += [
