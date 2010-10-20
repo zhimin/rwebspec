@@ -179,6 +179,78 @@ module RWebSpec
       end
     end
 
+    def modal_dialog(how=nil, what=nil)
+      @browser.modal_dialog(how, what)
+    end
+
+   # This is the main method for accessing a generic element with a given attibute
+    #  *  how   - symbol - how we access the element. Supports all values except :index and :xpath
+    #  *  what  - string, integer or regular expression - what we are looking for,
+    #
+    # Valid values for 'how' are listed in the Watir Wiki - http://wiki.openqa.org/display/WTR/Methods+supported+by+Element
+    #
+    # returns an Watir::Element object
+    #
+    # Typical Usage
+    #
+    #   element(:class, /foo/)      # access the first element with class 'foo'. We can use a string in place of the regular expression
+    #   element(:id, "11")          # access the first element that matches an id
+    def element(how, what)
+      return @browser.element(how, what)
+    end
+
+    # this is the main method for accessing generic html elements by an attribute
+    #
+    # Returns a HTMLElements object
+    #
+    # Typical usage:
+    #
+    #   elements(:class, 'test').each { |l| puts l.to_s }  # iterate through all elements of a given attribute
+    #   elements(:alt, 'foo')[1].to_s                       # get the first element of a given attribute
+    #   elements(:id, 'foo').length                        # show how many elements are foung in the collection
+    #
+    def elements(how, what)
+      return @browser.elements(how, what)
+    end
+
+    def show_all_objects
+      @browser.show_all_objects
+    end
+
+    # Returns the specified ole object for input elements on a web page.
+    #
+    # This method is used internally by Watir and should not be used externally. It cannot be marked as private because of the way mixins and inheritance work in watir
+    #
+    #   * how - symbol - the way we look for the object. Supported values are
+    #                  - :name
+    #                  - :id
+    #                  - :index
+    #                  - :value etc
+    #   * what  - string that we are looking for, ex. the name, or id tag attribute or index of the object we are looking for.
+    #   * types - what object types we will look at.
+    #   * value - used for objects that have one name, but many values. ex. radio lists and checkboxes
+    def locate_input_element(how, what, types, value=nil)
+      @browser.locate_input_element(how, what, types, value)
+    end
+
+    # This is the main method for accessing map tags - http://msdn.microsoft.com/workshop/author/dhtml/reference/objects/map.asp?frame=true
+    #  *  how   - symbol - how we access the map,
+    #  *  what  - string, integer or regular expression - what we are looking for,
+    #
+    # Valid values for 'how' are listed in the Watir Wiki - http://wiki.openqa.org/display/WTR/Methods+supported+by+Element
+    #
+    # returns a map object
+    #
+    # Typical Usage
+    #
+    #   map(:id, /list/)                 # access the first map that matches list.
+    #   map(:index,2)                    # access the second map on the page
+    #   map(:title, "A Picture")         # access a map using the tooltip text. See http://msdn.microsoft.com/workshop/author/dhtml/reference/properties/title_1.asp?frame=true
+    #
+    def map(how, what=nil)
+      @browser.map(how, what)
+    end
+
     def contains_text(text)
       @browser.contains_text(text);
     end
@@ -208,7 +280,7 @@ module RWebSpec
       end
     end
 
-    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
       define_method method do
         @browser.send(method)
       end

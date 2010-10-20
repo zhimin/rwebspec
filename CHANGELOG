@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+ 1.6.4
+   added WebBrwoser.modal_dialog
+   added many watir ie methods such as :elements, :divs....
+
  1.6.3
    Add base_authentication for Celerity
    should contains only return maxium 256 chracters in error stack trace, for full using should include
