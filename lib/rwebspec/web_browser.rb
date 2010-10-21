@@ -5,14 +5,15 @@
 
 begin
   require 'watir'
-  require 'watir/contrib/enabled_popup'
-  require 'watir/close_all'
-  require 'watir/screen_capture' 
+  # require 'watir/contrib/enabled_popup'
+  # require 'watir/close_all'
+  # require 'watir/screen_capture' 
   # NO need any more
   # require 'watir/ie'
   # require 'watir/contrib/visible'
   $watir_loaded = true
 rescue LoadError => e
+  puts e
   $watir_loaded = false
 end
 
@@ -21,6 +22,7 @@ begin
   require "firewatir";
   $firewatir_loaded = true
 rescue LoadError => e
+  puts e
   $firewatir_loaded = false
 end
 
