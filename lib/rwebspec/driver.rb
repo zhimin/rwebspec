@@ -13,13 +13,13 @@ require File.join(File.dirname(__FILE__), 'matchers', "contains_text.rb")
 require 'timeout'
 require 'uri'
 
-require 'watir/screen_capture' if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+# require 'watir/screen_capture' if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
 
 module RWebSpec
   module Driver
     include RWebSpec::TestWisePlugin
     include RWebSpec::Popup
-    include Watir::ScreenCapture if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
+    # include Watir::ScreenCapture if RUBY_PLATFORM.downcase.include?("mswin") or RUBY_PLATFORM.downcase.include?("mingw")
 
     @@default_polling_interval = 1 # second
     @@default_timeout = 30 # seconds
