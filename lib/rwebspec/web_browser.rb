@@ -81,7 +81,6 @@ module RWebSpec
         end
       else
         raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
-        puts "Ruby Linux or Mac platform: firefox"
         initialize_firefox_browser(existing_browser, base_url, options)
       end
     end
