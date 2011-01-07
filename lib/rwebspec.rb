@@ -1,7 +1,17 @@
 #***********************************************************
-#* Copyright (c) 2006 - 2009, Zhimin Zhan.
+#* Copyright (c) 2006 - 2010, Zhimin Zhan.
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
+require "rubygems";
+
+# Try load firewatir first, which depends on ActiveSupport 2.3.9 
+begin
+  require "firewatir";
+  $firewatir_loaded = true
+rescue LoadError => e
+  puts e
+  $firewatir_loaded = false
+end
 
 # Load active_support, so that we can use 1.days.ago
 begin
@@ -14,7 +24,7 @@ require 'active_support/core_ext'
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.6.4"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.6.5"
 end
 
 # Extra full path to load libraries

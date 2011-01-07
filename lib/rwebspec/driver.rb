@@ -297,7 +297,6 @@ module RWebSpec
         operation_delay
         yield
       rescue RuntimeError => re
-        puts "[DEBUG] operation error: #{re}"
         raise re
         #      ensure
         #        puts "[DEBUG] ensure #{perform_ok}" unless perform_ok

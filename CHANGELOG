@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 1.6.5
+   [Fixes] load Firewatir first, in case new version of ActiveSupport is loaded first
+
  1.6.4
    added WebBrwoser.modal_dialog
    added many watir ie methods such as :elements, :divs....

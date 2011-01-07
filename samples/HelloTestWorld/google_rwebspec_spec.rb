@@ -1,14 +1,14 @@
 # This is a comment (ignored),  line starting with #
 # Simple Spec shows using RWebSpec write easy-to-read automated test scripts (or specification)
-
-# using old framework name 'rwebunit' still works
-require 'rwebunit'
+require 'rubygems'
+require 'firewatir'
+require 'rwebspec'
 
 specification "google search" do
   include RWebSpec::RSpecHelper
 
   before(:all) do
-    open_browser "http://www.google.com"
+    open_browser "http://www.google.com", :firefox => true
   end
 
   before(:each) do
