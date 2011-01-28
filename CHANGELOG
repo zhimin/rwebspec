@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+
+ 1.7.1
+   [New] New version scheme, matching Watir versioning, appending minor number
+   [New] background_visit method, visit url in background, useful for function such as reset database
+
  1.6.5
    [Fixes] load Firewatir first, in case new version of ActiveSupport is loaded first
 
@@ -9,14 +14,14 @@ CHANGELOG
 
  1.6.3
    Add base_authentication for Celerity
-   should contains only return maxium 256 chracters in error stack trace, for full using should include
+   should contains only return maximum 256 characters in error stack trace, for full using should include
     
  1.6.2
   add helper method: basic_authentication for IE and Firefox
 
  1.6.1 (2010-07-08)
   Update load test installer
-  Extend Watir to suppoort calling JScript/VBscript in IE
+  Extend Watir to support calling JScript/VBscript in IE
 
  1.6 (2010-04) 
    Include ScreenCapture
@@ -36,7 +41,7 @@ CHANGELOG
  1.5.1 
    [Load Test helper
    assert_text_present changed to check text view of web pages
-   detect ILOAD2 environment to determin to preivew load test or not
+   detect ILOAD2 environment to determine to preview load test or not
 
  1.5
    [New] Supports Watir 1.6.5 
@@ -130,7 +135,7 @@ CHANGELOG
   1.0.4
   Added: WebBrowser.html WebBrowser.text
   Added: random method in test_utils
-  Enhancemet: close_browser works even no browser started in the test
+  Enhancement: close_browser works even no browser started in the test
   move open_browser to driver.rb
   fixed include rwebspec causing stack too deep error
   
@@ -287,7 +292,7 @@ TODO:
 == 0.5.1 (2007-09-21)
  - add wrap of Watir methods, such as buttons, button(...)
  - expose Watir low level methods to test/spec through Driver.rb
- - removed old way using array and comparision to access individual control
+ - removed old way using array and comparison to access individual control
  - renamed html_title to page_title
  - add method contains_text
  - make faster checkbox operations

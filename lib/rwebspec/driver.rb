@@ -171,6 +171,7 @@ module RWebSpec
 
     alias visit goto_page
 
+    
     # Go to another web site, normally different site being tested on
     #
     #  open_browser("http://www.itest2.com")
@@ -179,6 +180,27 @@ module RWebSpec
       @web_browser.goto_url url
     end
 
+    # Go to specific url in background (i.e not via browwser, different from goto_url)
+    # This won't share the session with what's currenlty in browser
+    #
+    # One use example: resetting database
+    #   background_visit("/reset")
+    #
+    def background_visit(url)
+      require 'httpclient'
+      begin
+        client = HTTPClient.new
+        if url && url =~ /^http/
+            http_response = client.get(url).body.content
+        else
+            base_url = $ITEST2_PROJECT_BASE_URL || $BASE_URL
+            http_response = client.get("#{base_url}#{url}").body.content
+        end
+      rescue => e
+        raise e
+      end
+    end
+    
     # Attach to existinb browser window
     #
     #  attach_browser(:title,    )
