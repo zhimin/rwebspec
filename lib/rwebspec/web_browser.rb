@@ -133,7 +133,11 @@ module RWebSpec
       @browser.visible = options[:visible] unless $HIDE_IE
       #NOTE: close_others fails
       if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
-        @browser.close_others
+				begin
+        	@browser.close_others
+				rescue => e1
+					puts "Failed to close others"
+				end
       else
         puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
       end
