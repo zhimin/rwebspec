@@ -24,7 +24,7 @@ require 'active_support/core_ext'
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.6.5"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.7.1"
 end
 
 # Extra full path to load libraries
