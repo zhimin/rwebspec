@@ -4,6 +4,7 @@ CHANGELOG
  1.7.1
    [New] New version scheme, matching Watir versioning, appending minor number
    [New] background_visit method, visit url in background, useful for function such as reset database
+   [Fix] in latest Watir, no all operations return true any more, refactor try{ }
 
  1.6.5
    [Fixes] load Firewatir first, in case new version of ActiveSupport is loaded first

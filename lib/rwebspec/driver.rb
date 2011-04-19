@@ -773,8 +773,9 @@ module RWebSpec
       last_error = nil
       until (duration = Time.now - start_time) > timeout
         begin
-          return if yield
+          yield
           last_error = nil
+					return true 
         rescue => e
           last_error = e
         end
