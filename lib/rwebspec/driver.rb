@@ -961,6 +961,34 @@ module RWebSpec
     end
 
 
+
+    # use win32screenshot library to save curernt active window, which shall be IE
+    #
+    def take_screenshot
+      if $testwise_screenshot_supported && is_windows?
+        begin
+          screenshot_image_filename =  "screenshot_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
+          the_dump_dir = default_dump_dir
+          FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
+          screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
+          screenshot_image_filepath.gsub!("/", "\\") if is_windows?
+
+          FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
+
+          case @web_browser.underlying_browser.browser
+            when :internet_explorer
+              Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)
+            else
+              Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
+          end
+          notify_screenshot_location(screenshot_image_filepath)
+        rescue => e
+          puts "error on taking screenshot: #{e}"
+        end
+      end
+    end
+
+
   end
 
 end

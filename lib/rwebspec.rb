@@ -24,7 +24,16 @@ require 'active_support/core_ext'
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.7.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.8.0"
+end
+
+if  RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
+ $testwise_screenshot_supported = false
+ begin
+   require 'win32/screenshot'
+   $testwise_screenshot_supported = true
+ rescue LoadError => no_screen_library_error
+ end  
 end
 
 # Extra full path to load libraries

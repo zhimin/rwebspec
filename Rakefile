@@ -70,12 +70,12 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "1.7.1"
+  s.version = "1.8.0"
   s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
   # s.description = ""
 
   s.author  = "Zhimin Zhan"
-  s.email   = "zhimin@agileway.net"
+  s.email   = "zhimin@agileway.com.au"
   s.homepage= "http://github.com/zhimin/rwebspec/tree/master"
   s.rubyforge_project = "rwebspec"
 
@@ -91,7 +91,7 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, ["= 1.1.12"])
 
-  s.add_dependency("commonwatir", ">= 1.8.0")
+  s.add_dependency("commonwatir", ">= 1.8.1")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
