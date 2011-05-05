@@ -941,7 +941,7 @@ module RWebSpec
 
     # take_screenshot to save the current active window
     # TODO can't move mouse
-    def take_screenshot
+    def take_screenshot_old
       if is_windows? && $ITEST2_DUMP_PAGE
         begin
           puts "[DEBUG] Capturing screenshots..."
@@ -965,7 +965,9 @@ module RWebSpec
     # use win32screenshot library to save curernt active window, which shall be IE
     #
     def take_screenshot
+      # puts "calling new take screenshot"
       if $testwise_screenshot_supported && is_windows?
+        # puts "testwise supported: #{$testwise_screenshot_supported}"
         begin
           screenshot_image_filename =  "screenshot_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
           the_dump_dir = default_dump_dir
@@ -975,11 +977,10 @@ module RWebSpec
 
           FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
 
-          case @web_browser.underlying_browser.browser
-            when :internet_explorer
-              Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)
-            else
-              Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
+          if ie then
+            Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)
+          else
+            Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
           end
           notify_screenshot_location(screenshot_image_filepath)
         rescue => e
@@ -988,6 +989,7 @@ module RWebSpec
       end
     end
 
+		# end of methods
 
   end
 
