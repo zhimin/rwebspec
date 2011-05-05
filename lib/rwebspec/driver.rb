@@ -977,8 +977,10 @@ module RWebSpec
 
           FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
 
-          if ie then
-            Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)
+          if is_firefox? then
+            Win32::Screenshot::Take.of(:window, :title => /mozilla\sfirefox/i).write(screenshot_image_filepath)					
+					elsif ie
+            Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)					
           else
             Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
           end
