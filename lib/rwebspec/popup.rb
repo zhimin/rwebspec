@@ -112,7 +112,7 @@ module RWebSpec
     def prepare_to_click_button_in_popup(button = "OK", wait_time = 3)
       #  !@web_browser.is_firefox?
       # TODO: firefox is OK
-      if RUBY_PLATFORM =~ /mswin/  then
+      if RUBY_PLATFORM =~ /mswin/ || RUBY_PLATFORM =~ /mingw/  then
         start_checking_js_dialog(button, wait_time)
       else
         raise "this only support on Windows and on IE"

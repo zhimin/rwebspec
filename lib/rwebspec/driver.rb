@@ -95,21 +95,25 @@ module RWebSpec
         # @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
         @web_browser.close_browser
       else
-        WebBrowser.close_all_browsers
+				close_all_browsers
       end
     end
-
     alias close_ie close_browser
 
 
     # Close all opening browser windows
     #
     def close_all_browsers
-      if is_firefox?
-        FireWatir::Firefox.close_all
-      else
-        Watir::IE.close_all
-      end
+			if @web_browser
+	      if is_firefox?
+	        FireWatir::Firefox.close_all
+	      else
+	        Watir::IE.close_all
+	      end
+			else
+				browser_type = $ITEST2_BROWSER ? $ITEST2_BROWSER.downcase.to_sym : :ie	
+	      WebBrowser.close_all_browsers(browser_type)				
+			end
     end
 
     # Verify the next page following an operation.
@@ -168,7 +172,6 @@ module RWebSpec
         @web_browser.goto_page(page) if @web_browser
       }
     end
-
     alias visit goto_page
 
     
@@ -181,29 +184,32 @@ module RWebSpec
     end
 
     # Go to specific url in background (i.e not via browwser, different from goto_url)
-    # This won't share the session with what's currenlty in browser
+    # This won't share the session with what's currenlty in browser, proxy setting
     #
     # One use example: resetting database
     #   background_visit("/reset")
     #
-    def background_visit(url)
+    def background_visit(url, opts = {})
       require 'httpclient'
       begin
         client = HTTPClient.new
         if url && url =~ /^http/
-            http_response = client.get(url).body.content
+            http_response = client.get(url).body
         else
             base_url = $ITEST2_PROJECT_BASE_URL || $BASE_URL
-            http_response = client.get("#{base_url}#{url}").body.content
+            http_response = client.get("#{base_url}#{url}").body
         end
+				
+				http_response = http_response.content if http_response.respond_to?("content")
       rescue => e
         raise e
       end
     end
     
-    # Attach to existinb browser window
+    # Attach to existing browser window
     #
-    #  attach_browser(:title,    )
+    #  attach_browser(:title, "Page" )
+    #  attach_browser(:url, "http://wwww..." )
     def attach_browser(how, what, options = {})
       options.merge!(:browser => is_firefox? ? "Firefox" : "IE") unless options[:browser]
       begin

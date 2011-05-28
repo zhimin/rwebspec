@@ -377,7 +377,7 @@ module RWebSpec
         yield
       rescue StandardError => e
         # puts "[DEBUG] Assertion error: #{e}"
-        take_screenshot
+        take_screenshot if $take_screenshot
         raise e
       end
     end

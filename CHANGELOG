@@ -1,5 +1,14 @@
 CHANGELOG
 =========
+ 1.8.1
+   [Upgrade] new take screenshot library
+   [Fix] only take screenshot on failed assertions if $task_screenshot is set
+   [Enhancement] add close_all for firefox browser (pass by argument)
+   [Enhancement] refactored driver.close_all_browsers
+   [New] background_visit now works new http-client version
+   [New] element_by_id() for firefox
+   [New] web_page.url 
+   [Fix] More correctly detect platform: mswin or mingw
 
  1.7.1
    [New] New version scheme, matching Watir versioning, appending minor number

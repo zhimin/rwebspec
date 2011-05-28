@@ -24,7 +24,7 @@ module FireWatir
       end
 
       case os
-      when /mswin/
+      when /mswin/ || /mingw/
         begin
           # Get the path to Firefox.exe using Registry.
           require 'win32/registry.rb'

@@ -80,6 +80,10 @@ module RWebSpec
       @web_browser.text
     end
 
+    def url
+      @web_browser.url
+    end
+
     # TO validate
     def contains?(ary)
       return true if ary.nil?

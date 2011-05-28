@@ -326,15 +326,14 @@ module RWebSpec
       end
       sleep 2
     end
-
     alias close close_browser
 
-    #TODO determine browser type, check FireWatir support or not
-    def self.close_all_browsers
-      if RUBY_PLATFORM.downcase.include?("mswin")
+    def self.close_all_browsers(browser_type = :ie)      
+			if browser_type == :ie
         Watir::IE.close_all
-      else
+      elsif browser_type == :firefox
         # raise "not supported in FireFox yet."
+				FireWatir::Firefox.new.close_all	
       end
     end
 
@@ -553,7 +552,9 @@ module RWebSpec
     def element_by_id(elem_id)
       if is_firefox?
         # elem = @browser.document.getElementById(elem_id)
-        elem = div(:id, elem_id) || label(:id, elem_id)  || button(:id, elem_id) || span(:id, elem_id) || hidden(:id, elem_id) || link(:id, elem_id) || radio(:id, elem_id)
+        # elem = div(:id, elem_id) || label(:id, elem_id)  || button(:id, elem_id) || 
+				# span(:id, elem_id) || hidden(:id, elem_id) || link(:id, elem_id) || radio(:id, elem_id)
+				elem = browser.element_by_xpath("//*[@id='#{elem_id}']")
       else
         elem = @browser.document.getElementById(elem_id)
       end
@@ -576,7 +577,7 @@ module RWebSpec
     end
 
     def select_file_for_upload(file_field, file_path)
-      normalized_file_path = RUBY_PLATFORM.downcase.include?("mswin") ? file_path.gsub("/", "\\") : file_path
+      normalized_file_path = RUBY_PLATFORM.downcase.include?("mingw") ? file_path.gsub("/", "\\") : file_path
       file_field(:name, file_field).set(normalized_file_path)
     end
 
