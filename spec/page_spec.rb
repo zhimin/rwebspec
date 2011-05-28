@@ -25,7 +25,7 @@ class TestPage < RWebSpec::AbstractWebPage
 
 end
 
-specification "Driver" do
+specification "Page objects" do
   include RWebSpec::Driver
   include RWebSpec::Assert
 
@@ -52,5 +52,10 @@ specification "Driver" do
     end
     @test_page.text.should_not contains("Text (with name, just <i>id</i>):")
   end
+
+	story	"page url" do
+		 @test_page.url.should include("spec/test_page.html")
+	end
+	
 end
 #END

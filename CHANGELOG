@@ -9,6 +9,7 @@ CHANGELOG
    [New] element_by_id() for firefox
    [New] web_page.url 
    [Fix] More correctly detect platform: mswin or mingw
+   [New] add Array.sum methods
 
  1.7.1
    [New] New version scheme, matching Watir versioning, appending minor number

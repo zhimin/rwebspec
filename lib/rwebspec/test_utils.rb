@@ -9,6 +9,11 @@ class Array
   def average
     inject(0.0) { |sum, e| sum + e } / length
   end
+
+	# why it is removed total
+	def sum
+    inject(0.0) { |sum, e| sum + e }
+	end
 end
 
 # useful hekoer methods for testing
