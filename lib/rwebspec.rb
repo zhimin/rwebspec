@@ -24,7 +24,7 @@ require 'active_support/core_ext'
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.8.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "1.8.2"
 end
 
 if  RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/

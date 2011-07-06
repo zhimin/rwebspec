@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 1.8.2
+  Add javascript_dialog in driver to support Watir 1.9
+
  1.8.1
    [Upgrade] new take screenshot library
    [Fix] only take screenshot on failed assertions if $task_screenshot is set

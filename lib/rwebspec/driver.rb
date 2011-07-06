@@ -839,6 +839,11 @@ module RWebSpec
       end
     end
 
+		# Watir 1.9 way of handling javascript dialog
+		def javascript_dialog
+			@web_browser.javascript_dialog
+		end
+		
     def select_file_for_upload(file_field_name, file_path)
       if is_windows?
         normalized_file_path = file_path.gsub("/", "\\")

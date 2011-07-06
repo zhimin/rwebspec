@@ -580,7 +580,12 @@ module RWebSpec
       normalized_file_path = RUBY_PLATFORM.downcase.include?("mingw") ? file_path.gsub("/", "\\") : file_path
       file_field(:name, file_field).set(normalized_file_path)
     end
-
+		
+		# Watir 1.9
+		def javascript_dialog
+			@browser.javascript_dialog
+		end
+		
     def start_window(url = nil)
       @browser.start_window(url);
     end
