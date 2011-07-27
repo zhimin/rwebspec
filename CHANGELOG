@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 1.9
+  [Upgrade] support Watir 2 syntax
+
  1.8.2
   Add javascript_dialog in driver to support Watir 1.9
 
