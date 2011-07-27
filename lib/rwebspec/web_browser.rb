@@ -509,7 +509,11 @@ module RWebSpec
       if values
         values.class == Array ? arys = values : arys = [values]
         arys.each {|cbx_value|
-          checkbox(:name, checkBoxName, cbx_value).set
+					if Watir::VERSION =~ /^2/ then		
+          	checkbox(:name => checkBoxName, :value => cbx_value).set
+					else
+          	checkbox(:name, checkBoxName, cbx_value).set						
+					end
         }
       else
         checkbox(:name, checkBoxName).set
@@ -524,7 +528,11 @@ module RWebSpec
       if values
         values.class == Array ? arys = values : arys = [values]
         arys.each {|cbx_value|
-          checkbox(:name, checkBoxName, cbx_value).clear
+					if Watir::VERSION =~ /^2/ then	
+          	checkbox(:name => checkBoxName, :value => cbx_value).clear
+					else
+          	checkbox(:name, checkBoxName, cbx_value).clear
+					end
         }
       else
         checkbox(:name, checkBoxName).clear
@@ -536,7 +544,11 @@ module RWebSpec
     #  Usage:
     #    click_radio_option("country", "Australia")
     def click_radio_option(radio_group, radio_option)
-      radio(:name, radio_group, radio_option).set
+			if Watir::VERSION =~ /^2/ then
+      	radio(:name => radio_group, :value => radio_option).set
+			else
+      	radio(:name, radio_group, radio_option).set				
+			end
     end
     alias click_radio_button click_radio_option
 
@@ -544,7 +556,11 @@ module RWebSpec
     #  Usage:
     #    click_radio_option("country", "Australia")
     def clear_radio_option(radio_group, radio_option)
-      radio(:name, radio_group, radio_option).clear
+			if Watir::VERSION =~ /^2/ then
+        radio(:name => radio_group, :value => radio_option).clear				
+			else
+        radio(:name, radio_group, radio_option).clear
+			end
     end
     alias clear_radio_button clear_radio_option
 
