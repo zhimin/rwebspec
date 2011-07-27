@@ -172,6 +172,7 @@ module RWebSpec
     alias td cell
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
+    alias a link
 
     # Wrapp of Watir's area to support Firefox and Watir
     #
@@ -285,12 +286,15 @@ module RWebSpec
       end
     end
 
-    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :cells, :rows].each do |method|
       define_method method do
         @browser.send(method)
       end
     end
-
+		alias as links
+		alias trs rows
+		alias tds cells
+		
     # current url
     def url
       @browser.url
@@ -509,10 +513,10 @@ module RWebSpec
       if values
         values.class == Array ? arys = values : arys = [values]
         arys.each {|cbx_value|
-					if Watir::VERSION =~ /^2/ then		
-          	checkbox(:name => checkBoxName, :value => cbx_value).set
-					else
+					if Watir::VERSION =~ /^1/ then		
           	checkbox(:name, checkBoxName, cbx_value).set						
+					else
+          	checkbox(:name => checkBoxName, :value => cbx_value).set
 					end
         }
       else
@@ -528,10 +532,10 @@ module RWebSpec
       if values
         values.class == Array ? arys = values : arys = [values]
         arys.each {|cbx_value|
-					if Watir::VERSION =~ /^2/ then	
-          	checkbox(:name => checkBoxName, :value => cbx_value).clear
-					else
+					if Watir::VERSION =~ /^1/ then	
           	checkbox(:name, checkBoxName, cbx_value).clear
+					else
+          	checkbox(:name => checkBoxName, :value => cbx_value).clear
 					end
         }
       else
@@ -544,10 +548,10 @@ module RWebSpec
     #  Usage:
     #    click_radio_option("country", "Australia")
     def click_radio_option(radio_group, radio_option)
-			if Watir::VERSION =~ /^2/ then
-      	radio(:name => radio_group, :value => radio_option).set
-			else
+			if Watir::VERSION =~ /^1/ then
       	radio(:name, radio_group, radio_option).set				
+			else
+      	radio(:name => radio_group, :value => radio_option).set
 			end
     end
     alias click_radio_button click_radio_option

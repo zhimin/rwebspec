@@ -279,6 +279,8 @@ module RWebSpec
     alias td cell
     alias check_box checkbox # seems watir doc is wrong, checkbox not check_box
     alias tr row
+    alias a link
+
 
     [:back, :forward, :refresh].each do |method|
       define_method(method) do
@@ -289,12 +291,16 @@ module RWebSpec
     alias go_back back
     alias go_forward forward
 
-    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields].each do |method|
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :cells, :rows].each do |method|
       define_method method do
         perform_operation { @web_browser.send(method) if @web_browser }
       end
     end
+		alias as links
+		alias trs rows
+		alias tds cells
 
+	
     # Check one or more checkboxes with same name, can accept a string or an array of string as values checkbox, pass array as values will try to set mulitple checkboxes.
     #
     # page.check_checkbox('bad_ones', 'Chicken Little')
@@ -425,7 +431,7 @@ module RWebSpec
       current_url =~ /(.*\/).*$/
       current_url_parent = $1
       if options[:replacement] && base_url =~ /^http:/
-        File.new(file, "w").puts absolutize_page_hpricot(content, base_url, current_url_parent)
+        File.new(file, "w").puts absolutize_page_nokogiri(content, base_url, current_url_parent)
       else
         File.new(file, "w").puts content
       end
@@ -466,6 +472,21 @@ module RWebSpec
       begin
         require 'hpricot'
         doc = Hpricot(content)
+        base_url.slice!(-1) if ends_with?(base_url, "/")
+        (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || "" }
+        (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || "" }
+        (doc/'script').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || "" }
+        return doc.to_html
+      rescue => e
+        absolutize_page(content, base_url, parent_url)
+      end
+    end  
+
+  	def absolutize_page_nokogiri(content, base_url, parent_url)
+      return absolutize_page(content, base_url, parent_url) if RUBY_PLATFORM == 'java'
+      begin
+        require 'nokogiri'
+        doc = Nokogiri::HTML(content)
         base_url.slice!(-1) if ends_with?(base_url, "/")
         (doc/'link').each { |e| e['href'] = absolutify_url(e['href'], base_url, parent_url) || "" }
         (doc/'img').each { |e| e['src'] = absolutify_url(e['src'], base_url, parent_url) || "" }
