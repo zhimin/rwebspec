@@ -280,6 +280,7 @@ module RWebSpec
     alias check_box checkbox # seems watir doc is wrong, checkbox not check_box
     alias tr row
     alias a link
+    alias img image
 
 
     [:back, :forward, :refresh].each do |method|
@@ -299,6 +300,7 @@ module RWebSpec
 		alias as links
 		alias trs rows
 		alias tds cells
+		alias imgs images
 
 	
     # Check one or more checkboxes with same name, can accept a string or an array of string as values checkbox, pass array as values will try to set mulitple checkboxes.

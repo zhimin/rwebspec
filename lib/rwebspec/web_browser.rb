@@ -173,6 +173,7 @@ module RWebSpec
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
     alias tr row
     alias a link
+    alias img image
 
     # Wrapp of Watir's area to support Firefox and Watir
     #
@@ -294,6 +295,7 @@ module RWebSpec
 		alias as links
 		alias trs rows
 		alias tds cells
+		alias imgs images
 		
     # current url
     def url
