@@ -4,6 +4,7 @@ module RWebSpec
   module TestWisePlugin
 
     def debug(message)
+      Thread.pass
       connect_to_testwise(" DEBUG", message.to_s + "\r\n") if $RUN_IN_TESTWISE && message
     end
 
@@ -13,10 +14,12 @@ module RWebSpec
       begin
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
                 $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+          Thread.pass
           sleep($ITEST2_OPERATION_DELAY / 1000)
         end
 
         while $ITEST2_PAUSE
+          Thread.pass
           debug("Paused, waiting ...")
           sleep 1
         end
@@ -64,6 +67,7 @@ module RWebSpec
 
 
     def connect_to_testwise (message_type, body)
+      Thread.pass
       begin
         the_message = message_type + "|" + body
         if @last_message == the_message then # ignore the message same as preivous one
