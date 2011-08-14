@@ -68,5 +68,16 @@ describe "Utils" do
       assert_equal 2.5, [1, 2, 3, 4].average
   end
   
+  it "words" do
+     words(2).split(" ").size.should ==  2
+  end
+  
+  it "sentences" do
+     sentences(3).size.should > 20
+  end
+
+  it "paragraphs" do
+    sentences(3).size.should > 60
+  end
   
 end

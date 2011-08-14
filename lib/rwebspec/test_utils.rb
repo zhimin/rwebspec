@@ -133,7 +133,11 @@ module RWebSpec
     # Generate a given number of words. If a range is passed, it will generate
     # a random number of words within that range.
     def words(total)
-      (1..interpret_value(total)).map { WORDS[random_number(0, total)] }.join(' ')
+      if total.class == Range
+        (1..interpret_value(total)).map { WORDS[random_number(total.min, total.max)] }.join(' ')
+      else
+        (1..interpret_value(total)).map { WORDS[random_number(0, total)] }.join(' ')
+      end
     end
 
     # Generate a given number of sentences. If a range is passed, it will generate

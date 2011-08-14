@@ -1,9 +1,13 @@
 CHANGELOG
 =========
+
+ 1.9.1
+  [Fix] test_utils sentences and paragraphs
+
  1.9
   [Upgrade] support Watir 2 syntax
-  alias tr row
-  alias a link
+  [Update] alias tr row
+  [Update] alias a link
   
 
  1.8.2
