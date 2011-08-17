@@ -41,6 +41,7 @@ module RWebSpec
         puts "Unicode may not work in IE, #{e}"
       end
 
+      base_url ||= $TESTWISE_PROJECT_BASE_URL
       base_url ||= $ITEST2_PROJECT_BASE_URL
       base_url ||= $BASE_URL
       raise "base_url must be set" if base_url.nil?
@@ -53,8 +54,8 @@ module RWebSpec
                          :go => true}
 
       options = default_options.merge options
-      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $BROWSER
-      ($ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
+      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $TESTWISE_BROWSER || "Firefox" == $BROWSER
+      ($TESTWISE_HIDE_BROWSER || $ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
 
       if base_url =~ /^file:/
         uri_base = base_url
@@ -196,7 +197,7 @@ module RWebSpec
         if url && url =~ /^http/
             http_response = client.get(url).body
         else
-            base_url = $ITEST2_PROJECT_BASE_URL || $BASE_URL
+            base_url = $TESTWISE_PROJECT_BASE_URL || $ITEST2_PROJECT_BASE_URL || $BASE_URL
             http_response = client.get("#{base_url}#{url}").body
         end
 				
@@ -397,14 +398,14 @@ module RWebSpec
     end
 
     def default_dump_dir
-      if $ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR
+      if ($TESTWISE_RUNNING_SPEC_ID && $TESTWISE_WORKING_DIR) || ($ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR)
 
-        $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
+        $TESTWISE_DUMP_DIR = $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
         FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
 
-        spec_run_id = $ITEST2_RUNNING_SPEC_ID
+        spec_run_id = $TESTWISE_RUNNING_SPEC_ID || $ITEST2_RUNNING_SPEC_ID
         spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
-        to_dir = File.join($ITEST2_DUMP_DIR, spec_run_dir_name)
+        to_dir = File.join($TESTWISE_DUMP_DIR, spec_run_dir_name)
       else
         to_dir = ENV['TEMP_DIR'] || (is_windows? ? "C:\\temp" : "/tmp")
       end
@@ -972,29 +973,6 @@ module RWebSpec
         basic_authentication_ie(options[:title], username, password, options)
       end
     end
-
-    # take_screenshot to save the current active window
-    # TODO can't move mouse
-    def take_screenshot_old
-      if is_windows? && $ITEST2_DUMP_PAGE
-        begin
-          puts "[DEBUG] Capturing screenshots..."
-          screenshot_image_filename =  "rwebspec_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
-          the_dump_dir = default_dump_dir
-          FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
-          screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
-
-          screenshot_image_filepath.gsub!("/", "\\") if is_windows?
-          screen_capture(screenshot_image_filepath, true)
-
-          notify_screenshot_location(screenshot_image_filepath)
-        rescue
-          puts "error: #{Failed to capture screen}"
-        end
-      end
-    end
-
-
 
     # use win32screenshot library to save curernt active window, which shall be IE
     #

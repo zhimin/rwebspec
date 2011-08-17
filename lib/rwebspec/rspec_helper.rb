@@ -80,7 +80,7 @@ module RWebSpec
 
     # When running
     def debugging?
-      $ITEST2_DEBUGGING && $ITEST2_RUNNING_AS == "test_case"
+      ($ITEST2_DEBUGGING && $ITEST2_RUNNING_AS == "test_case") || ($TESTWISE_DEBUGGING && $TESTWISE_RUNNING_AS == "test_case")
     end
 
     # RSpec Matchers

@@ -13,12 +13,18 @@ module RWebSpec
     def operation_delay
       begin
         if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
-                $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
+               $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
           Thread.pass
           sleep($ITEST2_OPERATION_DELAY / 1000)
+        end    
+    		
+				if $TESTWISE_OPERATION_DELAY && $TESTWISE_OPERATION_DELAY > 0 &&
+                $TESTWISE_OPERATION_DELAY < 30000  then # max 30 seconds
+          Thread.pass
+          sleep($TESTWISE_OPERATION_DELAY / 1000)
         end
 
-        while $ITEST2_PAUSE
+        while $TESTWISE_PAUSE || $ITEST2_PAUSE
           Thread.pass
           debug("Paused, waiting ...")
           sleep 1
@@ -35,7 +41,7 @@ module RWebSpec
 
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
-      return unless $ITEST2_TRACE_EXECUTION
+      return unless ($TESTWISE_TRACE_EXECUTION || $ITEST2_TRACE_EXECUTION)
       begin
         trace_lines = []
         trace_file = nil
@@ -43,7 +49,7 @@ module RWebSpec
         caller.each_with_index do |position, idx|
           next unless position =~ /\A(.*?):(\d+)/
           trace_file = $1
-          if trace_file =~ /(_spec|_test|_rwebspec)\.rb\s*$/
+          if trace_file =~ /(_spec|_test|_rwebspec)\.rb\s*$/ || trace_file =~ /\.feature$/
             found_first_spec_reference = true
             trace_lines << position
             break
@@ -73,7 +79,7 @@ module RWebSpec
         if @last_message == the_message then # ignore the message same as preivous one
           return
         end
-        itest_port = $ITEST2_TRACE_PORT || 7025
+        itest_port = $TESTWISE_TRACE_PORT || $ITEST2_TRACE_PORT || 7025
         itest_socket = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
         itest_socket.connect(Socket.pack_sockaddr_in(itest_port, '127.0.0.1'))
         itest_socket.puts(the_message)

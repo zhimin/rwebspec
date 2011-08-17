@@ -70,9 +70,9 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "1.9.1"
+  s.version = "1.9.2"
   s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
-  # s.description = ""
+  s.description = "Executable functional specification for web applications in RSpec syntax and Watir"
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.com.au"

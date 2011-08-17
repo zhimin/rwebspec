@@ -111,24 +111,16 @@ module RWebSpec
     end
 
     def initialize_ie_browser(existing_browser, options)
-      if existing_browser then
-        @browser = existing_browser
-        if $ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED then
-          @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
-          @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
-        else
-          @browser.speed = :zippy
-        end
-        return
-      end
-
-      @browser = Watir::IE.new
-      if $ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED then
-        @browser.set_slow_speed if $ITEST2_TYPING_SPEED == 'slow'
-        @browser.set_fast_speed if $ITEST2_TYPING_SPEED == 'fast'
+      @browser = existing_browser ||  Watir::IE.new
+      if ($TESTWISE_EMULATE_TYPING && $TESTWISE_TYPING_SPEED) || ($ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED) then
+        @browser.set_slow_speed if $TESTWISE_TYPING_SPEED == "slow" || $ITEST2_TYPING_SPEED == 'slow'
+        @browser.set_fast_speed if $TESTWISE_TYPING_SPEED == 'fast' || $ITEST2_TYPING_SPEED == 'fast'
       else
         @browser.speed = :zippy
       end
+			
+			return if existing_browser
+
       @browser.activeObjectHighLightColor = options[:highlight_colour]
       @browser.visible = options[:visible] unless $HIDE_IE
       #NOTE: close_others fails
@@ -144,7 +136,7 @@ module RWebSpec
     end
 
     def self.reuse(base_url, options)
-      if self.is_windows? && $ITEST2_BROWSER != "Firefox"
+      if self.is_windows? && ($TESTWISE_BROWSER != "Firefox" && $ITEST2_BROWSER != "Firefox")
         Watir::IE.each do |browser_window|
           return WebBrowser.new(base_url, browser_window, options)
         end
