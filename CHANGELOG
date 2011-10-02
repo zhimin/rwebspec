@@ -1,7 +1,10 @@
 CHANGELOG
 =========
+ 1.9.3
+  [Enhacement] take_screenshot with to_dir arguments
+
  1.9.2
-  [] TestWise 2 
+  [Update] TestWise 2 Constants
 
  1.9.1
   [Fix] test_utils sentences and paragraphs

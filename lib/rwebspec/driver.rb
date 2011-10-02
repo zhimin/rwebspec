@@ -974,15 +974,20 @@ module RWebSpec
       end
     end
 
+
     # use win32screenshot library to save curernt active window, which shall be IE
     #
-    def take_screenshot
-      # puts "calling new take screenshot"
-      if $testwise_screenshot_supported && is_windows?
-        # puts "testwise supported: #{$testwise_screenshot_supported}"
+    # opts[:to_dir] => the direcotry to save image under
+    def take_screenshot(opts = {})
+      # puts "calling new take screenshot: #{$screenshot_supported}"
+      unless $screenshot_supported
+        puts " [WARN] Screenhost not supported, check whether win32screenshot gem is installed" 
+        return
+      end
+  
         begin
           screenshot_image_filename =  "screenshot_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
-          the_dump_dir = default_dump_dir
+          the_dump_dir = opts[:to_dir] || default_dump_dir
           FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
           screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
           screenshot_image_filepath.gsub!("/", "\\") if is_windows?
@@ -991,7 +996,7 @@ module RWebSpec
 
           if is_firefox? then
             Win32::Screenshot::Take.of(:window, :title => /mozilla\sfirefox/i).write(screenshot_image_filepath)					
-					elsif ie
+		  elsif ie
             Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)					
           else
             Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
@@ -1000,10 +1005,9 @@ module RWebSpec
         rescue => e
           puts "error on taking screenshot: #{e}"
         end
-      end
+      
     end
-
-		# end of methods
+	# end of methods
 
   end
 
