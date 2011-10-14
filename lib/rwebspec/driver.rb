@@ -6,7 +6,7 @@
 # You can just use
 #    click_button("submit")
 #
-require File.join(File.dirname(__FILE__), 'testwise_plugin')
+require File.join(File.dirname(__FILE__), '../plugins/testwise_plugin')
 require File.join(File.dirname(__FILE__), 'popup')
 require File.join(File.dirname(__FILE__), 'matchers', "contains_text.rb")
 

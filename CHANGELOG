@@ -1,5 +1,11 @@
 CHANGELOG
 =========
+
+ 2.0 
+  [Update] Deprecate support for FireWatir, speed up loading
+  [Update] Drop constant naming RWebUnit
+  [Refactoring] internal folder structure like extensions and plugins
+
  1.9.3
   [Enhacement] take_screenshot with to_dir arguments
 

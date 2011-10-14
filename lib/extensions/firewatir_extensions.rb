@@ -1,4 +1,3 @@
-
 module FireWatir
   class Firefox
 

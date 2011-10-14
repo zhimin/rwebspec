@@ -45,6 +45,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec/*.rb')  
+  rdoc.rdoc_files.include('lib/extensions/*.rb')  
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
   rdoc.options += [
@@ -70,8 +71,8 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "1.9.3"
-  s.summary = "Executable functional specification for web applications in RSpec syntax and Watir"
+  s.version = "2.0.0"
+  s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax and Watir"
 
   s.author  = "Zhimin Zhan"
@@ -90,7 +91,6 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, ["= 1.1.12"])
-
   s.add_dependency("commonwatir", ">= 2.0")
 end
 

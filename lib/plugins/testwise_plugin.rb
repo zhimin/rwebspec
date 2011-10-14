@@ -12,11 +12,6 @@ module RWebSpec
     # Support of iTest to ajust the intervals between keystroke/mouse operations
     def operation_delay
       begin
-        if $ITEST2_OPERATION_DELAY && $ITEST2_OPERATION_DELAY > 0 &&
-               $ITEST2_OPERATION_DELAY < 30000  then # max 30 seconds
-          Thread.pass
-          sleep($ITEST2_OPERATION_DELAY / 1000)
-        end    
     		
 				if $TESTWISE_OPERATION_DELAY && $TESTWISE_OPERATION_DELAY > 0 &&
                 $TESTWISE_OPERATION_DELAY < 30000  then # max 30 seconds
