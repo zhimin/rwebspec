@@ -67,7 +67,9 @@ module Watir
         
         # Trick 2: need to wrap no-wait click operation in a thread
         Thread.new do
-          system("ruby", "-e", ruby_code)
+	        # this will pop up Windows Command window
+          # system("ruby", "-e", ruby_code)
+          system("rubyw", "-e", ruby_code)
         end
         highlight(:clear)
       rescue RuntimeError => re
