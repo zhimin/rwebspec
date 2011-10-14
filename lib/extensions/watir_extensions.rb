@@ -11,7 +11,7 @@ module Watir
 
     def method_missing(method_name, *args, &block)
 
-      if ($TESTWISE_DIR || TESTWISE_ENV) &&  method_name.to_s =~ /(.*)_no_wait/ && self.respond_to?($1)
+      if ($TESTWISE_DIR || $TESTWISE_BROWSER) &&  method_name.to_s =~ /(.*)_no_wait/ && self.respond_to?($1)
         ruby_code = testwise_generate_ruby_code(self, $1, *args)
         testwise_click_no_wait(ruby_code)
 
