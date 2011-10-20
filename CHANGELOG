@@ -1,6 +1,7 @@
 CHANGELOG
 =========
-
+ 2.0.1
+  [Fixes] loading watir gem on non-windows platform
  2.0 
   [Update] Deprecate support for FireWatir, speed up loading
   [Update] Drop constant naming RWebUnit

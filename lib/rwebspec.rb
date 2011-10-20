@@ -30,7 +30,7 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.0.0"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.0.1"
 end
 
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
@@ -55,12 +55,13 @@ require File.dirname(__FILE__) + "/rwebspec/rspec_helper"
 require File.dirname(__FILE__) + "/rwebspec/load_test_helper"
 
 require File.dirname(__FILE__) + "/rwebspec/matchers/contains_text"
-
 require File.dirname(__FILE__) + "/extensions/rspec_extensions"
-require File.dirname(__FILE__) + "/extensions/watir_extensions"
+
 require File.dirname(__FILE__) + "/extensions/firewatir_extensions" if $ENABLE_FIREFOX 
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
+	require File.dirname(__FILE__) + "/extensions/watir_extensions"
   require File.dirname(__FILE__) + "/extensions/window_script_extensions.rb"
 end
+
 require File.dirname(__FILE__) + "/plugins/testwise_plugin.rb"
 
