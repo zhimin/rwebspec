@@ -873,14 +873,14 @@ module RWebSpec
         normalized_file_path = file_path.gsub("/", "\\")
         if $support_ie8 && check_ie_version && @ie_version >= 8
           # puts "IE8"
-          file_field(:name, file_field).set(normalized_file_path)
+          file_field(:name, file_field_name).set(normalized_file_path)
           # choose_file_dialog(normalized_file_path)
         else
-          file_field(:name, file_field).set(normalized_file_path)
+          file_field(:name, file_field_name).set(normalized_file_path)
         end
       else
         # for firefox, just call file_field, it may fail
-        file_field(:name, file_field).set(normalized_file_path)
+        file_field(:name, file_field_name).set(normalized_file_path)
       end
     end
 

@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 2.0.2
+  [Fixes] select_file_upload
+
  2.0.1
   [Fixes] loading watir gem on non-windows platform
  2.0 
