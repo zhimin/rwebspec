@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+ 2.0.3
+  [Deprecate] try() {} changed to try_until as cucumber use try constant, will remove from RWebSpec 3
+
  2.0.2
   [Fixes] select_file_upload
 

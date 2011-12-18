@@ -794,10 +794,10 @@ module RWebSpec
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
     # Error will be ignored until timeout
     # Example
-    #    try { click_link('waiting')}
-    #    try(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
-    #    try { click_button('Search' }
-    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, & block)
+    #    try_until { click_link('waiting')}
+    #    try_until(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
+    #    try_until { click_button('Search' }
+    def try_until(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
       start_time = Time.now
 
       last_error = nil
@@ -816,8 +816,15 @@ module RWebSpec
       raise "Timeout after #{duration.to_i} seconds."
     end
 
-    alias try_upto try
-
+    alias try_upto try_until
+    
+    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+      puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_until instead."
+      try_until(timeout, polling_interval) {
+        yield
+      }
+    end
+    
     ##
     #  Convert :first to 1, :second to 2, and so on...
     def symbol_to_sequence(symb)
