@@ -60,12 +60,12 @@ describe "Utils" do
   end
   
   story "sum" do
-      assert_equal 10, [1, 2, 3, 4].sum      
-      assert_equal 15.5, [1, 2, 3, 4, 5.5].sum      
+    assert_equal 10, sum_of([1, 2, 3, 4])
+    assert_equal 15.5, sum_of([1, 2, 3, 4, 5.5])
   end
   
   story "average" do
-      assert_equal 2.5, [1, 2, 3, 4].average
+      assert_equal 2.5, average_of([1, 2, 3, 4])
   end
   
   it "words" do

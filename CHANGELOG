@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+
+ 2.0.4
+  [Replace] added 'average_of' and 'sum_of' in test_utils to replace Array's overidding, which might not be safe
+
  2.0.3
   [Deprecate] try() {} changed to try_until as cucumber use try constant, will remove from RWebSpec 3
 

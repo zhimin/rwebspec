@@ -3,19 +3,6 @@
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
-
-class Array
-
-  def average
-    inject(0.0) { |sum, e| sum + e } / length
-  end
-
-	# why it is removed total
-	def sum
-    inject(0.0) { |sum, e| sum + e }
-	end
-end
-
 # useful hekoer methods for testing
 #
 module RWebSpec
@@ -215,6 +202,17 @@ module RWebSpec
 
     def default_locale
       return :au
+    end
+
+
+    def average_of(array)
+      array.inject(0.0) { |sum, e| sum + e } / array.length
+    end
+
+    # NOTE might cause issues
+    # why it is removed total
+    def sum_of(array)
+      array.inject(0.0) { |sum, e| sum + e }
     end
 
   end
