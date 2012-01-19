@@ -8,6 +8,177 @@
 module RWebSpec
   module Utils
 
+    # TODO: syntax
+
+    # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
+    # Error will be ignored until timeout
+    # Example
+    #    try_until { click_link('waiting')}
+    #    try_until(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
+    #    try_until { click_button('Search' }
+    def try_until(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+      start_time = Time.now
+
+      last_error = nil
+      until (duration = Time.now - start_time) > timeout
+        begin
+          yield
+          last_error = nil
+					return true 
+        rescue => e
+          last_error = e
+        end
+        sleep polling_interval
+      end
+
+      raise "Timeout after #{duration.to_i} seconds with error: #{last_error}." if last_error
+      raise "Timeout after #{duration.to_i} seconds."
+    end
+
+    alias try_upto try_until
+    
+    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+      puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_until instead."
+      try_until(timeout, polling_interval) {
+        yield
+      }
+    end
+    
+    
+    # Try the operation up to specified times, and sleep given interval (in seconds)
+    # Error will be ignored until timeout
+    # Example
+    #    repeat_try(3, 2) { click_button('Search' } # 3 times, 6 seconds in total
+    #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
+    def repeat_try(num_tries = @@default_timeout || 30, interval = @@default_polling_interval || 1, & block)
+      num_tries ||= 1
+      (num_tries - 1).times do |num|
+        begin
+          yield
+          return
+        rescue => e
+          # puts "debug: #{num} failed: #{e}"
+          sleep interval
+        end
+      end
+
+      # last try, throw error if still fails
+      begin
+        yield
+      rescue => e
+        raise e.to_s + " after trying #{num_tries} times every #{interval} seconds"
+      end
+      yield
+    end
+
+    
+    ##
+    #  Convert :first to 1, :second to 2, and so on...
+    def symbol_to_sequence(symb)
+      value = {:zero => 0,
+               :first => 1,
+               :second => 2,
+               :third => 3,
+               :fourth => 4,
+               :fifth => 5,
+               :sixth => 6,
+               :seventh => 7,
+               :eighth => 8,
+               :ninth => 9,
+               :tenth => 10}[symb]
+      return value || symb.to_i
+    end
+
+
+
+    # use win32screenshot library to save curernt active window, which shall be IE
+    #
+    # opts[:to_dir] => the direcotry to save image under
+    def take_screenshot(opts = {})
+      # puts "calling new take screenshot: #{$screenshot_supported}"
+      unless $screenshot_supported
+        puts " [WARN] Screenhost not supported, check whether win32screenshot gem is installed" 
+        return
+      end
+  
+        begin
+          screenshot_image_filename =  "screenshot_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
+          the_dump_dir = opts[:to_dir] || default_dump_dir
+          FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
+          screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
+          screenshot_image_filepath.gsub!("/", "\\") if is_windows?
+
+          FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
+
+          if is_firefox? then
+            Win32::Screenshot::Take.of(:window, :title => /mozilla\sfirefox/i).write(screenshot_image_filepath)					
+		  elsif ie
+            Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)					
+          else
+            Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
+          end
+          notify_screenshot_location(screenshot_image_filepath)
+        rescue => e
+          puts "error on taking screenshot: #{e}"
+        end
+      
+    end
+
+    #= Convenient functions
+    #
+
+    # Using Ruby block syntax to create interesting domain specific language,
+    # may be appeal to someone.
+
+    # Example:
+    #  on @page do |i|
+    #    i.enter_text('btn1')
+    #    i.click_button('btn1')
+    #  end
+    def on(page, & block)
+      yield page
+    end
+
+    # fail the test if user can perform the operation
+    #
+    # Example:
+    #  shall_not_allow { 1/0 }
+    def shall_not_allow(& block)
+      operation_performed_ok = false
+      begin
+        yield
+        operation_performed_ok = true
+      rescue
+      end
+      raise "Operation shall not be allowed" if operation_performed_ok
+    end
+
+    alias do_not_allow shall_not_allow
+
+    # Does not provide real function, other than make enhancing test syntax
+    #
+    # Example:
+    #   allow { click_button('Register') }
+    def allow(& block)
+      yield
+    end
+
+    alias shall_allow allow
+    alias allowing allow
+
+    # try operation, ignore if errors occur
+    #
+    # Example:
+    #   failsafe { click_link("Logout") }  # try logout, but it still OK if not being able to (already logout))
+    def failsafe(& block)
+      begin
+        yield
+      rescue =>e
+      end
+    end
+
+    alias fail_safe failsafe
+
     # default date format returned is 29/12/2007.
     # if supplied parameter is not '%m/%d/%Y' -> 12/29/2007
     # Otherwise, "2007-12-29", which is most approiate date format

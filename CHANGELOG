@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+ 2.1
+  [Change] Move try_until, fail_safe from driver.rb to utils.rb 
 
  2.0.4
   [Replace] added 'average_of' and 'sum_of' in test_utils to replace Array's overidding, which might not be safe

@@ -30,7 +30,7 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.0.4"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.0"
 end
 
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
