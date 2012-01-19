@@ -30,8 +30,13 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.0"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.1"
 end
+
+$testwise_polling_interval = 1 # seconds
+
+$testwise_polling_timeout = 30 # seconds
+
 
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
  $screenshot_supported = false
@@ -41,6 +46,7 @@ if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
  rescue LoadError => no_screen_library_error
  end  
 end
+
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebspec/using_pages"

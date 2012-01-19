@@ -45,7 +45,7 @@ module RWebSpec
     #    try { click_link('waiting')}
     #    try(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
     #    try { click_button('Search' }
-    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+    def try(timeout = $testwise_polling_timeout, polling_interval = $testwise_polling_interval || 1, &block)
       start_time = Time.now
 
       last_error = nil

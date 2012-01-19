@@ -8,9 +8,6 @@
 module RWebSpec
   module Utils
 
-    @@default_polling_interval = 1 # second
-    @@default_timeout = 30 # seconds
-
     # TODO: syntax
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
@@ -19,7 +16,7 @@ module RWebSpec
     #    try_until { click_link('waiting')}
     #    try_until(10, 2) { click_button('Search' } # try to click the 'Search' button upto 10 seconds, try every 2 seconds
     #    try_until { click_button('Search' }
-    def try_until(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+    def try_until(timeout = $testwise_polling_timeout, polling_interval = $testwise_polling_interval || 1, &block)
       start_time = Time.now
 
       last_error = nil
@@ -40,7 +37,7 @@ module RWebSpec
 
     alias try_upto try_until
     
-    def try(timeout = @@default_timeout, polling_interval = @@default_polling_interval || 1, &block)
+    def try(timeout = $testwise_polling_timeout, polling_interval = $testwise_polling_interval || 1, &block)
       puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_until instead."
       try_until(timeout, polling_interval) {
         yield
@@ -53,7 +50,7 @@ module RWebSpec
     # Example
     #    repeat_try(3, 2) { click_button('Search' } # 3 times, 6 seconds in total
     #    repeat_try { click_button('Search' } # using default 5 tries, 2 second interval
-    def repeat_try(num_tries = @@default_timeout || 30, interval = @@default_polling_interval || 1, & block)
+    def repeat_try(num_tries = $testwise_polling_timeout || 30, interval = $testwise_polling_interval || 1, & block)
       num_tries ||= 1
       (num_tries - 1).times do |num|
         begin

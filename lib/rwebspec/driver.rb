@@ -20,9 +20,6 @@ module RWebSpec
     include RWebSpec::TestWisePlugin
     include RWebSpec::Popup
 
-    @@default_polling_interval = 1 # second
-    @@default_timeout = 30 # seconds
-
     # open a browser, and set base_url via hash, but does not acually
     #
     # example:
@@ -623,7 +620,7 @@ module RWebSpec
     #   wait_until {puts 'hello'}
     #   wait_until { div(:id, :receipt_date).exists? }
     #
-    def wait_until(timeout = @@default_timeout || 30, polling_interval = @@default_polling_interval || 1, & block)
+    def wait_until(timeout = $testwise_polling_timeout || 30, polling_interval = $testwise_polling_interval || 1, & block)
       waiter = Watir::Waiter.new(timeout, polling_interval)
       waiter.wait_until { yield }
     end
@@ -643,7 +640,7 @@ module RWebSpec
     #
     # Warning: this method has not been fully tested, if you are not using Rails, change your parameter accordingly.
     #
-    def ajax_wait_for_element(element_id, seconds, status='show', check_interval = @@default_polling_interval)
+    def ajax_wait_for_element(element_id, seconds, status='show', check_interval = $testwise_polling_interval)
       count = 0
       check_interval = 1 if check_interval < 1 or check_interval > seconds
       while count < (seconds / check_interval) do
@@ -663,7 +660,7 @@ module RWebSpec
     #Wait the element with given id to be present in web page
     #
     # Warning: this not working in Firefox, try use wait_util or try instead
-    def wait_for_element(element_id, timeout = @@default_timeout, interval = @@default_polling_interval)
+    def wait_for_element(element_id, timeout = $testwise_polling_timeout, interval = $testwise_polling_interval)
       start_time = Time.now
       #TODO might not work with Firefox
       until @web_browser.element_by_id(element_id) do
