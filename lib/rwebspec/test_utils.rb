@@ -8,6 +8,9 @@
 module RWebSpec
   module Utils
 
+    @@default_polling_interval = 1 # second
+    @@default_timeout = 30 # seconds
+
     # TODO: syntax
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
