@@ -30,7 +30,7 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.2"
 end
 
 $testwise_polling_interval = 1 # seconds

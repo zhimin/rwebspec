@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+
+ 2.1.2
+ [Change] add @browser instance to page objects
+
  2.1.1
  [Change] use Global variable for retry settings (instead of class variables)
 
