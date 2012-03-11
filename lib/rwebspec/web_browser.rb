@@ -51,10 +51,9 @@ module RWebSpec
         # Java, maybe celerity
         puts "Ruby java platform"
         raise "Not supported unless Celerity detected" unless $celerity_loaded
-        if $$celerity_loaded then
+        if $celerity_loaded then
           initialize_celerity_browser(base_url, options)
         end
-
       when /mswin|windows|mingw/i
         raise "Not supported, no Watir detected" unless $watir_loaded 
         initialize_ie_browser(existing_browser, options)
