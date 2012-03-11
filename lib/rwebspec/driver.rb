@@ -102,11 +102,7 @@ module RWebSpec
     #
     def close_all_browsers
 			if @web_browser
-	      if is_firefox?
-	        FireWatir::Firefox.close_all
-	      else
-	        Watir::IE.close_all
-	      end
+	      Watir::IE.close_all
 			else
 				browser_type = $ITEST2_BROWSER ? $ITEST2_BROWSER.downcase.to_sym : :ie	
 	      WebBrowser.close_all_browsers(browser_type)				

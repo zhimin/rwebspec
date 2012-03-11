@@ -17,14 +17,6 @@ rescue LoadError => e
   $watir_loaded = false
 end
 
-begin
-  require "rubygems";
-  require "firewatir";
-  $firewatir_loaded = true
-rescue LoadError => e
-  puts e
-  $firewatir_loaded = false
-end
 
 begin
   require "rubygems";
@@ -34,7 +26,7 @@ rescue LoadError => e
   $celerity_loaded = false
 end
 
-raise "You have must at least Watir or Firewatir installed" unless $watir_loaded || $firewatir_loaded || $celerity_loaded
+raise "You have must at least Watir installed" unless $watir_loaded || $celerity_loaded
 
 module RWebSpec
 
@@ -56,50 +48,17 @@ module RWebSpec
 
       case RUBY_PLATFORM
       when /java/i
-        # Java, maybe firewatir or celerity
+        # Java, maybe celerity
         puts "Ruby java platform"
-        raise "Not supported, no FireWatir or Celerity detected" unless $firewatir_loaded || $celerity_loaded
-        if $firewatir_loaded && $celerity_loaded then
-          # choose one out of two, :default to celerity
-          if options[:firefox] then
-            initialize_firefox_browser(existing_browser, base_url, options)
-          else
-            initialize_celerity_browser(base_url, options)
-          end
-        elsif $firewatir_loaded
-          initialize_firefox_browser(existing_browser, base_url, options)
-        else
+        raise "Not supported unless Celerity detected" unless $celerity_loaded
+        if $$celerity_loaded then
           initialize_celerity_browser(base_url, options)
         end
 
       when /mswin|windows|mingw/i
-        raise "Not supported, no Watir or FireWatir detected" unless $watir_loaded || $firewatir_loaded
-        if $firewatir_loaded && options[:firefox] then
-          initialize_firefox_browser(existing_browser, base_url, options)
-        else
-          initialize_ie_browser(existing_browser, options)
-        end
-      else
-        raise "Not supported, no FireWatirdetected" unless $firewatir_loaded
-        initialize_firefox_browser(existing_browser, base_url, options)
+        raise "Not supported, no Watir detected" unless $watir_loaded 
+        initialize_ie_browser(existing_browser, options)
       end
-    end
-
-    def initialize_firefox_browser(existing_browser, base_url, options)
-      if existing_browser then
-        @browser = existing_browser
-        return
-      end
-      # JSSH is running, 9997
-      begin
-        require 'net/telnet'
-        firefox_jssh = Net::Telnet::new("Host" => "127.0.0.1", "Port" => 9997)
-        FireWatir::Firefox.firefox_started = true
-      rescue => e
-        puts "The firefox brower with JSSH is not available, #{e}"
-        sleep 1
-      end
-      @browser = FireWatir::Firefox.start(base_url)
     end
 
     def initialize_celerity_browser(base_url, options)
@@ -167,15 +126,8 @@ module RWebSpec
     alias a link
     alias img image
 
-    # Wrapp of Watir's area to support Firefox and Watir
-    #
-    # Note: FireWatir does not support area directly, treat it as text_field
     def area(*args)
-      if is_firefox?
-        text_field(*args)
-      else
-        @browser.send("area", *args)
-      end
+      @browser.send("area", *args)
     end
 
     def modal_dialog(how=nil, what=nil)
@@ -270,8 +222,6 @@ module RWebSpec
 
     def page_title
       case @browser.class.to_s
-      when "FireWatir::Firefox"
-        @browser.title
       when "Watir::IE"
         @browser.document.title
       else
@@ -303,20 +253,13 @@ module RWebSpec
     end
 
     def is_firefox?
-      return false unless $firewatir_loaded
-      begin
-        @browser.class == FireWatir::Firefox
-      rescue => e
-        return false
-      end
+      return false
     end
 
     # Close the browser window.  Useful for automated test suites to reduce
     # test interaction.
     def close_browser
       case @browser.class.to_s
-      when "FireWatir::Firefox"
-        @browser.close
       when "Watir::IE"
         @browser.getIE.quit
       else
@@ -329,9 +272,6 @@ module RWebSpec
     def self.close_all_browsers(browser_type = :ie)      
 			if browser_type == :ie
         Watir::IE.close_all
-      elsif browser_type == :firefox
-        # raise "not supported in FireFox yet."
-				FireWatir::Firefox.new.close_all	
       end
     end
 
@@ -615,12 +555,7 @@ module RWebSpec
       default_options = {:browser => "IE"}
       options = default_options.merge(options)
       site_context = Context.new(options[:base_url]) if options[:base_url]
-      if (options[:browser] == "Firefox")
-        ff = FireWatir::Firefox.attach(how, what)        
-        return WebBrowser.new_from_existing(ff, site_context)
-      else
-        return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
-      end
+      return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
     end
 
     # Attach a Watir::IE instance to a popup window.

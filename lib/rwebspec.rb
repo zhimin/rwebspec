@@ -4,20 +4,6 @@
 #***********************************************************
 require "rubygems"
 
-# From 2.0, no default support for FireWatir. 
-#  
-if $ENABLE_FIREFOX 
-	# Try load firewatir first, which depends on ActiveSupport 
-	puts "Deprecated: Please use watir-webdriver or selenium-webdriver to run tests in Firefox"
-	begin
-	  require "firewatir";
-	  $firewatir_loaded = true
-	rescue LoadError => e
-	  puts e
-	  $firewatir_loaded = false
-	end
-end
-
 # Load active_support, so that we can use 1.days.ago
 begin
   require 'active_support/basic_object'
@@ -30,7 +16,7 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.1.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "2.2.0"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -63,7 +49,6 @@ require File.dirname(__FILE__) + "/rwebspec/load_test_helper"
 require File.dirname(__FILE__) + "/rwebspec/matchers/contains_text"
 require File.dirname(__FILE__) + "/extensions/rspec_extensions"
 
-require File.dirname(__FILE__) + "/extensions/firewatir_extensions" if $ENABLE_FIREFOX 
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
 	require File.dirname(__FILE__) + "/extensions/watir_extensions"
   require File.dirname(__FILE__) + "/extensions/window_script_extensions.rb"

@@ -1,14 +1,14 @@
 # This is a comment (ignored),  line starting with #
 # Simple Spec shows using RWebSpec write easy-to-read automated test scripts (or specification)
 require 'rubygems'
-require 'firewatir'
+require 'watir'
 require 'rwebspec'
 
 specification "google search" do
   include RWebSpec::RSpecHelper
 
   before(:all) do
-    open_browser "http://www.google.com", :firefox => true
+    open_browser "http://www.google.com"
   end
 
   before(:each) do

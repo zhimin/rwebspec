@@ -1,10 +1,5 @@
 require 'rwebspec'
 
-begin
-  FireWatir::Firefox.firefox_started = true
-rescue => e
-end
-
 ##
 # This test suite demos the assertion you can do with rWebUnit or Watir
 #

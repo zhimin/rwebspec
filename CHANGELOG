@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+
+ 2.2.0
+ [Change] Drop support for firewatir
+
  2.1.1
  [Change] use Global variable for retry settings (instead of class variables)
 

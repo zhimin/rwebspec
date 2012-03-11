@@ -1,7 +1,7 @@
 # This is a comment (ignored),  line starting with #
 # Simple Spec shows using RWebSpec write easy-to-read automated test scripts (or specification)
 require 'rubygems'
-require 'firewatir'
+require 'watir'
 require 'rwebspec'
 
 include RWebSpec::RSpecHelper
