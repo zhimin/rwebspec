@@ -24,14 +24,14 @@ module RWebSpec
 
     include RWebSpec::Assert
     include RWebSpec::Driver
+    include RWebSpec::Utils
 
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
     attr_accessor :page_specific_text
 
     def initialize(the_browser, page_specific_text = nil)
-      @web_browser = the_browser
-      @web_tester = the_browser
+      @web_browser = @browser =  @web_tester = the_browser
       @page_specific_text = page_specific_text
       begin
         snapshot if $TESTWISE_DUMP_PAGE || $ITEST2_DUMP_PAGE 

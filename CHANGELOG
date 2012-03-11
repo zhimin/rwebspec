@@ -4,6 +4,12 @@ CHANGELOG
  2.2.0
  [Change] Drop support for firewatir
 
+ 2.1.3
+ [Fix] Page object to include Utils module
+
+ 2.1.2
+ [Change] add @browser instance to page objects
+
  2.1.1
  [Change] use Global variable for retry settings (instead of class variables)
 
