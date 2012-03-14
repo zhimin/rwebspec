@@ -1,6 +1,6 @@
 require 'socket'
 
-MAX_MESSAGE_LENGTH = 96000 # < 100K
+MAX_MESSAGE_LENGTH = 8192 # < 10K
 
 module RWebSpec
   module TestWisePlugin
@@ -11,9 +11,8 @@ module RWebSpec
 				the_sent_msg = message.to_s
 				if the_sent_msg.size > MAX_MESSAGE_LENGTH 
 					the_sent_msg = the_sent_msg[0..MAX_MESSAGE_LENGTH] + "..."
-				else
-	       	connect_to_testwise(" DEBUG",  the_sent_msg + "\r\n") 
 				end
+	      connect_to_testwise(" DEBUG",  the_sent_msg + "\r\n") 
 			end
 			
     end
