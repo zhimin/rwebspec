@@ -11,7 +11,7 @@ module RWebSpec
 				the_sent_msg = message.to_s
 				if the_sent_msg.size > MAX_MESSAGE_LENGTH 
 					the_sent_msg = the_sent_msg[0..MAX_MESSAGE_LENGTH] + "..."
-				end
+				else
 	       	connect_to_testwise(" DEBUG",  the_sent_msg + "\r\n") 
 				end
 			end
