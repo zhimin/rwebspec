@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+WATIR CHANGES
+[web_browser.rb]
+- remove waitForIE
+- select_list(...).set => select_list().select
+- cell removed.
+[assert.rb] assert_radio_option_checked (isSet? => set?)
+
+[TestWise]
+- can take screenshot, but not shown in report
+
  2.2.0
  [Change] Drop support for firewatir
  [Enhancement] Set limit on message size sent to TestWise IDE

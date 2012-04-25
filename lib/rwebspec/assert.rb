@@ -98,7 +98,7 @@ module RWebSpec
     def assert_checkbox_not_selected(checkbox_name)
       @web_browser.checkboxes.each { |checkbox|
         if (checkbox.name == checkbox_name) then
-          perform_assertion {  assert(!checkbox.isSet?, "Checkbox #{checkbox_name} is checked unexpectly") }
+          perform_assertion {  assert(!checkbox.set?, "Checkbox #{checkbox_name} is checked unexpectly") }
         end
       }
     end
@@ -108,7 +108,7 @@ module RWebSpec
     def assert_checkbox_selected(checkbox_name)
       @web_browser.checkboxes.each { |checkbox|
         if (checkbox.name == checkbox_name) then
-          perform_assertion { assert(checkbox.isSet?, "Checkbox #{checkbox_name} not checked") }
+          perform_assertion { assert(checkbox.set?, "Checkbox #{checkbox_name} not checked") }
         end
       }
     end
@@ -211,7 +211,7 @@ module RWebSpec
     def assert_radio_option_selected(radio_group, radio_option)
       @web_browser.radios.each { |radio|
         if (radio.name == radio_group and radio_option == radio.value) then
-          perform_assertion { assert(radio.isSet?, "Radio button #{radio_group}-[#{radio_option}] not checked") }
+          perform_assertion { assert(radio.set?, "Radio button #{radio_group}-[#{radio_option}] not checked") }
         end
       }
     end
@@ -222,7 +222,7 @@ module RWebSpec
     def assert_radio_option_not_selected(radio_group, radio_option)
       @web_browser.radios.each { |radio|
         if (radio.name == radio_group and radio_option == radio.value) then
-          perform_assertion {  assert(!radio.isSet?, "Radio button #{radio_group}-[#{radio_option}] checked unexpected") }
+          perform_assertion {  assert(!radio.set?, "Radio button #{radio_group}-[#{radio_option}] checked unexpected") }
         end
       }
     end

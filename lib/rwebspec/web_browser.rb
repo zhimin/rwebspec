@@ -17,16 +17,7 @@ rescue LoadError => e
   $watir_loaded = false
 end
 
-
-begin
-  require "rubygems";
-  require "celerity";
-  $celerity_loaded = true
-rescue LoadError => e
-  $celerity_loaded = false
-end
-
-raise "You have must at least Watir installed" unless $watir_loaded || $celerity_loaded
+raise "You have must at least Watir installed" unless $watir_loaded
 
 module RWebSpec
 
@@ -46,33 +37,15 @@ module RWebSpec
       options = default_options.merge options
       @context = Context.new base_url if base_url
 
-      case RUBY_PLATFORM
-      when /java/i
-        # Java, maybe celerity
-        puts "Ruby java platform"
-        raise "Not supported unless Celerity detected" unless $celerity_loaded
-        if $celerity_loaded then
-          initialize_celerity_browser(base_url, options)
-        end
-      when /mswin|windows|mingw/i
-        raise "Not supported, no Watir detected" unless $watir_loaded 
-        initialize_ie_browser(existing_browser, options)
-      end
+      initialize_ie_browser(existing_browser, options)
     end
 
-    def initialize_celerity_browser(base_url, options)
-      default_celerity_options = { :proxy => nil,  :browser => :firefox, :resynchronize => true, :log_level => :off }
-      options = default_celerity_options.merge options
-      options.each { |k, v| options.delete(k) unless default_celerity_options.keys.include?(k)}
-      @browser = Celerity::Browser.new(options)
-      @browser.goto(base_url)
-    end
 
     def initialize_ie_browser(existing_browser, options)
       @browser = existing_browser ||  Watir::IE.new
-      if ($TESTWISE_EMULATE_TYPING && $TESTWISE_TYPING_SPEED) || ($ITEST2_EMULATE_TYPING && $ITEST2_TYPING_SPEED) then
-        @browser.set_slow_speed if $TESTWISE_TYPING_SPEED == "slow" || $ITEST2_TYPING_SPEED == 'slow'
-        @browser.set_fast_speed if $TESTWISE_TYPING_SPEED == 'fast' || $ITEST2_TYPING_SPEED == 'fast'
+      if ($TESTWISE_EMULATE_TYPING && $TESTWISE_TYPING_SPEED) then
+        @browser.set_slow_speed if $TESTWISE_TYPING_SPEED == "slow"
+        @browser.set_fast_speed if $TESTWISE_TYPING_SPEED == 'fast'
       else
         @browser.speed = :zippy
       end
@@ -114,14 +87,14 @@ module RWebSpec
     ##
     #  Delegate to Watir
     #
-    [:button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
+    [:button, :td, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :tr, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |*args|
         @browser.send(method, *args)
       end
     end
-    alias td cell
+    alias cell td
     alias check_box checkbox  # seems watir doc is wrong, checkbox not check_box
-    alias tr row
+    alias row tr
     alias a link
     alias img image
 
@@ -258,12 +231,7 @@ module RWebSpec
     # Close the browser window.  Useful for automated test suites to reduce
     # test interaction.
     def close_browser
-      case @browser.class.to_s
-      when "Watir::IE"
-        @browser.getIE.quit
-      else
-        puts "#{@browser.class} can't close, ignore"
-      end
+      @browser.close
       sleep 2
     end
     alias close close_browser
@@ -298,11 +266,8 @@ module RWebSpec
     # performed.  Most action methods in Watir::Simple already call this before
     # and after.
     def wait_for_browser
-      if $celerity_loaded then
-        # puts "ignore, using celerity"
-      else
-        @browser.waitForIE unless is_firefox?
-      end
+			  # Watir 3 does not support it any more
+        # @browser.waitForIE unless is_firefox?
     end
 
 
@@ -330,6 +295,7 @@ module RWebSpec
     #    ....
     #    goto_page("/purchase")  # full url => http://www.itest.com/purchase
     def goto_page(page)
+			# puts "DEBUG calling goto page => #{page}" 
       @browser.goto full_url(page);
     end
 
@@ -606,18 +572,6 @@ module RWebSpec
 
     # return underlying browser
     def ie
-      raise "can't call this as it is configured to use Firefox" if is_firefox?
-      @browser
-    end
-
-    # return underlying firefox browser object, raise error if not running using Firefox
-    def firefox
-      raise "can't call this as it is configured to use IE" unless is_firefox?
-      @browser
-    end
-
-    def celerity
-      raise "can't call this as it is configured to use Celerity" unless RUBY_PLATFORM =~ /java/
       @browser
     end
 

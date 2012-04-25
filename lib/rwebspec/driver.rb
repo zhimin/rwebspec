@@ -60,7 +60,7 @@ module RWebSpec
         uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
       end
 
-      if options[:start_new] || $celerity_loaded
+      if options[:start_new]
         @web_browser = WebBrowser.new(uri_base, nil, options)
       else
         @web_browser = WebBrowser.reuse(uri_base, options) # Reuse existing browser
@@ -149,10 +149,6 @@ module RWebSpec
 
     def is_firefox?
       @web_browser.is_firefox? if @web_browser
-    end
-
-    def is_celerity? 
-      RUBY_PLATFORM =~ /java/ && @web_browser
     end
 
     # Go to another page on the testing site.
@@ -264,14 +260,14 @@ module RWebSpec
     # table 	<table> tags, including row and cell methods for accessing nested elements
     # text_field 	<input> tags with the type=text (single-line), type=textarea (multi-line), and type=password
     # p 	<p> (paragraph) tags, because
-    [:area, :button, :cell, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :row, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
+    [:area, :button, :td, :checkbox, :div, :form, :frame, :h1, :h2, :h3, :h4, :h5, :h6, :hidden, :image, :li, :link, :map, :pre, :tr, :radio, :select_list, :span, :table, :text_field, :paragraph, :file_field, :label].each do |method|
       define_method method do |* args|
         perform_operation { @web_browser.send(method, * args) if @web_browser }
       end
     end
-    alias td cell
+    alias cell td
     alias check_box checkbox # seems watir doc is wrong, checkbox not check_box
-    alias tr row
+    alias row tr
     alias a link
     alias img image
 
@@ -765,45 +761,8 @@ module RWebSpec
       login_win.click_button("OK")
     end
 
-    # Use JSSH to pass authentication
-    #  Window title "Authentication required"
-    def basic_authentication_firefox(username, password, wait = 3)
-      jssh_command = "
-    var length = getWindows().length;
-    var win;
-    var found = false;
-    for (var i = 0; i < length; i++) {
-      win = getWindows()[i];
-      if(win.document.title == \"Authentication Required\") {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      var jsdocument = win.document;
-      var dialog = jsdocument.getElementsByTagName(\"dialog\")[0];
-      jsdocument.getElementsByTagName(\"textbox\")[0].value = \"#{username}\";
-      jsdocument.getElementsByTagName(\"textbox\")[1].value = \"#{password}\";
-      dialog.getButton(\"accept\").click();
-    }
-    \n"
-      sleep(wait)
-      $jssh_socket.send(jssh_command, 0)
-      # read_socket()
-    end
-
-    def basic_authentication_celerity(username, password)
-      @web_browser.celerity.credentials = "#{username}:#{password}"
-    end
-
     def basic_authentication(username, password, options = {})
-      if is_celerity?
-        basic_authentication_celerity(username, password)
-      elsif is_firefox?
-        basic_authentication_firefox(username, password)
-      else
-        basic_authentication_ie(options[:title], username, password, options)
-      end
+      basic_authentication_ie(options[:title], username, password, options)
     end
 
 	 # end of methods
