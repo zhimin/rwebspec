@@ -50,10 +50,10 @@ require File.dirname(__FILE__) + "/rwebspec/matchers/contains_text"
 require File.dirname(__FILE__) + "/extensions/rspec_extensions"
 
 # Watir 3 API Changes, no Watir/Container
-#if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
-#	require File.dirname(__FILE__) + "/extensions/watir_extensions"
+if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
+	require File.dirname(__FILE__) + "/extensions/watir_extensions"
 #  require File.dirname(__FILE__) + "/extensions/window_script_extensions.rb"
-#end
+end
 
 require File.dirname(__FILE__) + "/plugins/testwise_plugin.rb"
 

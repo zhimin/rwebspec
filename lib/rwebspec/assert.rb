@@ -120,7 +120,7 @@ module RWebSpec
     def assert_option_value_not_present(select_name, option_value)
       @web_browser.select_lists.each { |select|
         continue unless select.name == select_name
-        select.o.each do |option| # items in the list
+        select.options.each do |option| # items in the list
           perform_assertion {  assert(!(option.value == option_value), "unexpected select option: #{option_value} for #{select_name} found") }
         end
       }
@@ -131,7 +131,7 @@ module RWebSpec
     def assert_option_not_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
         next unless select.name == select_name
-        select.o.each do |option| # items in the list
+        select.options.each do |option| # items in the list
           perform_assertion {  assert(!(option.text == option_label), "unexpected select option: #{option_label} for #{select_name} found") }
         end
       }
@@ -142,7 +142,7 @@ module RWebSpec
     def assert_option_value_present(select_name, option_value)
       @web_browser.select_lists.each { |select|
         next unless select.name == select_name
-        select.o.each do |option| # items in the list
+        select.options.each do |option| # items in the list
           return if option.value == option_value
         end
       }
@@ -155,7 +155,7 @@ module RWebSpec
     def assert_option_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
         next unless select.name == select_name
-        select.o.each do |option| # items in the list
+        select.options.each do |option| # items in the list
           return if option.text == option_label
         end
       }
@@ -168,7 +168,7 @@ module RWebSpec
     def assert_option_equals(select_name, option_label)
       @web_browser.select_lists.each { |select|
         next unless select.name == select_name
-        select.o.each do |option| # items in the list
+        select.options.each do |option| # items in the list
           if (option.text == option_label) then
             perform_assertion { assert_equal(select.value, option.value, "Select #{select_name}'s value is not equal to expected option label: '#{option_label}'") }
           end
