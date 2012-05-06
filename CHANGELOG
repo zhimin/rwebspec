@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+ 3.0.1
+ - fixed not loading watir properly - not calling windows_extensions.rb
+
 WATIR CHANGES
 [web_browser.rb]
 - remove waitForIE

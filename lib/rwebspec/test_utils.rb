@@ -118,6 +118,8 @@ module RWebSpec
             Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
           end
           notify_screenshot_location(screenshot_image_filepath)
+				rescue ::DL::DLTypeError => de
+					puts "No screenshot libray found: #{de}"
         rescue => e
           puts "error on taking screenshot: #{e}"
         end

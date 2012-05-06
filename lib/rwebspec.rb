@@ -16,7 +16,7 @@ end
 require 'spec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "3.0"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "3.0.1"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -52,7 +52,7 @@ require File.dirname(__FILE__) + "/extensions/rspec_extensions"
 # Watir 3 API Changes, no Watir/Container
 if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
 	require File.dirname(__FILE__) + "/extensions/watir_extensions"
-#  require File.dirname(__FILE__) + "/extensions/window_script_extensions.rb"
+  require File.dirname(__FILE__) + "/extensions/window_script_extensions.rb"
 end
 
 require File.dirname(__FILE__) + "/plugins/testwise_plugin.rb"
