@@ -71,7 +71,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "3.0.1"
+  s.version = "3.1.0"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax and Watir"
 
@@ -90,7 +90,8 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" )
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
-  s.add_dependency(%q<rspec>, ["= 1.1.12"])
+  s.add_dependency(%q<rspec>, [">= 2.10"])
+  s.add_dependency(%q<rspec-core>, [">= 2.10.1"])
   s.add_dependency("commonwatir", ">= 3.0")
 end
 

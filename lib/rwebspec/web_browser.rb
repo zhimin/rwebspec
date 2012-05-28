@@ -2,22 +2,23 @@
 #* Copyright (c) 2006, Zhimin Zhan.
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
-
 begin
   require 'watir'
   # require 'watir/contrib/enabled_popup'
   # require 'watir/close_all'
   # require 'watir/screen_capture' 
   # NO need any more
-  # require 'watir/ie'
+  require 'watir-classic/ie'
   # require 'watir/contrib/visible'
   $watir_loaded = true
 rescue LoadError => e
-  puts e
+  puts "!!!Error on loading watir: #{e}"
   $watir_loaded = false
 end
 
-raise "You have must at least Watir installed" unless $watir_loaded
+if RUBY_PLATFORM =~ /mingw/
+	raise "You have must at least Watir installed" unless $watir_loaded
+end
 
 module RWebSpec
 
@@ -68,6 +69,9 @@ module RWebSpec
 
     def self.reuse(base_url, options)
       if self.is_windows? && ($TESTWISE_BROWSER != "Firefox" && $ITEST2_BROWSER != "Firefox")
+				require 'watir-classic/ie' 
+				# try to avoid 
+				#  lib/ruby/1.8/dl/win32.rb:11:in `sym': unknown type specifier 'v'
         Watir::IE.each do |browser_window|
           return WebBrowser.new(base_url, browser_window, options)
         end

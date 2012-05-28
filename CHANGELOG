@@ -1,8 +1,11 @@
 CHANGELOG
 =========
 
- 3.0.1
- - fixed not loading watir properly - not calling windows_extensions.rb
+3.1 (may break existing test)
+- Support RSpec 2
+
+3.0.1
+- fixed not loading watir properly - not calling windows_extensions.rb
 
 WATIR CHANGES
 [web_browser.rb]

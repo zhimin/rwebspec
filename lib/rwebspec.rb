@@ -13,7 +13,7 @@ rescue LoadError => no_as1_err
   # active_support 2.0 loaded error
 end
 
-require 'spec'
+require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
   RWEBSPEC_VERSION = RWEBUNIT_VERSION = "3.0.1"
