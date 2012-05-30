@@ -1,6 +1,7 @@
 require 'socket'
 
 MAX_MESSAGE_LENGTH = 8192 # < 10K
+$testwise_support = true
 
 module RWebSpec
   module TestWisePlugin

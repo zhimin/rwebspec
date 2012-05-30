@@ -388,5 +388,43 @@ module RWebSpec
       array.inject(0.0) { |sum, e| sum + e }
     end
 
+		## Data Driven Tests
+		#
+		#  Processing each row in a CSV file, must have heading rows
+		# 
+		#  Usage:
+		# 
+		#   process_each_row_in_csv_file(@csv_file) { |row| 
+		#     goto_page("/")
+		#     enter_text("username", row[1])
+		#     enter_text("password", row[2])
+		#     click_button("Sign in")
+		#     page_text.should contain(row[3])
+		#     failsafe{ click_link("Sign off") }
+		#   }
+	  #
+		def process_each_row_in_csv_file(csv_file, &block)
+	    require 'faster_csv'
+	    connect_to_testwise("CSV_START",  csv_file) if $testwise_support
+	    has_error = false
+	    idx = 0
+	    FasterCSV.foreach(csv_file, :headers => :first_row, :encoding => 'u') do |row|
+				connect_to_testwise("CSV_ON_ROW",  idx.to_s)  if $testwise_support 
+				begin
+	        yield row
+					connect_to_testwise("CSV_ROW_PASS",  idx.to_s)  if $testwise_support
+				rescue => e
+					connect_to_testwise("CSV_ROW_FAIL",  idx.to_s)  if $testwise_support
+	        has_error = true
+	      ensure
+	        idx += 1
+				end
+	    end
+
+			connect_to_testwise("CSV_END",  "")  if $testwise_support
+			raise "Test failed on data" if has_error
+	  end
+
+
   end
 end
