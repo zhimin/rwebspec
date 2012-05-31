@@ -29,7 +29,7 @@ module RWebSpec
           sleep($TESTWISE_OPERATION_DELAY / 1000)
         end
 
-        while $TESTWISE_PAUSE || $ITEST2_PAUSE
+        while $TESTWISE_PAUSE
           Thread.pass
           debug("Paused, waiting ...")
           sleep 1
@@ -46,7 +46,7 @@ module RWebSpec
 
     # find out the line (and file) the execution is on, and notify iTest via Socket
     def dump_caller_stack
-      return unless ($TESTWISE_TRACE_EXECUTION || $ITEST2_TRACE_EXECUTION)
+      return unless ($TESTWISE_TRACE_EXECUTION)
       begin
         trace_lines = []
         trace_file = nil
@@ -84,7 +84,7 @@ module RWebSpec
         if @last_message == the_message then # ignore the message same as preivous one
           return
         end
-        itest_port = $TESTWISE_TRACE_PORT || $ITEST2_TRACE_PORT || 7025
+        itest_port = $TESTWISE_TRACE_PORT || 7025
         itest_socket = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
         itest_socket.connect(Socket.pack_sockaddr_in(itest_port, '127.0.0.1'))
         itest_socket.puts(the_message)
