@@ -38,7 +38,7 @@ module RWebSpec
       end
 
       base_url ||= $TESTWISE_PROJECT_BASE_URL
-      base_url ||= $ITEST2_PROJECT_BASE_URL
+      base_url ||= $TESTWISE_PROJECT_BASE_URL
       base_url ||= $BASE_URL
       raise "base_url must be set" if base_url.nil?
 
@@ -50,8 +50,8 @@ module RWebSpec
                          :go => true}
 
       options = default_options.merge options
-      options[:firefox] = true if "Firefox" == $ITEST2_BROWSER || "Firefox" == $TESTWISE_BROWSER || "Firefox" == $BROWSER
-      ($TESTWISE_HIDE_BROWSER || $ITEST2_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
+      options[:firefox] = true if "Firefox" == $TESTWISE_BROWSER || "Firefox" == $TESTWISE_BROWSER || "Firefox" == $BROWSER
+      ($TESTWISE_HIDE_BROWSER || $TESTWISE_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
 
       if base_url =~ /^file:/
         uri_base = base_url
@@ -89,7 +89,7 @@ module RWebSpec
     def close_browser
       if @web_browser
         # Old TestWise version
-        # @web_browser.close_browser unless $ITEST2_LEAVE_BROWSER_OPEN_AFTER_RUN
+        # @web_browser.close_browser unless $TESTWISE_LEAVE_BROWSER_OPEN_AFTER_RUN
         @web_browser.close_browser
       else
 				close_all_browsers
@@ -104,7 +104,7 @@ module RWebSpec
 			if @web_browser
 	      Watir::IE.close_all
 			else
-				browser_type = $ITEST2_BROWSER ? $ITEST2_BROWSER.downcase.to_sym : :ie	
+				browser_type = $TESTWISE_BROWSER ? $TESTWISE_BROWSER.downcase.to_sym : :ie	
 	      WebBrowser.close_all_browsers(browser_type)				
 			end
     end
@@ -185,7 +185,7 @@ module RWebSpec
         if url && url =~ /^http/
             http_response = client.get(url).body
         else
-            base_url = $TESTWISE_PROJECT_BASE_URL || $ITEST2_PROJECT_BASE_URL || $BASE_URL
+            base_url = $TESTWISE_PROJECT_BASE_URL || $TESTWISE_PROJECT_BASE_URL || $BASE_URL
             http_response = client.get("#{base_url}#{url}").body
         end
 				
@@ -386,12 +386,12 @@ module RWebSpec
     end
 
     def default_dump_dir
-      if ($TESTWISE_RUNNING_SPEC_ID && $TESTWISE_WORKING_DIR) || ($ITEST2_RUNNING_SPEC_ID && $ITEST2_WORKING_DIR)
+      if ($TESTWISE_RUNNING_SPEC_ID && $TESTWISE_WORKING_DIR) || ($TESTWISE_RUNNING_SPEC_ID && $TESTWISE_WORKING_DIR)
 
-        $TESTWISE_DUMP_DIR = $ITEST2_DUMP_DIR = File.join($ITEST2_WORKING_DIR, "dump")
-        FileUtils.mkdir($ITEST2_DUMP_DIR) unless File.exists?($ITEST2_DUMP_DIR)
+        $TESTWISE_DUMP_DIR = $TESTWISE_DUMP_DIR = File.join($TESTWISE_WORKING_DIR, "dump")
+        FileUtils.mkdir($TESTWISE_DUMP_DIR) unless File.exists?($TESTWISE_DUMP_DIR)
 
-        spec_run_id = $TESTWISE_RUNNING_SPEC_ID || $ITEST2_RUNNING_SPEC_ID
+        spec_run_id = $TESTWISE_RUNNING_SPEC_ID || $TESTWISE_RUNNING_SPEC_ID
         spec_run_dir_name = spec_run_id.to_s.rjust(4, "0") unless spec_run_id == "unknown"
         to_dir = File.join($TESTWISE_DUMP_DIR, spec_run_dir_name)
       else

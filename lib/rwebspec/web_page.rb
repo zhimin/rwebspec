@@ -34,8 +34,8 @@ module RWebSpec
       @web_browser = @browser =  @web_tester = the_browser
       @page_specific_text = page_specific_text
       begin
-        snapshot if $TESTWISE_DUMP_PAGE || $ITEST2_DUMP_PAGE 
-        delay = $TESTWISE_PAGE_DELAY || $ITEST2_PAGE_DELAY
+        snapshot if $TESTWISE_DUMP_PAGE || $TESTWISE_DUMP_PAGE 
+        delay = $TESTWISE_PAGE_DELAY || $TESTWISE_PAGE_DELAY
         sleep(delay)
       rescue => e
       end

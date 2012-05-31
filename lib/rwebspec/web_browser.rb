@@ -68,7 +68,7 @@ module RWebSpec
     end
 
     def self.reuse(base_url, options)
-      if self.is_windows? && ($TESTWISE_BROWSER != "Firefox" && $ITEST2_BROWSER != "Firefox")
+      if self.is_windows? && ($TESTWISE_BROWSER != "Firefox" && $TESTWISE_BROWSER != "Firefox")
 				require 'watir-classic/ie' 
 				# try to avoid 
 				#  lib/ruby/1.8/dl/win32.rb:11:in `sym': unknown type specifier 'v'
