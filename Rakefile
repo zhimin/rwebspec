@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rdoc' # require rdoc 2
@@ -23,10 +23,10 @@ task :clean do
 end
 
 desc 'Run all specs'
-Spec::Rake::SpecTask.new('spec') do |t|
+RSpec::Core::RakeTask.new('spec') do |t|
   t.spec_opts = ['--format', 'specdoc', '--colour']
   # t.libs = ["lib", "server/lib" ]
-  t.spec_files = Dir['spec/**/*_spec.rb'].sort
+  t.pattern = Dir['spec/**/*_spec.rb'].sort
 end
 
 # Generate the RDoc documentation
