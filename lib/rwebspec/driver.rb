@@ -281,14 +281,14 @@ module RWebSpec
     alias go_back back
     alias go_forward forward
 
-    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :cells, :rows].each do |method|
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :tds, :trs].each do |method|
       define_method method do
         perform_operation { @web_browser.send(method) if @web_browser }
       end
     end
 		alias as links
-		alias trs rows
-		alias tds cells
+		alias rows trs
+		alias cells tds 
 		alias imgs images
 
 	

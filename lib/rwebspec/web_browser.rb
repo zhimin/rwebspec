@@ -205,14 +205,14 @@ module RWebSpec
       end
     end
 
-    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :cells, :rows].each do |method|
+    [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels, :tds, :trs].each do |method|
       define_method method do
         @browser.send(method)
       end
     end
 		alias as links
-		alias trs rows
-		alias tds cells
+		alias rows trs
+		alias cells tds
 		alias imgs images
 		
     # current url
