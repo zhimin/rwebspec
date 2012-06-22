@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+3.1.4
+- rename try_until to try_for (previous syntax still works)
+
 3.1.3
 - changed rows => trs, cells => tds with Watir 3
 
