@@ -698,23 +698,11 @@ module RWebSpec
     def select_file_for_upload(file_field_name, file_path)
       if is_windows?
         normalized_file_path = file_path.gsub("/", "\\")
-        if $support_ie8 && check_ie_version && @ie_version >= 8
-          # puts "IE8"
-          file_field(:name, file_field_name).set(normalized_file_path)
-          # choose_file_dialog(normalized_file_path)
-        else
-          file_field(:name, file_field_name).set(normalized_file_path)
-        end
+        file_field(:name, file_field_name).set(normalized_file_path)
       else
         # for firefox, just call file_field, it may fail
         file_field(:name, file_field_name).set(normalized_file_path)
       end
-    end
-
-    def choose_file_dialog(file_path)
-      Watir.autoit.WinWaitActive("Choose File to Upload", '', 10)
-      Watir.autoit.ControlSetText("Choose File to Upload", "", 1148, file_path)
-      Watir.autoit.ControlClick("Choose File to Upload", "", "&Open")
     end
 
     def check_ie_version

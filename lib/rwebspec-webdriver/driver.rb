@@ -1,5 +1,4 @@
 # convenient methods to drive the browser.
-# convenient methods to drive the browser.
 #
 # Instead of
 #    browser.click_button("submit")
@@ -662,40 +661,6 @@ module RWebSpec
         end
       end
 
-=begin
-
-      # TODO: Firewatir does not suport retrieving style or outerHtml
-      #    http://jira.openqa.org/browse/WTR-260
-      #    http://code.google.com/p/firewatir/issues/detail?id=76
-      #
-      # Max timeout value is 10 minutes
-      #
-      def ajax_call_complete_after_element_hidden(elem_id, check_start = 0.5, timeout = 5, interval = 0.5, &block)
-        yield
-        sleep check_start  # the time allowed to perform the coomplete
-        timeout = 10 * 60 if timeout > 10 * 600 or timeout <= 0
-        begin
-          Timeout::timeout(timeout) {
-            begin
-              elem = element_by_id(elem_id)
-              while elem  do
-                puts "outer=>#{elem.outerHtml}|"
-                puts "style =>#{elem.attribute_value('style')}|"
-                sleep interval
-                elem = element_by_id(elem_id)
-              end
-            rescue => e
-              puts e
-            end
-          }
-        rescue Timeout::Error
-          # Too slow!!
-          raise "Too slow, wait max #{timeout} seconds, the element #{elem_id} still there"
-        end
-      end
-
-=end
-
       # Clear popup windows such as 'Security Alert' or 'Security Information' popup window,
       #
       # Screenshot see http://kb2.adobe.com/cps/165/tn_16588.html
@@ -725,14 +690,7 @@ module RWebSpec
       end
 
       def select_file_for_upload(file_field_name, file_path)
-        elem = find_element(:name, file_field_name)
-        elem.send_keys(file_path)
-      end
-
-      def choose_file_dialog(file_path)
-        Watir.autoit.WinWaitActive("Choose File to Upload", '', 10)
-        Watir.autoit.ControlSetText("Choose File to Upload", "", 1148, file_path)
-        Watir.autoit.ControlClick("Choose File to Upload", "", "&Open")
+				@web_browser.select_file_for_upload(file_field_name, file_path)
       end
 
       def check_ie_version

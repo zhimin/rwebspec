@@ -145,8 +145,6 @@ module RWebSpec
       alias tr row
 
       # Wrapp of Watir's area to support Firefox and Watir
-      #
-      # Note: FireWatir does not support area directly, treat it as text_field
       def area(* args)
         if is_firefox?
           text_field(* args)
@@ -614,10 +612,11 @@ module RWebSpec
         elem.innerHTML
       end
 
-      def select_file_for_upload(file_field, file_path)
+      def select_file_for_upload(file_field_name, file_path)
         is_on_windows = RUBY_PLATFORM.downcase.include?("mingw") || RUBY_PLATFORM.downcase.include?("mswin")
         normalized_file_path = is_on_windows ? file_path.gsub("/", "\\") : file_path
-        file_field(:name, file_field).set(normalized_file_path)
+				find_element(:name, file_field_name).click
+				find_element(:name, file_field_name).send_keys(normalized_file_path)
       end
 
       def start_window(url = nil)
@@ -636,7 +635,6 @@ module RWebSpec
         options = default_options.merge(options)
         site_context = Context.new(options[:base_url]) if options[:base_url]
         if (options[:browser].to_s == "firefox")
-          ff = FireWatir::Firefox.attach(how, what)
           return WebBrowser.new_from_existing(ff, site_context)
         else
           return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
