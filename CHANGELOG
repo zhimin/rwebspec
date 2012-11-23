@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+4.0
+- Merge rwebspec-webdriver with rwebspec!
+
 3.1.4
 - rename try_until to try_for (previous syntax still works)
 

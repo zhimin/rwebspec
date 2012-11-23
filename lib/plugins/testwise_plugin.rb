@@ -40,6 +40,22 @@ module RWebSpec
       end
     end
 
+			def check_for_pause		
+				
+        if $TESTWISE_READY_TO_PAUSE
+          # Already executed the the line immedately above,         
+          # give some buffer time for TW to set $TESTWISE_PAUSE flag
+          sleep 0.5 
+        end
+
+				# If the executed line no change, ignore
+	      while $TESTWISE_PAUSE													
+	          Thread.pass
+	          debug("[selenium_webdriver_extension] Paused, waiting ...")
+	          sleep 1
+	      end			
+			end
+
     def notify_screenshot_location(image_file_path)
       connect_to_testwise("  SHOT", image_file_path)
     end

@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'rspec/core/rake_task'
-require 'rake/rdoctask'
+# require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'rdoc' # require rdoc 2
-gem 'darkfish-rdoc'
+# gem 'darkfish-rdoc'
 # require 'darkfish-rdoc'
 
 $:.unshift(File.dirname(__FILE__) + "/lib")
@@ -24,7 +24,7 @@ end
 
 desc 'Run all specs'
 RSpec::Core::RakeTask.new('spec') do |t|
-  t.spec_opts = ['--format', 'specdoc', '--colour']
+  t.rspec_opts = ['--format', 'specdoc', '--colour']
   # t.libs = ["lib", "server/lib" ]
   t.pattern = Dir['spec/**/*_spec.rb'].sort
 end
@@ -39,12 +39,15 @@ end
 #   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
 # }
 
+=begin
 # using DarkFish - http://deveiate.org/projects/Darkfish-Rdoc/
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
-  rdoc.rdoc_files.include('lib/rwebspec/*.rb')  
+  rdoc.rdoc_files.include('lib/rwebspec-common/*.rb')  
+  rdoc.rdoc_files.include('lib/rwebspec-watir/*.rb')  
+  rdoc.rdoc_files.include('lib/rwebspec-selenium/*.rb')  
   rdoc.rdoc_files.include('lib/extensions/*.rb')  
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
@@ -58,7 +61,9 @@ Rake::RDocTask.new("chm") do |rdoc|
   rdoc.rdoc_dir = 'chm'
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
-  rdoc.rdoc_files.include('lib/rwebspec/*.rb')
+  rdoc.rdoc_files.include('lib/rwebspec-common/*.rb')
+  rdoc.rdoc_files.include('lib/rwebspec-watir/*.rb')
+  rdoc.rdoc_files.include('lib/rwebspec-selenium/*.rb')
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
     rdoc.options += [
@@ -67,13 +72,14 @@ Rake::RDocTask.new("chm") do |rdoc|
       ]
 end
 
+=end
 
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "3.1.4"
+  s.version = "4.0"
   s.summary = "Web application functional specification in Ruby"
-  s.description = "Executable functional specification for web applications in RSpec syntax and Watir"
+  s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 
   s.author  = "Zhimin Zhan"
   s.email   = "zhimin@agileway.com.au"
@@ -93,6 +99,9 @@ spec = Gem::Specification.new do |s|
   s.add_dependency(%q<rspec>, [">= 2.10"])
   s.add_dependency(%q<rspec-core>, [">= 2.10.1"])
   s.add_dependency("commonwatir", ">= 3.0")
+  if RUBY_PLATFORM =~ /mingw/
+    s.add_dependency("selenium-webdriver")
+  end
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
