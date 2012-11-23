@@ -287,14 +287,22 @@ module RWebSpec
     #   assert_visible(:div, "public_notice")
     #   assert_visible(:span, "public_span")
     def assert_visible(tag, element_id)
-      perform_assertion { assert(eval("#{tag}(:id, '#{element_id.to_s}').visible?"), "Element '#{tag}' with id: '#{element_id}' not visible") }
+			if RWebSpec.framework =~ /selenium/i
+      	perform_assertion { assert(eval("#{tag}(:id, '#{element_id.to_s}').displayed?"), "Element '#{tag}' with id: '#{element_id}' not visible") }
+			else
+			  perform_assertion { assert(eval("#{tag}(:id, '#{element_id.to_s}').visible?"), "Element '#{tag}' with id: '#{element_id}' not visible") }
+			end
     end
 
     # Assert tag with element id is hidden?, example 
     #   assert_hidden(:div, "secret")
     #   assert_hidden(:span, "secret_span")
     def assert_hidden(tag, element_id)
-      perform_assertion { assert(!eval("#{tag}(:id, '#{element_id.to_s}').visible?"), "Element '#{tag}' with id: '#{element_id}' is visible") }
+			if RWebSpec.framework =~ /selenium/i
+      	perform_assertion { assert(!eval("#{tag}(:id, '#{element_id.to_s}').displayed?"), "Element '#{tag}' with id: '#{element_id}' is visible") }
+			else
+      	perform_assertion { assert(!eval("#{tag}(:id, '#{element_id.to_s}').visible?"), "Element '#{tag}' with id: '#{element_id}' is visible") }
+			end
     end
 
     alias assert_not_visible assert_hidden
