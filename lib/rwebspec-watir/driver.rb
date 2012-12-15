@@ -751,6 +751,58 @@ module RWebSpec
     def basic_authentication(username, password, options = {})
       basic_authentication_ie(options[:title], username, password, options)
     end
+    
+    # TODO: Common driver module =>  this is shared by both Watir and Selenium
+    #
+
+
+  # TODO: Common driver module =>  this is shared by both Watir and Selenium
+  #
+
+  # use win32screenshot library or Selenium to save curernt active window
+  #
+  # opts[:to_dir] => the direcotry to save image under
+  def take_screenshot(to_file = nil, opts = {})
+    # puts "calling new take screenshot: #{$screenshot_supported}"
+    # unless $screenshot_supported
+    #   puts " [WARN] Screenhost not supported, check whether win32screenshot gem is installed" 
+    #   return
+    # end
+
+    if to_file
+      screenshot_image_filepath = to_file
+    else
+      screenshot_image_filename =  "screenshot_" + Time.now.strftime("%m%d%H%M%S") + ".jpg"
+      the_dump_dir = opts[:to_dir] || default_dump_dir
+      FileUtils.mkdir_p(the_dump_dir) unless File.exists?(the_dump_dir)
+      screenshot_image_filepath = File.join(the_dump_dir, screenshot_image_filename)
+      screenshot_image_filepath.gsub!("/", "\\") if is_windows?
+
+      FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
+    end
+
+    if RWebSpec.framework == "Watir"        
+        begin       
+          if is_firefox? then
+            Win32::Screenshot::Take.of(:window, :title => /mozilla\sfirefox/i).write(screenshot_image_filepath)					
+		      elsif ie
+            Win32::Screenshot::Take.of(:window, :title => /internet\sexplorer/i).write(screenshot_image_filepath)					
+          else
+            Win32::Screenshot::Take.of(:foreground).write(screenshot_image_filepath)
+          end
+          notify_screenshot_location(screenshot_image_filepath)
+				rescue ::DL::DLTypeError => de
+					puts "No screenshot libray found: #{de}"
+        rescue => e
+          puts "error on taking screenshot: #{e}"
+        end
+    else
+      # save screenshot with selenium
+      @web_browser.driver.save_screenshot(screenshot_image_filepath)
+      notify_screenshot_location(screenshot_image_filepath)
+    end  
+
+  end
 
 	 # end of methods
 
