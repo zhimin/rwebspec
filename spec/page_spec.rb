@@ -34,10 +34,19 @@ specification "Page objects" do
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
-    browser = open_browser(test_page_file, {:firefox => true})
+		if RWebSpec.framework == "Selenium" || RUBY_PLATFORM =~ /darwin/
+    	@browser = open_browser(test_page_file, {:browser => :firefox})
+		else
+    	@browser = open_browser(test_page_file)			
+		end
+		
     @test_page = TestPage.new(browser)
   end
 
+	after(:all) do
+		close_browser
+	end
+	
   story "assert on page, title" do
     @test_page.assert_on_page
     @test_page.page_specific_text.should == "iTest2/Watir Test Page"

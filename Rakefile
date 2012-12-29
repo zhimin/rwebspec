@@ -24,7 +24,7 @@ end
 
 desc 'Run all specs'
 RSpec::Core::RakeTask.new('spec') do |t|
-  t.rspec_opts = ['--format', 'specdoc', '--colour']
+  t.rspec_opts = ['']
   # t.libs = ["lib", "server/lib" ]
   t.pattern = Dir['spec/**/*_spec.rb'].sort
 end

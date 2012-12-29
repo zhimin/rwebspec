@@ -166,9 +166,17 @@ module RWebSpec
       @web_browser.select_lists.each { |select|
 				the_element_name = element_name(select)
         next unless the_element_name  == select_name
-        select.options.each do |option| # items in the list
-          return if option.value == option_value
-        end
+
+				if RWebSpec.framework == "Watir"
+	        select.options.each do |option| # items in the list
+	          return if option.value == option_value
+	        end					
+				else					
+					select.find_elements(:tag_name => "option" ).each do |option|
+						return if element_value(option) == option_value
+					end
+				end
+				
       }
       fail("can't find the combo box with value: #{option_value}")
     end
@@ -180,11 +188,19 @@ module RWebSpec
       @web_browser.select_lists.each { |select|
 				the_element_name = element_name(select)
         next unless the_element_name == select_name
-        select.options.each do |option| # items in the list
-          return if option.text == option_label
-        end
+
+				if RWebSpec.framework == "Watir"
+	        select.options.each do |option| # items in the list
+	          return if option.text == option_label
+	        end
+				else
+					select.find_elements(:tag_name => "option" ).each do |option|
+	          return if option.text == option_label
+					end			
+				end
+
       }
-      fail("can't find the combob box: #{select_name} with value: #{option_label}")
+      fail("can't find the combo box: #{select_name} with value: #{option_label}")
     end
 
     alias assert_select_label_present assert_option_present
@@ -194,11 +210,23 @@ module RWebSpec
       @web_browser.select_lists.each { |select|
 				the_element_name = element_name(select)
         next unless the_element_name == select_name
-        select.options.each do |option| # items in the list
-          if (option.text == option_label) then
-            perform_assertion { assert_equal(select.value, option.value, "Select #{select_name}'s value is not equal to expected option label: '#{option_label}'") }
-          end
-        end
+
+				if RWebSpec.framework == "Watir"
+
+	        select.options.each do |option| # items in the list
+	          if (option.text == option_label) then
+	            perform_assertion { assert_equal(select.value, option.value, "Select #{select_name}'s value is not equal to expected option label: '#{option_label}'") }
+	          end
+	        end
+	
+				else
+					select.find_elements(:tag_name => "option" ).each do |option|
+		        if (option.text == option_label) then
+							assert option.selected?
+						end
+					end
+					
+				end
       }
     end
 
@@ -209,7 +237,12 @@ module RWebSpec
       @web_browser.select_lists.each { |select|
 				the_element_name = element_name(select)
         next unless the_element_name == select_name
-        perform_assertion {  assert_equal(select.value, option_value, "Select #{select_name}'s value is not equal to expected: '#{option_value}'") }
+
+				if RWebSpec.framework == "Watir"
+	        perform_assertion {  assert_equal(select.value, option_value, "Select #{select_name}'s value is not equal to expected: '#{option_value}'") }
+				else
+	        perform_assertion {  assert_equal(element_value(select), option_value, "Select #{select_name}'s value is not equal to expected: '#{option_value}'") }					
+				end
       }
     end
 
@@ -422,9 +455,9 @@ module RWebSpec
 
     private
     def table_source(table_id, options)
-      elem_table = table(:id, table_id.to_s)
+      elem_table = RWebSpec.framework == "Watir" ? table(:id, table_id.to_s) : @web_browser.driver.find_element(:id => table_id)
       elem_table_text = elem_table.text
-      elem_table_html = is_firefox? ? elem_table.innerHTML : elem_table.html
+      elem_table_html = RWebSpec.framework == "Watir" ?  elem_table.html : elem_table["innerHTML"];
       table_source = options[:just_plain_text] ? elem_table_text : elem_table_html
     end
 

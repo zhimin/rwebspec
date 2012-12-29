@@ -25,8 +25,16 @@ specification "Driver" do
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
-    open_browser(test_page_file, {:browser => :chrome})
+		if RWebSpec.framework == "Selenium" || RUBY_PLATFORM =~ /darwin/
+    	open_browser(test_page_file, {:browser => :chrome})
+		else
+    	open_browser(test_page_file)			
+		end
   end
+
+	after(:all) do
+		close_browser
+	end
 
   #ABC
   story "expect_page" do

@@ -24,9 +24,17 @@ describe "Assertion" do
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
-    open_browser(test_page_file, {:browser => :chrome})
+		if RWebSpec.framework == "Selenium" || RUBY_PLATFORM =~ /darwin/
+    	open_browser(test_page_file, {:browser => :chrome})
+		else
+    	open_browser(test_page_file)			
+		end
   end
 
+	after(:all) do
+		close_browser
+	end
+	
   it "Assert nil" do
     value = nil
     assert_nil value
@@ -117,7 +125,7 @@ describe "Assertion" do
   end
 
   it "assert_table" do
-    if is_firefox?
+    if RWebSpec.framework == "Selenium"
       assert_text_present_in_table("alpha_table", "A B", :just_plain_text => true)  # => true
     else 
       assert_text_present_in_table("alpha_table", "AB", :just_plain_text => true)  # => true    
