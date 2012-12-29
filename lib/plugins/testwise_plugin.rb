@@ -57,7 +57,11 @@ module RWebSpec
 			end
 
     def notify_screenshot_location(image_file_path)
-      connect_to_testwise("  SHOT", image_file_path)
+      begin
+        connect_to_testwise("  SHOT", image_file_path)
+      rescue => e
+        puts "[DEBUG] failed to notify TestWise a screenshot"
+      end
     end
 
     # find out the line (and file) the execution is on, and notify iTest via Socket

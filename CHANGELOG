@@ -4,6 +4,7 @@ CHANGELOG
 4.1
 [Fixed] - click_button, click_button_with_id support :index
 [Refactored] - unit tests
+[Feature] - Save screenshot for Selenium
 
 4.0
 - Merge rwebspec-webdriver with rwebspec!
