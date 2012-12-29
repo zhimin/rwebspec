@@ -111,8 +111,8 @@ describe "Assertion" do
   # end
 
   it "assert_exists, assert_not" do
-    assert div(:id, "info").exists?
-    assert_not div(:id, "not_there").exists?
+    # Watir vway assert div(:id, "info").exists?
+    # assert_not div(:id, "not_there").exists?
     assert_exists(:div, "info")
   end
 

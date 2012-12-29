@@ -259,7 +259,12 @@ module RWebSpec
 			end
 			
 			# :links => removed
-      [:images, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
+			# :checkboxes => removed
+			# :radios => removed
+			# :select_lists => removed
+			# :buttons => removed
+			# :divs => removed
+      [:images, :text_fields, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
         define_method method do
           @browser.send(method)
         end
@@ -267,6 +272,26 @@ module RWebSpec
 
 			def links
 				@browser.find_elements(:tag_name, "a")
+			end
+
+			def checkboxes
+				@browser.find_elements(:xpath, "//input[@type='checkbox']")
+			end
+			
+			def radios
+				@browser.find_elements(:xpath, "//input[@type='radio']")
+			end		
+			
+			def select_lists
+				@browser.find_elements(:tag_name, "select")
+			end			
+			
+			def buttons
+				@browser.find_elements(:tag_name, "button")
+			end			
+			
+			def divs
+				@browser.find_elements(:tag_name, "divs")
 			end
 			
       # current url

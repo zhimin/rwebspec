@@ -94,23 +94,43 @@ module RWebSpec
       }
     end
 
+		def is_selenium_element?(elem)
+			elem.class.name =~ /Selenium/
+		end
+
+		def element_name(elem)
+			elem.class.name =~ /Selenium/ ? elem['name'] : elem.name 			
+		end
+
+		def element_value(elem)
+			elem.class.name =~ /Selenium/ ? elem['value'] : elem.value 			
+		end
 
     ##
     # Checkbox
     def assert_checkbox_not_selected(checkbox_name)
       @web_browser.checkboxes.each { |checkbox|
-        if (checkbox.name == checkbox_name) then
-          perform_assertion {  assert(!checkbox.set?, "Checkbox #{checkbox_name} is checked unexpectly") }
+				the_element_name = element_name(checkbox)
+        if (the_element_name == checkbox_name) then		
+	 				if is_selenium_element?(checkbox)
+          	perform_assertion {  assert(!checkbox.selected?, "Checkbox #{checkbox_name} is checked unexpectly") }			
+					else
+          	perform_assertion {  assert(!checkbox.set?, "Checkbox #{checkbox_name} is checked unexpectly") }
+					end
         end
       }
     end
-
     alias assert_checkbox_not_checked assert_checkbox_not_selected
 
     def assert_checkbox_selected(checkbox_name)
       @web_browser.checkboxes.each { |checkbox|
-        if (checkbox.name == checkbox_name) then
-          perform_assertion { assert(checkbox.set?, "Checkbox #{checkbox_name} not checked") }
+				the_element_name = element_name(checkbox)
+        if (the_element_name == checkbox_name) then
+					if is_selenium_element?(checkbox)	 	
+          	perform_assertion { assert(checkbox.selected?, "Checkbox #{checkbox_name} not checked") }
+					else
+          	perform_assertion { assert(checkbox.set?, "Checkbox #{checkbox_name} not checked") }					
+					end
         end
       }
     end
@@ -132,7 +152,8 @@ module RWebSpec
 
     def assert_option_not_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
-        next unless select.name == select_name
+				the_element_name = element_name(select)
+        next unless the_element_name == select_name
         select.options.each do |option| # items in the list
           perform_assertion {  assert(!(option.text == option_label), "unexpected select option: #{option_label} for #{select_name} found") }
         end
@@ -143,7 +164,8 @@ module RWebSpec
 
     def assert_option_value_present(select_name, option_value)
       @web_browser.select_lists.each { |select|
-        next unless select.name == select_name
+				the_element_name = element_name(select)
+        next unless the_element_name  == select_name
         select.options.each do |option| # items in the list
           return if option.value == option_value
         end
@@ -156,7 +178,8 @@ module RWebSpec
 
     def assert_option_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
-        next unless select.name == select_name
+				the_element_name = element_name(select)
+        next unless the_element_name == select_name
         select.options.each do |option| # items in the list
           return if option.text == option_label
         end
@@ -169,7 +192,8 @@ module RWebSpec
 
     def assert_option_equals(select_name, option_label)
       @web_browser.select_lists.each { |select|
-        next unless select.name == select_name
+				the_element_name = element_name(select)
+        next unless the_element_name == select_name
         select.options.each do |option| # items in the list
           if (option.text == option_label) then
             perform_assertion { assert_equal(select.value, option.value, "Select #{select_name}'s value is not equal to expected option label: '#{option_label}'") }
@@ -183,7 +207,8 @@ module RWebSpec
 
     def assert_option_value_equals(select_name, option_value)
       @web_browser.select_lists.each { |select|
-        next unless select.name == select_name
+				the_element_name = element_name(select)
+        next unless the_element_name == select_name
         perform_assertion {  assert_equal(select.value, option_value, "Select #{select_name}'s value is not equal to expected: '#{option_value}'") }
       }
     end
@@ -197,24 +222,31 @@ module RWebSpec
     # radio_group is the name field, radio options 'value' field
     def assert_radio_option_not_present(radio_group, radio_option)
       @web_browser.radios.each { |radio|
-        if (radio.name == radio_group) then
-          perform_assertion {  assert(!(radio_option == radio.value), "unexpected radio option: " + radio_option  + " found") }
+				the_element_name = element_name(radio)					
+        if (the_element_name == radio_group) then
+          perform_assertion {  assert(!(radio_option == element_value(radio) ), "unexpected radio option: " + radio_option  + " found") }
         end
       }
     end
 
     def assert_radio_option_present(radio_group, radio_option)
       @web_browser.radios.each { |radio|
-        return if (radio.name == radio_group) and (radio_option == radio.value)
+				the_element_name = element_name(radio)				
+        return if (the_element_name == radio_group) and (radio_option == element_value(radio) )
       }
       fail("can't find the radio option : '#{radio_option}'")
     end
 
     def assert_radio_option_selected(radio_group, radio_option)
       @web_browser.radios.each { |radio|
-        if (radio.name == radio_group and radio_option == radio.value) then
-          perform_assertion { assert(radio.set?, "Radio button #{radio_group}-[#{radio_option}] not checked") }
-        end
+				the_element_name = element_name(radio)					
+        if (the_element_name == radio_group and radio_option == element_value(radio) ) then
+					if is_selenium_element?(radio)
+          	perform_assertion { assert(radio.selected?, "Radio button #{radio_group}-[#{radio_option}] not checked") }
+					else
+          	perform_assertion { assert(radio.set?, "Radio button #{radio_group}-[#{radio_option}] not checked") }					
+					end  
+      	end
       }
     end
 
@@ -223,8 +255,13 @@ module RWebSpec
 
     def assert_radio_option_not_selected(radio_group, radio_option)
       @web_browser.radios.each { |radio|
-        if (radio.name == radio_group and radio_option == radio.value) then
-          perform_assertion {  assert(!radio.set?, "Radio button #{radio_group}-[#{radio_option}] checked unexpected") }
+				the_element_name = element_name(radio)						
+        if (the_element_name == radio_group and radio_option == element_value(radio) ) then	
+					if is_selenium_element?(radio)
+          	perform_assertion {  assert(!radio.selected?, "Radio button #{radio_group}-[#{radio_option}] checked unexpected") }
+					else
+          	perform_assertion {  assert(!radio.set?, "Radio button #{radio_group}-[#{radio_option}] checked unexpected") }
+					end
         end
       }
     end
@@ -271,7 +308,12 @@ module RWebSpec
     #  assert_exists("label", "receipt_date")
     #  assert_exists(:span, :receipt_date)
     def assert_exists(tag, element_id)
-      perform_assertion { assert(eval("#{tag}(:id, '#{element_id.to_s}').exists?"), "Element '#{tag}' with id: '#{element_id}' not found") }
+			if RWebSpec.framework == "Watir"
+      	perform_assertion { assert(eval("#{tag}(:id, '#{element_id.to_s}').exists?"), "Element '#{tag}' with id: '#{element_id}' not found") }		
+			else
+				perform_assertion { assert( @web_browser.driver.find_element(:tag_name => tag, :id => element_id))}
+			end
+		
     end
 
     alias assert_exists? assert_exists
@@ -352,7 +394,12 @@ module RWebSpec
     # assert_text_field_value("text1", "text already there") => true
     #
     def assert_text_field_value(textfield_name, text)
-      perform_assertion { assert_equal(text, text_field(:name, textfield_name).value) }
+			if RWebSpec.framework == "Watir"				
+      	perform_assertion { assert_equal(text, text_field(:name, textfield_name).value) }
+			else
+				the_element = @web_browser.driver.find_element(:name, textfield_name)
+      	perform_assertion { assert_equal(text, element_value(the_element)) }
+			end			
     end
 
 
