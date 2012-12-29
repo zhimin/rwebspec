@@ -1,0 +1,905 @@
+<HTML lang=en xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>My Organized Info</TITLE>
+
+<META content="text/html; charset=utf-8" htt-equiv="Content-Type"><LINK media=screen href="/stylesheets/wenji.css?1248084437" type=text/css rel=stylesheet><LINK media=screen href="/stylesheets/proto.menu.css?1248084437" type=text/css rel=stylesheet><LINK media=screen href="/stylesheets/lightbox.css?1248084437" type=text/css rel=stylesheet>
+
+<SCRIPT src="/javascripts/ckeditor/ckeditor.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/all.js?1248084437" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT id=__onDOMContentLoaded src="//:" defer></SCRIPT>
+
+
+<SCRIPT src="/javascripts/proto.menu.js?1248084437" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/scriptaculous.js?load=effects,builder" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/effects.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/builder.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/lightbox.js?1248084437" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/javascripts/calendar_date_select/calendar_date_select.js?1248084437" type=text/javascript></SCRIPT>
+
+<LINK media=screen href="/stylesheets/calendar_date_select/red.css?1248084437" type=text/css rel=stylesheet>
+
+<SCRIPT src="/syntaxhighlighter_2/scripts/shCore.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/syntaxhighlighter_2/scripts/shBrushXml.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/syntaxhighlighter_2/scripts/shBrushJava.js" type=text/javascript></SCRIPT>
+
+
+
+<SCRIPT src="/syntaxhighlighter_2/scripts/shBrushRuby.js" type=text/javascript></SCRIPT>
+
+<!--
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushBash.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushCpp.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushCSharp.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushCss.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushDiff.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushJScript.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushPhp.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushPlain.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushScala.js"></script>
+  <script type="text/javascript" src="/syntaxhighlighter_2/scripts/shBrushSql.js"></script>
+  --><LINK href="/syntaxhighlighter_2/styles/shCore.css" type=text/css rel=stylesheet><LINK href="/syntaxhighlighter_2/styles/shThemeDefault.css" type=text/css rel=stylesheet>
+
+<SCRIPT type=text/javascript>
+      SyntaxHighlighter.config.clipboardSwf = '/syntaxhighlighter_2/scripts/clipboard.swf';
+      // check application.js, call on demand
+      // SyntaxHighlighter.all();
+  </SCRIPT>
+
+
+
+<SCRIPT type=text/javascript>
+      Element.addMethods({
+          getNumStyle: function(element, style) {
+              var value = $(element).getStyle(style);
+              return value === null ? null : parseInt(value);
+          }
+      })
+
+      document.observe('dom:loaded', function() {
+          var emptyBinMenuItems = [
+              {
+                  name: 'Empty Trash',
+                  className: 'empty_trash',
+                  callback: function(e) {
+                      AJ.ajax_request('/welcome/empty_trash');
+                  }
+              }
+          ]
+
+          var normalMenuItems = [
+              {
+                  name: 'Mark as flagged',
+                  className: 'flag',
+                  callback: function(e) {
+                      AJ.ajax_request('/welcome/flag/' + e.element().id);
+                  }
+              },
+              {
+                  name: 'Mark as not flagged',
+                  className: 'unflag',
+                  callback: function(e) {
+                      AJ.ajax_request('/welcome/unflag/' + e.element().id);
+                  }
+              },
+              {
+                  name: 'Mark as public',
+                  className: 'public',
+                  callback: function(e) {
+                      AJ.ajax_request('/secure/mark_public/' + e.element().id);
+                  }
+              },
+              {
+                  name: 'Mark as private',
+                  className: 'private',
+                  callback: function(e) {
+                      AJ.ajax_request('/secure/mark_private/' + e.element().id);
+                  }
+              }
+          ]
+
+          var restoreDeletedMenuItems = [
+              {
+                  name: 'Restore',
+                  className: 'restore_deleted',
+                  callback: function(e) {
+                      AJ.ajax_request('/welcome/restore/' + e.element().id);
+                  }
+              }
+          ]
+
+          new Proto.Menu({
+              selector: '#full_recycle_bin',
+              className: 'menu desktop',
+              menuItems: emptyBinMenuItems
+          })
+
+          new Proto.Menu({
+              selector: ".deleted_item",
+              className: 'menu desktop',
+              menuItems: restoreDeletedMenuItems
+          })
+
+          new Proto.Menu({
+              selector: ".normal_item",
+              className: 'menu desktop',
+              menuItems: normalMenuItems
+          })
+
+      })
+  </SCRIPT>
+
+</HEAD>
+
+<BODY>
+
+<DIV id=wrap>
+
+<DIV id=header>
+
+<TABLE cellSpacing=0 cellPadding=0 width="70%" border=0>
+
+<TBODY>
+
+<TR>
+
+<TD vAlign=top width=194>
+
+<TABLE width="100%">
+
+<TBODY>
+
+<TR>
+
+<TD>
+
+<H1><A href="/">My Organised Info</A> <FONT color=red>demo</FONT> </H1></TD>
+
+<TD>
+
+<DIV id=version_number><SPAN id=standalone_warning>demo<SPAN> v0.7.3.3 BETA </DIV></SPAN></SPAN></TD></TR></TBODY></TABLE></TD>
+
+<TD vAlign=top width="40%">
+
+<DIV id=itemActions>
+
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+
+<TBODY>
+
+<TR><!-- only on Edge, first_render --></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+
+<DIV id=header_user>Welcome, zhimin | <A href="/my/home">Home page</A> | <A href="/preferences">Preferences</A> | <A href="/logout">Logout</A> </DIV>
+
+<DIV id=search>
+
+<FORM onsubmit="new Ajax.Updater('results', '/welcome/search', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" action=/welcome/search method=post><SELECT id=search_scope name=search_scope> <OPTION selected>Mine</OPTION> <OPTION>All</OPTION></SELECT> <INPUT id=searchField onblur="if(this.value=='')this.value='Search'" onfocus="if(this.value=='Search')this.value=''" type=search size=30 name=q results="5" placeholder="Search">
+
+<SCRIPT type=text/javascript charset=utf-8>
+              if (navigator.userAgent.include(' AppleWebKit/')) {
+              <input type = "search" name = "q" placeholder = "Search" id = "searchField" results = "5" size = "30" />
+              } else {
+              <input type = "text" value = "Search" name = "q" id = "searchField" onfocus = "if(this.value=='Search')this.value=''" onblur = "if(this.value=='')this.value='Search'" />
+              }
+          </SCRIPT>
+
+ <!-- only show the button if not safari --></FORM></DIV></DIV>
+
+<DIV id=content>
+
+<DIV id=sidebar>
+
+<DIV class=groupsScroller id=categories>
+
+<TABLE cellSpacing=0 cellPadding=1 width="100%" border=0>
+
+<TBODY>
+
+<TR>
+
+<TD class=category_heading_current id=category_collection_heading width="50%"><A onclick="Element.hide('collection_projects');Element.hide('project_add_btn_div');Element.hide('project_remove_btn_div'); Element.show('collection_categories'); setElementClass('category_projects_heading', 'category_heading'); setElementClass('category_collection_heading', 'category_heading_current')" href="#">Collection</A></TD>
+
+<TD class=category_heading id=category_projects_heading width="50%"><A onclick="Element.show('collection_projects');Element.show('project_add_btn_div');Element.show('project_remove_btn_div'); Element.hide('collection_categories');setElementClass('category_projects_heading', 'category_heading_current'); setElementClass('category_collection_heading', 'category_heading')" href="#">Projects</A></TD></TR></TBODY></TABLE>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+
+<TBODY>
+
+<TR class=itemGroupSelected>
+
+<TD width=36><A href="/library"><IMG alt=Library src="/images/library.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/library">Library</A></TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=libraryCount>7</DIV></TD></TR></TBODY></TABLE>
+
+<DIV id=collection_categories>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+
+<TBODY>
+
+<TR class=itemGroup>
+
+<TD width=36><A href="http://myorganized.agileway.net/flagged"><IMG alt=Flag src="/images/flag.png?1248084437" border=0></A> </TD>
+
+<TD class=groupName><A href="/flagged">Flagged Items</A></TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=flaggedCount>1</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Contact>
+
+<TD width=36><A href="/contacts"><IMG alt=Contact src="/images/contact.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/contacts">Contacts</A> </TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=ContactCount>2</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Note>
+
+<TD width=36><A href="/notes"><IMG alt=Note src="/images/note.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/notes">Notes</A> </TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=NoteCount>1</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Serial>
+
+<TD width=36><A href="/serials"><IMG alt=Serial src="/images/serial.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/serials">Serials</A> </TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=SerialCount>1</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Bookmark>
+
+<TD width=36><A href="/bookmarks"><IMG alt=Bookmark src="/images/bookmark.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/bookmarks">Bookmarks</A> </TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=BookmarkCount>1</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Image>
+
+<TD width=36><A href="/images"><IMG alt=Image src="/images/image.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/images">Images</A> </TD>
+
+<TD>&nbsp;</TD></TR>
+
+<TR class=itemGroup id=category_Password>
+
+<TD width=36><A href="/passwords"><IMG alt=Password src="/images/password.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/passwords">Passwords</A> </TD>
+
+<TD class=itemCount vAlign=top align=right>
+
+<DIV class=menuItemCounterBox id=PasswordCount>1</DIV></TD></TR>
+
+<TR class=itemGroup id=category_Document>
+
+<TD width=36><A href="/documents"><IMG alt=Document src="/images/document.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/documents">Documents</A> </TD>
+
+<TD>&nbsp;</TD></TR>
+
+<TR class=itemGroup id=category_Video>
+
+<TD width=36><A href="/videos"><IMG alt=Video src="/images/video.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/videos">Videos</A> </TD>
+
+<TD>&nbsp;</TD></TR>
+
+<TR class=itemGroup id=category_Code>
+
+<TD width=36><A href="/codes"><IMG alt=Code src="/images/code.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/codes">Code Snippnets</A> </TD>
+
+<TD>&nbsp;</TD></TR>
+
+<TR class=itemGroup id=category_Quote>
+
+<TD width=36><A href="/quotes"><IMG alt=Quote src="/images/quote.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/quotes">Quotes</A> </TD>
+
+<TD>&nbsp;</TD></TR>
+
+<TR class=itemGroup id=category_Solution>
+
+<TD width=36><A href="/solutions"><IMG alt=Solution src="/images/solution.png?1248084437" border=0></A> </TD>
+
+<TD><A href="/solutions">Solution Logs</A> </TD>
+
+<TD>&nbsp;</TD></TR></TBODY></TABLE></DIV>
+
+<DIV id=collection_projects style="DISPLAY: none"></DIV>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+
+<TBODY>
+
+<TR>
+
+<TD class=itemGroup colSpan=3>
+
+<DIV id=category_trash>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+
+<TBODY>
+
+<TR>
+
+<TD width=36><A href="http://myorganized.agileway.net/trash"><IMG alt=Trash_empty src="/images/trash_empty.png?1248084437" border=0></A> </TD>
+
+<TD class=groupName><A href="/trash">Trash</A> </TD>
+
+<TD>&nbsp;</TD></TD></TR></TBODY></TABLE></DIV></TD></TR></TBODY></TABLE>
+
+<DIV id=collection_panel>
+
+<TABLE class=collectionControlsPanel cellSpacing=0 cellPadding=0 width="100%" border=0>
+
+<TBODY>
+
+<TR>
+
+<TD class=configAdd><A id=prefs_link href="/preferences"><IMG title=Settings alt=Settings src="/images/controlActions.png?1248084437" border=0></A> </TD>
+
+<TD class=groupAdd>
+
+<DIV id=project_add_btn_div style="DISPLAY: none"><A class=small onclick="promptToRemote('Project name', 'project_name', '/projects'); return false;" href="/library"><IMG alt=Controladd src="/images/controlAdd.png?1248084437" border=0></A> </DIV></TD>
+
+<TD class=groupAdd>
+
+<DIV id=project_remove_btn_div style="DISPLAY: none"></DIV></TD>
+
+<TD vAlign=bottom align=right width=140><A id=logout_link href="/logout"><IMG title="Sign out" alt="Sign out" src="/images/exit.jpg?1248084437" width=20 border=0> </A></TD></TR></TBODY></TABLE></DIV></DIV></DIV>
+
+<DIV id=results_item_div>
+
+<SCRIPT type=text/javascript>
+    /* */
+    function highlight_row(item_id, index) {
+      var prev_item_id = parseInt($('prev_item_id').getAttribute('value'));
+      var prev_item_index = parseInt($('prev_item_id').getAttribute('index'));
+      if (prev_item_id > 0) {
+        $('item_row_' + prev_item_id).className = 'row' + row_class_name(prev_item_index);
+      }
+      $('prev_item_id').writeAttribute('value', item_id);
+      $('prev_item_id').writeAttribute('index', index);
+      $('item_row_' + item_id).className = 'row' + row_class_name(index) + ' highlighted';
+    }
+
+    function row_class_name(index) {
+      if (index % 2 == 0) {
+        return "Odd";
+      } else {
+        return "Even";
+      }
+    }
+</SCRIPT>
+
+
+
+<DIV id=results><SPAN id=prev_item_id style="DISPLAY: none" index="0" value="0"></SPAN>
+
+<DIV id=resultItems>
+
+<TABLE class=datagrid id=datagrid cellSpacing=0 cellPadding=0 width="100%" collapse="" border-collapse="">
+
+<THEAD><!-- Datagrid table header -->
+
+<TR class=datagrid-header>
+
+<TH width=16><!-- Flag column --></TH>
+
+<TH width=16><!-- Share column --></TH>
+
+<TH width=16><!-- Security column --></TH>
+
+<TH><A id=datagrid_name href="javascript:sortColumn('datagrid','name');">Name</A></TH>
+
+<TH width=140><A id=datagrid_date_modified href="javascript:sortColumn('datagrid','dateModified');">Date Modified</A></TH>
+
+<TH width=80>Kind</TH></TR></THEAD>
+
+<TBODY id=datagrid_body>
+
+<TR class=datagrid-row id=item_row_1963511881 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #fff" onclick="highlight_row('1963511881', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#fff'" url="/bookmarks/show_item/1963511881"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_1963511881_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_1963511881 height=12 alt=Bookmark src="/images/bookmark.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_1963511881", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_1963511881>iTest2</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_1963511881" onclick="highlight_row('1963511881', 0);; new Ajax.Request('/bookmarks/show_item/1963511881', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Bookmark'}); return false;"> iTest2</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Bookmark</TD></TR>
+
+<TR class=datagrid-row id=item_row_1 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #f1f7fc" onclick="highlight_row('1', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#f1f7fc'" url="/contacts/show_item/1"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_1_flag align=middle><IMG alt=Flagheader src="/images/flagHeader.png?1248084437"> </TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_1 height=12 alt=Contact src="/images/contact.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_1", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_1>Homer Simpson</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_1" onclick="highlight_row('1', 1);; new Ajax.Request('/contacts/show_item/1', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Contact'}); return false;"> Homer Simpson</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Contact</TD></TR>
+
+<TR class=datagrid-row id=item_row_2 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #fff" onclick="highlight_row('2', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#fff'" url="/contacts/show_item/2"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_2_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_2 height=12 alt=Contact src="/images/contact.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_2", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_2>Bart Simpson</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_2" onclick="highlight_row('2', 2);; new Ajax.Request('/contacts/show_item/2', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Contact'}); return false;"> Bart Simpson</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Contact</TD></TR>
+
+<TR class=datagrid-row id=item_row_4 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #f1f7fc" onclick="highlight_row('4', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#f1f7fc'" url="/serials/show_item/4"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_4_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_4 height=12 alt=Serial src="/images/serial.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_4", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_4>iTest2</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_4" onclick="highlight_row('4', 3);; new Ajax.Request('/serials/show_item/4', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Serial'}); return false;"> iTest2</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Serial</TD></TR>
+
+<TR class=datagrid-row id=item_row_5 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #fff" onclick="highlight_row('5', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#fff'" url="/notes/show_item/5"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_5_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_5 height=12 alt=Note src="/images/note.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_5", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_5>Architect must code</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_5" onclick="highlight_row('5', 4);; new Ajax.Request('/notes/show_item/5', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Note'}); return false;"> Architect must code</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Note</TD></TR>
+
+<TR class=datagrid-row id=item_row_6 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #f1f7fc" onclick="highlight_row('6', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#f1f7fc'" url="/web_archives/show_item/6"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_6_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_6 height=12 alt=Web_archive src="/images/web_archive.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_6", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_6>Architect must code</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_6" onclick="highlight_row('6', 5);; new Ajax.Request('/web_archives/show_item/6', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=WebArchive'}); return false;"> Architect must code</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; WebArchive</TD></TR>
+
+<TR class=datagrid-row id=item_row_10 onmouseover="this.style.backgroundColor = '#e6f3ff'; this.style.cursor = 'pointer'" style="CURSOR: pointer; BACKGROUND-COLOR: #fff" onclick="highlight_row('10', 0);; new Ajax.Request(this.readAttribute('url'), {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}}); return false;" onmouseout="this.style.backgroundColor = '#fff'" url="/passwords/show_item/10"><!-- onclick="document.location = this.readAttribute('url');" -->
+
+<TD class=flag id=item_10_flag align=middle></TD>
+
+<TD class=share></TD>
+
+<TD class=security></TD>
+
+<TD class=title align=left><IMG class=title id=item_handle_10 height=12 alt=Password src="/images/password.png?1248084437" width=12 border=0 valign="middle"> <!--
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_10", {ghosting:true, revert:true})
+//]]>
+</script>
+	                    		--><SPAN id=item_10>iTest2 License</SPAN> <!--
+                                <a class="normal_item" href="#" id="item_10" onclick="highlight_row('10', 6);; new Ajax.Request('/passwords/show_item/10', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Password'}); return false;"> iTest2 License</a>
+                                --></TD>
+
+<TD class=datetime align=right sorttable_customkey="200907300116">30/07/2009 01:16PM </TD>
+
+<TD noWrap>&nbsp; &nbsp; Password</TD></TR></TBODY></TABLE><!--
+        <table id="resultsTable" class="sortable" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th width="16" class="sorttable_noindicator"><img alt="Flag" border="0" src="/images/flag.png?1248084437" width="12" /></th>
+                    <th width="16" class="sorttable_nosort">&nbsp;</th>
+                    <th width="16" class="sorttable_nosort">&nbsp;</th>
+                    <th class = "heading" colspan="1" align="left"> Name </th>
+                    <th class="datetime" nowrap="true" width="100" align="right"> Date Modified</th>
+                    <th width="80">Kind</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    
+                        <tr class="rowOdd" id="item_row_1963511881">
+                            <td class="flag" id="item_1963511881_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="iTest2">
+									
+                                <img alt="Bookmark" border="0" class="title" height="12" id="item_handle_1963511881" src="/images/bookmark.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_1963511881", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_1963511881" onclick="highlight_row('1963511881', 0);; new Ajax.Request('/bookmarks/show_item/1963511881', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Bookmark'}); return false;"> iTest2</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Bookmark
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowEven" id="item_row_1">
+                            <td class="flag" id="item_1_flag"
+                                sorttable_customkey="1"
+                            
+                                align="center">
+                                <img alt="Flagheader" src="/images/flagHeader.png?1248084437" />
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="Homer Simpson">
+									
+                                <img alt="Contact" border="0" class="title" height="12" id="item_handle_1" src="/images/contact.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_1", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_1" onclick="highlight_row('1', 1);; new Ajax.Request('/contacts/show_item/1', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Contact'}); return false;"> Homer Simpson</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Contact
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowOdd" id="item_row_2">
+                            <td class="flag" id="item_2_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="Bart Simpson">
+									
+                                <img alt="Contact" border="0" class="title" height="12" id="item_handle_2" src="/images/contact.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_2", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_2" onclick="highlight_row('2', 2);; new Ajax.Request('/contacts/show_item/2', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Contact'}); return false;"> Bart Simpson</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Contact
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowEven" id="item_row_4">
+                            <td class="flag" id="item_4_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="iTest2">
+									
+                                <img alt="Serial" border="0" class="title" height="12" id="item_handle_4" src="/images/serial.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_4", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_4" onclick="highlight_row('4', 3);; new Ajax.Request('/serials/show_item/4', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Serial'}); return false;"> iTest2</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Serial
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowOdd" id="item_row_5">
+                            <td class="flag" id="item_5_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="Architect must code">
+									
+                                <img alt="Note" border="0" class="title" height="12" id="item_handle_5" src="/images/note.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_5", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_5" onclick="highlight_row('5', 4);; new Ajax.Request('/notes/show_item/5', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Note'}); return false;"> Architect must code</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Note
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowEven" id="item_row_6">
+                            <td class="flag" id="item_6_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="Architect must code">
+									
+                                <img alt="Web_archive" border="0" class="title" height="12" id="item_handle_6" src="/images/web_archive.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_6", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_6" onclick="highlight_row('6', 5);; new Ajax.Request('/web_archives/show_item/6', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=WebArchive'}); return false;"> Architect must code</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                WebArchive
+                            </td>
+                        </tr>
+                    
+                        <tr class="rowOdd" id="item_row_10">
+                            <td class="flag" id="item_10_flag"
+                                
+                                align="center">
+                                
+                            </td>
+                            <td class="share">
+                            </td>
+                            <td class="security">
+                            </td>
+                            <td align="left" class="title" sorttable_customkey="iTest2 License">
+									
+                                <img alt="Password" border="0" class="title" height="12" id="item_handle_10" src="/images/password.png?1248084437" valign="middle" width="12" />
+
+	                    		<script type="text/javascript">
+//<![CDATA[
+new Draggable("item_10", {ghosting:true, revert:true})
+//]]>
+</script>
+
+                                <a class="normal_item" href="#" id="item_10" onclick="highlight_row('10', 6);; new Ajax.Request('/passwords/show_item/10', {asynchronous:true, evalScripts:true, onComplete:function(request){Element.hide('loadingItem')}, onLoading:function(request){Element.show('loadingItem'); Element.hide('no-selection')}, parameters:'item_class=Password'}); return false;"> iTest2 License</a>
+                            </td>
+        					<td align="right" class="datetime" sorttable_customkey="200907300116">
+                                30/07/2009 01:16PM
+                            </td>
+                            <td nowrap="true">
+                                &nbsp; &nbsp;
+                                Password
+                            </td>
+                        </tr>
+                    
+                
+            </tbody>
+        </table>
+        --></DIV>
+
+<DIV id=resultSummary align=right>Found 7 items </DIV></DIV>
+
+<DIV id=itemDetail>
+
+<DIV id=loadingItem style="DISPLAY: none" align=center>
+
+<TABLE cellSpacing=0 cellPadding=0 border=0>
+
+<TBODY>
+
+<TR>
+
+<TD><IMG src="/images/loading_large.gif" align=top></TD>
+
+<TD>&nbsp;</TD>
+
+<TD vAlign=center>Loading ...</TD></TR></TBODY></TABLE></DIV>
+
+<DIV id=no-selection align=center>No Selection </DIV></DIV></DIV></DIV><!--
+  <div id="ajax-indicator" style="display:none;"><span>&nbsp; &nbsp; &nbsp; Loading ...</span></div>
+  --></DIV>
+
+<DIV class="menu desktop" style="DISPLAY: none" undefined="display:none">
+
+<UL>
+
+<LI class=""><A class="empty_trash enabled" title="Empty Trash" href="#">Empty Trash</A></LI></UL></DIV><IFRAME style="DISPLAY: none; FILTER: progid:DXImageTransform.Microsoft.Alpha(opacity=0); POSITION: absolute" src="javascript:false;" frameBorder=0 undefined="position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);display:none"></IFRAME>
+
+<DIV class="menu desktop" style="DISPLAY: none" undefined="display:none">
+
+<UL>
+
+<LI class=""><A class="restore_deleted enabled" title=Restore href="#">Restore</A></LI></UL></DIV><IFRAME style="DISPLAY: none; FILTER: progid:DXImageTransform.Microsoft.Alpha(opacity=0); POSITION: absolute" src="javascript:false;" frameBorder=0 undefined="position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);display:none"></IFRAME>
+
+<DIV class="menu desktop" style="DISPLAY: none" undefined="display:none">
+
+<UL>
+
+<LI class=""><A class="flag enabled" title="Mark as flagged" href="#">Mark as flagged</A></LI>
+
+<LI class=""><A class="unflag enabled" title="Mark as not flagged" href="#">Mark as not flagged</A></LI>
+
+<LI class=""><A class="public enabled" title="Mark as public" href="#">Mark as public</A></LI>
+
+<LI class=""><A class="private enabled" title="Mark as private" href="#">Mark as private</A></LI></UL></DIV><IFRAME style="DISPLAY: none; FILTER: progid:DXImageTransform.Microsoft.Alpha(opacity=0); POSITION: absolute" src="javascript:false;" frameBorder=0 undefined="position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);display:none"></IFRAME>
+
+<DIV id=overlay style="DISPLAY: none"></DIV>
+
+<DIV id=lightbox style="DISPLAY: none">
+
+<DIV id=outerImageContainer style="WIDTH: 250px; HEIGHT: 250px">
+
+<DIV id=imageContainer><IMG id=lightboxImage>
+
+<DIV id=hoverNav><A id=prevLink href="http://myorganized.agileway.net/library#"></A><A id=nextLink href="http://myorganized.agileway.net/library#"></A></DIV>
+
+<DIV id=loading><A id=loadingLink href="http://myorganized.agileway.net/library#"><IMG src="http://myorganized.agileway.net/images/loading.gif"></A></DIV></DIV></DIV>
+
+<DIV id=imageDataContainer>
+
+<DIV id=imageData>
+
+<DIV id=imageDetails><SPAN id=caption></SPAN><SPAN id=numberDisplay></SPAN></DIV>
+
+<DIV id=bottomNav><A id=bottomNavClose href="http://myorganized.agileway.net/library#"><IMG src="http://myorganized.agileway.net/images/closelabel.gif"></A></DIV></DIV></DIV></DIV></BODY></HTML>

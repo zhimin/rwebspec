@@ -258,12 +258,17 @@ module RWebSpec
 				end
 			end
 			
-      [:images, :links, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
+			# :links => removed
+      [:images, :buttons, :select_lists, :checkboxes, :radios, :text_fields, :divs, :dls, :dds, :dts, :ems, :lis, :maps, :spans, :strongs, :ps, :pres, :labels].each do |method|
         define_method method do
           @browser.send(method)
         end
       end
 
+			def links
+				@browser.find_elements(:tag_name, "a")
+			end
+			
       # current url
       def current_url
         @browser.current_url
@@ -435,8 +440,17 @@ module RWebSpec
       # Click a button with give HTML id
       # Usage:
       #   click_button_with_id("btn_sumbit")
+      #   click_button_with_id("btn_sumbit", :index => 2) # the secone link with same id, not good gractice in HTML
       def click_button_with_id(id, opts = {})
-        find_element(:id, id).click
+	     if opts && opts[:index] && opts[:index].to_i() > 0
+					elements = find_elements(:id, id)
+					the_index = opts[:index].to_i() - 1          
+          first_match = elements[the_index]
+          first_match.click
+				else
+	        find_element(:id, id).click
+        end
+		
       end
 
       # Click a button with give name
@@ -459,13 +473,14 @@ module RWebSpec
         if matching_buttons.size > 0
 
           if opts && opts[:index]
-            puts "Call matching buttons: #{matching_buttons.inspect}"
-            first_match = matching_buttons[opts[:index].to_i() - 1]
+						the_index = opts[:index].to_i() - 1
+            puts "Call matching buttons: #{matching_buttons.inspect} => #{the_index}"
+            first_match = matching_buttons[the_index]
             first_match.click
+					else
+	          the_button = matching_buttons[0]
+	          the_button.click
           end
-
-          the_button = matching_buttons[0]
-          the_button.click
 
         else
           raise "No button with value: #{caption} found"

@@ -1,18 +1,20 @@
-require 'rubygems'
-require "spec"
-require 'uri'
+# require 'rubygems'
+# require "spec"
+# require 'uri'
+# 
+# require File.join(File.dirname(__FILE__), "..", "lib/extensions/rspec_extensions.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/driver.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/context.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_browser.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_page.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/assert.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/extensions/watir_extensions.rb")
+# require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_page.rb")
+# require 'test/unit/assertions'
+# 
+# $:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebspec")
 
-require File.join(File.dirname(__FILE__), "..", "lib/extensions/rspec_extensions.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/driver.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/context.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_browser.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_page.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/assert.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/extensions/watir_extensions.rb")
-require File.join(File.dirname(__FILE__), "..", "lib/rwebspec/web_page.rb")
-require 'test/unit/assertions'
-
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib/rwebspec")
+require File.join(File.dirname(__FILE__), "spec_helper.rb")
 
 require File.dirname(__FILE__) + "/stack"
 require File.dirname(__FILE__) + "/mock_page"
@@ -28,6 +30,7 @@ end
 specification "Page objects" do
   include RWebSpec::Driver
   include RWebSpec::Assert
+  include RWebSpec::Utils
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))

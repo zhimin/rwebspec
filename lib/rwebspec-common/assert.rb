@@ -80,11 +80,13 @@ module RWebSpec
     #  assert_link_present_with_text("Click ") # => 
     #
     def assert_link_present_with_text(link_text)
+			
       @web_browser.links.each { |link|
         return if link.text.include?(link_text)
       }
       fail( "can't find the link containing text: #{link_text}")
-    end
+  
+  	end
 
     def assert_link_not_present_with_text(link_text)
       @web_browser.links.each { |link|

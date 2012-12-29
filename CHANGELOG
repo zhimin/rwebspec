@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+4.1
+[Fixed] - click_button, click_button_with_id support :index
+[Refactored] - unit tests
+
 4.0
 - Merge rwebspec-webdriver with rwebspec!
 

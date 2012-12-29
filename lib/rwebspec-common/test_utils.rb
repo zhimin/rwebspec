@@ -40,8 +40,8 @@ module RWebSpec
     alias try_until try_for
 
     def try(timeout = $testwise_polling_timeout, polling_interval = $testwise_polling_interval || 1, &block)
-      puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_until instead."
-      try_until(timeout, polling_interval) {
+      puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_for instead."
+      try_for(timeout, polling_interval) {
         yield
       }
     end
