@@ -76,6 +76,16 @@ background: #f4f4ed;
      $('receipt').replace("<p>Receipt No: <label>" + msecs + "</label> <br/>Receipt Date: <label id='date'>" + today_str +  "</label></p>");
   }
 
+  function set_tool() {
+    Element.show('spinner');
+    var rand_no = Math.floor(2000*Math.random()) + 1;
+    setTimeout( "set_my_tool()", rand_no );
+  }
+
+  function set_my_tool() {
+    Element.hide('spinner');
+	 document.getElementById('favourite_tool').value = "TestWise"
+  }
 
 </script>
 
@@ -229,8 +239,16 @@ background: #f4f4ed;
 			<p><input type="submit" value="Transfer" onclick="transfer();"/> <img src="spinner.gif" id="spinner" style="display:none;"/></p>
 
 			<div id="receipt">
-			</div>
+			</div>			
 			
+			
+			Favourite tool :<select id="favourite_tool" name="favourite_tool">
+				<option></option>
+				<option>TestWise</option>
+				<option>BuildWise</option>
+				<option>LoadWise</option>
+				<option>StoryWise</option>
+			</select> <a id="choose_tool_link" href="javascript:void(0);" onclick="set_tool();">Set (ajax)</a>
 			
 		</td>
 	</tr>

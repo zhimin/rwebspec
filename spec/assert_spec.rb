@@ -21,6 +21,7 @@ require File.dirname(__FILE__) + "/mock_page"
 describe "Assertion" do
   include RWebSpec::Driver
   include RWebSpec::Assert
+  include RWebSpec::Utils
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
@@ -106,18 +107,6 @@ describe "Assertion" do
     assert_option_value_equals("testing_tool", "iTest2")
   end
 
-  # scenario "Ajax - show or hide text, assert visible? (not working on Mac)" do
-  #   click_link("Hide info")
-  #   sleep 0.5
-  #   # FIXME Check visiblity doesn not work on Firefox yet
-  #   assert !div(:id, "info").visible?
-  #   assert_hidden(:div, "info")
-  #   click_link("Show info")
-  #   sleep 0.5
-  #   assert_visible(:div, "info")
-  #   assert div(:id, "info").visible?
-  # end
-
   it "assert_exists, assert_not" do
     # Watir vway assert div(:id, "info").exists?
     # assert_not div(:id, "not_there").exists?
@@ -138,6 +127,25 @@ describe "Assertion" do
   it "assert_text_field_value" do
     assert_text_field_value("text1", "text already there")
   end
+
+	it "using try_for with assertion" do
+		click_link_with_id("choose_tool_link")
+		try_for(3) { assert_option_value_equals("favourite_tool", "TestWise") }    
+	end
+	
+  # scenario "Ajax - show or hide text, assert visible? (not working on Mac)" do
+  #   click_link("Hide info")
+  #   sleep 0.5
+  #   # FIXME Check visiblity doesn not work on Firefox yet
+  #   assert !div(:id, "info").visible?
+  #   assert_hidden(:div, "info")
+  #   click_link("Show info")
+  #   sleep 0.5
+  #   assert_visible(:div, "info")
+  #   assert div(:id, "info").visible?
+  # end
+	
+
   
 end
 #END
