@@ -287,7 +287,8 @@ module RWebSpec
 			end			
 			
 			def buttons
-				@browser.find_elements(:tag_name, "button")
+				button_array = @browser.find_elements(:tag_name, "button") + @browser.find_elements(:xpath, "//input[@type='submit']") + @browser.find_elements(:xpath, "//input[@type='button']")
+				return button_array
 			end			
 			
 			def divs

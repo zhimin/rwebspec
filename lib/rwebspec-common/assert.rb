@@ -306,26 +306,28 @@ module RWebSpec
     # Button
     def assert_button_not_present(button_id)
       @web_browser.buttons.each { |button|
-        perform_assertion { assert(button.id != button_id, "unexpected button id: #{button_id} found") }
+				the_button_id = RWebSpec.framework == "Watir" ? button.id : button["id"]	
+        perform_assertion { assert(the_button_id != button_id, "unexpected button id: #{button_id} found") }
       }
     end
 
     def assert_button_not_present_with_text(text)
       @web_browser.buttons.each { |button|
-        perform_assertion { assert(button.value != text, "unexpected button id: #{text} found") }
+        perform_assertion { assert(element_value(button) != text, "unexpected button id: #{text} found") }
       }
     end
 
     def assert_button_present(button_id)
       @web_browser.buttons.each { |button|
-        return if button_id == button.id
+				the_button_id = RWebSpec.framework == "Watir" ? button.id : button["id"]
+        return if button_id == the_button_id
       }
       fail("can't find the button with id: #{button_id}")
     end
 
     def assert_button_present_with_text(button_text)
-      @web_browser.buttons.each { |button|
-        return if button_text == button.value
+      @web_browser.buttons.each { |button|			
+        return if button_text == element_value(button)
       }
       fail("can't find the button with text: #{button_text}")
     end
