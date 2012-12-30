@@ -1,7 +1,8 @@
 require 'rubygems'
 require 'rspec/core/rake_task'
 # require 'rake/rdoctask'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
+
 require 'rdoc' # require rdoc 2
 # gem 'darkfish-rdoc'
 # require 'darkfish-rdoc'
@@ -77,7 +78,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "4.0.2"
+  s.version = "4.1.0"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 
@@ -104,6 +105,6 @@ spec = Gem::Specification.new do |s|
   end
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = true
 end
