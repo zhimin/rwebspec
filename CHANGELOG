@@ -5,6 +5,7 @@ CHANGELOG
 [Fixed] - click_button, click_button_with_id support :index
 [Refactored] - unit tests
 [Feature] - Save screenshot for Selenium
+[CHANGE] - open_browser(base_url, options) => open_browser(:base_url => "http://")
 
 4.0
 - Merge rwebspec-webdriver with rwebspec!

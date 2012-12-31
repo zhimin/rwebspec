@@ -29,7 +29,7 @@ module RWebSpec
     #   1. pass as first argument
     #   2. If running using TestWise, used as confiured
     #   3. Use default value set
-    def open_browser(base_url = nil, options = {})
+    def open_browser(options = {})
 
       begin
         support_unicode
@@ -38,7 +38,7 @@ module RWebSpec
       end
 
       base_url ||= $TESTWISE_PROJECT_BASE_URL
-      base_url ||= $TESTWISE_PROJECT_BASE_URL
+      base_url ||= options[:base_url]
       base_url ||= $BASE_URL
       raise "base_url must be set" if base_url.nil?
 
@@ -50,7 +50,7 @@ module RWebSpec
                          :go => true}
 
       options = default_options.merge options
-      ($TESTWISE_HIDE_BROWSER || $TESTWISE_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
+      ($TESTWISE_HIDE_BROWSER) ? $HIDE_IE = true : $HIDE_IE = false
 
       if base_url =~ /^file:/
         uri_base = base_url

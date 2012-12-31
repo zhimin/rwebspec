@@ -37,8 +37,16 @@ module RWebSpec
           when "ie"
             initialize_ie_browser(existing_browser, options)
           when  "htmlunit"
-             initialize_htmlunit_browser(base_url, options)
+            initialize_htmlunit_browser(base_url, options)
         end
+
+				begin
+					if options[:resize_to] && options[:resize_to].class == Array
+						@browser.manage.window.resize_to(options[:resize_to][0], options[:resize_to][1])
+		    	end
+				rescue => e
+					puts "[ERROR] failed to resize => #{options[:resize_to]}"
+				end
       end
 
       def initialize_firefox_browser(existing_browser, base_url, options)
@@ -83,7 +91,7 @@ module RWebSpec
           else
             @browser.speed = :zippy
           end
-          return
+          return @browser
         end
 
         @browser = Selenium::WebDriver.for :ie
@@ -101,6 +109,7 @@ module RWebSpec
         #      else
         #        puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
         #      end
+
       end
 
       # TODO resuse not working yet

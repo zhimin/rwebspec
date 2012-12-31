@@ -29,8 +29,9 @@ module RWebSpec
       #
       # New Options:
       #    :browser => :ie | :firefox | :chrome
-      def open_browser(base_url = nil, options = {})
+      def open_browser(options = {})
         # puts "[DEBUG] [SeleniumDriver] Callling open_browser #{base_url}"
+
         begin
           support_unicode
         rescue => e
@@ -39,6 +40,7 @@ module RWebSpec
 
         base_url ||= $TESTWISE_PROJECT_BASE_URL
         base_url ||= $BASE_URL
+        base_url ||= options[:base_url]
         raise "base_url must be set" if base_url.nil?
 
         default_options = {:speed => "fast",
@@ -80,7 +82,8 @@ module RWebSpec
         end
 
 				# remembering browser handle for debugging need
-				$browser = @web_browser
+				$browser = @web_browser				
+		
         return @web_browser
       end
 
