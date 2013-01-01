@@ -39,8 +39,12 @@ module RWebSpec
         end
 
         base_url ||= $TESTWISE_PROJECT_BASE_URL
+				if options && options.class == String
+	      	base_url ||= options
+				elsif options && options.class == Hash && options[:base_url]
+	      	base_url ||= options[:base_url]
+				end
         base_url ||= $BASE_URL
-        base_url ||= options[:base_url]
         raise "base_url must be set" if base_url.nil?
 
         default_options = {:speed => "fast",
@@ -182,7 +186,7 @@ module RWebSpec
 
       # Go to another page on the testing site.
       #
-      #  open_browser("http://www.itest2.com")
+      #  open_browser(:base_url => "http://www.itest2.com")
       #  goto_page("/demo")  # visit page http://www.itest2.com/demo
       #
       def goto_page(page)
@@ -194,7 +198,7 @@ module RWebSpec
 
       # Go to another web site, normally different site being tested on
       #
-      #  open_browser("http://www.itest2.com")
+      #  open_browser(:base_url => "http://www.itest2.com")
       #  goto_url("http://myorganized.info")
       def goto_url(url)
         puts "Calling web_browser goto: #{@web_browser.inspect}"

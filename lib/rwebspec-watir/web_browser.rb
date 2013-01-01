@@ -295,7 +295,7 @@ module RWebSpec
 
     # Go to a page
     #  Usage:
-    #    open_browser("http://www.itest2.com"
+    #    open_browser(:base_url => "http://www.itest2.com")
     #    ....
     #    goto_page("/purchase")  # full url => http://www.itest.com/purchase
     def goto_page(page)

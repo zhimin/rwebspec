@@ -26,7 +26,7 @@ describe "Assertion" do
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
 		if RWebSpec.framework == "Selenium" || RUBY_PLATFORM =~ /darwin/
-    	open_browser(test_page_file, {:browser => :chrome})
+    	open_browser(:base_url => test_page_file, :browser => :chrome)
 		else
     	open_browser(test_page_file)			
 		end

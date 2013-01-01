@@ -9,7 +9,7 @@ specification "User Profile" do
   include TestHelper
 
   before(:all) do
-    open_browser("http://demo.adminwise.com")
+    open_browser(:base_url => "http://demo.adminwise.com")
     reset_database
   end
 
