@@ -105,12 +105,7 @@ module RWebSpec
     # Close all opening browser windows
     #
     def close_all_browsers
-			if @web_browser
-	      Watir::IE.close_all
-			else
-				browser_type = $TESTWISE_BROWSER ? $TESTWISE_BROWSER.downcase.to_sym : :ie	
-	      WebBrowser.close_all_browsers(browser_type)				
-			end
+			@web_browser.close_all_browsers
     end
 
     # Verify the next page following an operation.

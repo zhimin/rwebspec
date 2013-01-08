@@ -101,7 +101,6 @@ module RWebSpec
         #      else
         #        @browser.speed = :zippy
         #      end
-        #      @browser.activeObjectHighLightColor = options[:highlight_colour]
         #      @browser.visible = options[:visible] unless $HIDE_IE
         #      #NOTE: close_others fails
         #      if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
@@ -343,7 +342,7 @@ module RWebSpec
       alias close close_browser
 
       #TODO determine browser type, check FireWatir support or not
-      def self.close_all_browsers
+      def close_all_browsers
         raise "not implemented"
       end
 

@@ -99,6 +99,8 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "docs/**/*" )
   s.add_dependency(%q<rspec>, [">= 2.10"])
   s.add_dependency(%q<rspec-core>, ["= 2.10.1"])
+  s.add_dependency(%q<rspec-mocks>, ["= 2.10.1"])
+  s.add_dependency(%q<rspec-expectations>, ["= 2.10.0"])
   s.add_dependency("commonwatir", ">= 3.0")
   unless RUBY_PLATFORM =~ /mingw/
     s.add_dependency("selenium-webdriver")

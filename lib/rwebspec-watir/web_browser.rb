@@ -53,18 +53,17 @@ module RWebSpec
 			
 			return if existing_browser
 
-      @browser.activeObjectHighLightColor = options[:highlight_colour]
+			# Watir-classic 3.4 drop the support			
+      # @browser.activeObjectHighLightColor = options[:highlight_colour]
       @browser.visible = options[:visible] unless $HIDE_IE
       #NOTE: close_others fails
-      if RUBY_VERSION =~ /^1\.8/ && options[:close_others] then
-				begin
-        	@browser.close_others
-				rescue => e1
-					puts "Failed to close others"
-				end
-      else
-        puts "close other browser instances not working yet in Ruby 1.9.1 version of Watir"
-      end
+			begin
+	      if options[:close_others] then
+					@browser.windows.reject(&:current?).each(&:close)
+	      end
+			rescue => e1
+				puts "Failed to close others"
+			end
     end
 
     def self.reuse(base_url, options)
@@ -240,10 +239,8 @@ module RWebSpec
     end
     alias close close_browser
 
-    def self.close_all_browsers(browser_type = :ie)      
-			if browser_type == :ie
-        Watir::IE.close_all
-      end
+    def close_all_browsers(browser_type = :ie)      
+			@browser.windows.each(&:close)
     end
 
     def full_url(relative_url)
