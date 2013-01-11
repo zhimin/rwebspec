@@ -39,8 +39,10 @@ module RWebSpec
 
       base_url ||= $TESTWISE_PROJECT_BASE_URL
 			if options && options.class == String
-      	base_url ||= options
-			elsif options && options.class == Hash && options[:base_url]
+			  options = {:base_url => options.to_s }
+			end
+			
+			if options && options.class == Hash && options[:base_url]
       	base_url ||= options[:base_url]
 			end
 			
