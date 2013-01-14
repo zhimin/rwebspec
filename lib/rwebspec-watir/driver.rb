@@ -37,16 +37,18 @@ module RWebSpec
         puts "Unicode may not work in IE, #{e}"
       end
 
-      base_url ||= $TESTWISE_PROJECT_BASE_URL
 			if options && options.class == String
 			  options = {:base_url => options.to_s }
 			end
-			
+			      
 			if options && options.class == Hash && options[:base_url]
       	base_url ||= options[:base_url]
 			end
 			
+			base_url = options[:base_url] rescue nil  
+			base_url ||= $TESTWISE_PROJECT_BASE_URL			
       base_url ||= $BASE_URL
+      
       raise "base_url must be set" if base_url.nil?
 
       default_options = {:speed => "fast",
