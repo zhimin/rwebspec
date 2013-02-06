@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+4.1.4
+[Enhancement] Add warning to calling close_all_browsers
+
 4.1
 [Fixed] - click_button, click_button_with_id support :index
 [Refactored] - unit tests

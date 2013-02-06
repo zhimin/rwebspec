@@ -343,9 +343,13 @@ module RWebSpec
 
       #TODO determine browser type, check FireWatir support or not
       def close_all_browsers
-        raise "not implemented"
+        puts "[WARN] not supported yet in RWebSpec-WebDriver"
       end
 
+      def self.close_all_browsers
+        puts "[WARN] not supported yet in RWebSpec-WebDriver"
+      end          
+          
       def full_url(relative_url)
         if @context && @context.base_url
           @context.base_url + relative_url
