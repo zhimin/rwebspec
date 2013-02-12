@@ -1,6 +1,6 @@
 require 'socket'
 
-MAX_MESSAGE_LENGTH = 8192 # < 10K
+MAX_MESSAGE_LENGTH = 8192 unless defined?(MAX_MESSAGE_LENGTH)# < 10K
 $testwise_support = true
 
 module RWebSpec

@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.1.4"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.1.5"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -56,7 +56,7 @@ module RWebSpec
     end
 
     def load_watir
-      puts "Loading Watir"
+      # puts "Loading Watir"
       load(File.dirname(__FILE__) + "/rwebspec-watir/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-watir/driver.rb")
       require File.dirname(__FILE__) + "/extensions/watir_extensions"
@@ -64,7 +64,7 @@ module RWebSpec
     end
 
     def load_selenium
-      puts "Loading Selenium"
+      # puts "Loading Selenium"
       load(File.dirname(__FILE__) + "/rwebspec-webdriver/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-webdriver/driver.rb")
       require File.dirname(__FILE__) + "/extensions/webdriver_extensions"

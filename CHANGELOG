@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+4.1.5
+[Enhancement] Remove warning message MAX_MESSAGE_LENGTH redefined
+
 4.1.4
 [Enhancement] Add warning to calling close_all_browsers
 
