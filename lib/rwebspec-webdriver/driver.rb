@@ -49,6 +49,7 @@ module RWebSpec
   			base_url = options[:base_url] rescue nil  
   			base_url ||= $TESTWISE_PROJECT_BASE_URL			
         base_url ||= $BASE_URL
+        base_url ||= options[:url]
         
         raise "base_url must be set" if base_url.nil?
 
@@ -65,10 +66,15 @@ module RWebSpec
           options[:browser] = $TESTWISE_BROWSER.downcase
         end
 
-        if options[:firefox] && options[:browser].nil? then
+        if options[:browser].nil? then
           options[:browser] = "firefox" # legacy
         end
 
+        if (RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/) && 
+            (options[:browser].nil? || options[:browser].to_s != "ie")
+          options[:browser] = "firefox"          
+        end
+        
         if base_url =~ /^file:/
           uri_base = base_url
         else
