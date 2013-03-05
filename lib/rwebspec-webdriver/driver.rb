@@ -30,7 +30,7 @@ module RWebSpec
       # New Options:
       #    :browser => :ie | :firefox | :chrome
       def open_browser(options = {})
-        # puts "[DEBUG] [SeleniumDriver] Callling open_browser #{base_url}"
+        # puts "[DEBUG] [SeleniumDriver] Callling open_browser #{options.inspect}"
 
         begin
           support_unicode
@@ -66,12 +66,8 @@ module RWebSpec
           options[:browser] = $TESTWISE_BROWSER.downcase
         end
 
-        if options[:browser].nil? then
-          options[:browser] = "firefox" # legacy
-        end
-
         if (RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/) && 
-            (options[:browser].nil? || options[:browser].to_s != "ie")
+            (options[:browser].nil? || options[:browser].to_s == "ie")
           options[:browser] = "firefox"          
         end
         
@@ -82,6 +78,7 @@ module RWebSpec
           uri_base = "#{uri.scheme}://#{uri.host}:#{uri.port}"
         end
 
+        puts "[DEBUG] Starting a new browser #{uri_base} with options: #{options.inspect}"
         if options[:start_new]
           # puts "[DEBUG] [SeleniumBrowser] creating a new browser"
           @web_browser = WebBrowser.new(uri_base, nil, options)

@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+4.1.8
+[Fixes] assert
+
+4.1.7
+[Fixes] Default to browser on Mac
+
 4.1.6
 [Enhancement] Remove warning message MAX_MESSAGE_LENGTH redefined
 [Fixes] loading framework not aware of watir-webdriver

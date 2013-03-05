@@ -443,8 +443,13 @@ module RWebSpec
 
     def assert_text_in_element(element_id, text)
       elem = element_by_id(element_id)
-      assert_not_nil(elem.innerText, "element #{element_id} has no text")
-      perform_assertion { assert(elem.innerText.include?(text), "the text #{text} not found in element #{element_id}") }
+      if RWebSpec.framework == "Watir"							
+        assert_not_nil(elem.innerText, "element #{element_id} has no text")
+        perform_assertion { assert(elem.innerText.include?(text), "the text #{text} not found in element #{element_id}") }
+      else
+        perform_assertion { assert(elem.attribute("value").include?(text), "the text #{text} not found in element #{element_id}") }
+      end
+    
     end
 
     # Use 
