@@ -447,7 +447,11 @@ module RWebSpec
         assert_not_nil(elem.innerText, "element #{element_id} has no text")
         perform_assertion { assert(elem.innerText.include?(text), "the text #{text} not found in element #{element_id}") }
       else
-        perform_assertion { assert(elem.attribute("value").include?(text), "the text #{text} not found in element #{element_id}") }
+        perform_assertion { 
+          # this works in text field
+          assert(element_value(elem).include?(text), "the text #{text} not found in element #{element_id}")
+          # TODO
+        }
       end
     
     end

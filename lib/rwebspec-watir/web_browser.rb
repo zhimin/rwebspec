@@ -481,13 +481,8 @@ module RWebSpec
     end
 
     def element_value(elementId)
-      if is_firefox? then
-        elem = element_by_id(elementId)
-        elem ? elem.invoke('innerText') : nil
-      else
-        elem = element_by_id(elementId)
-        elem ? elem.invoke('innerText') : nil
-      end
+      elem = element_by_id(elementId)
+      elem ? elem.invoke('innerText') : nil
     end
 
     def element_source(elementId)
