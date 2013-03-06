@@ -12,15 +12,14 @@ module RSpec
   module Core
     class ExampleGroup
 
-      define_example_method :scenario
-      define_example_method :story
-      define_example_method :test_case
-      define_example_method :use_case
-      define_example_method :test
-
       class << self
         alias_method :specification, :describe
         alias_method :test_suite, :describe
+                
+        alias_method :story, :it
+        alias_method :test_case, :it
+        alias_method :scenario, :it
+        
       end
 
     end
