@@ -101,7 +101,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency(%q<rspec-core>, ["~> 2.13.0"])
   s.add_dependency(%q<rspec-mocks>, ["~> 2.13.0"])
   s.add_dependency(%q<rspec-expectations>, ["~> 2.13"])
-  s.add_dependency("commonwatir", ">= 4.0")
+  s.add_dependency("commonwatir", ">= 4.0.0")
   unless RUBY_PLATFORM =~ /mingw/
     s.add_dependency("selenium-webdriver")
   end
