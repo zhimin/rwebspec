@@ -8,7 +8,7 @@ RWebSpec.framework = "Selenium-WebDriver"
 
 include RWebSpec::RSpecHelper
 
-open_browser "http://testwisely.com/demo", :browser => :firefox
+open_browser :base_url => "http://testwisely.com/demo", :browser => :firefox
 click_link("NetBank")
 page_title.should == "NetBank"
 select_option("account", "Cheque")
