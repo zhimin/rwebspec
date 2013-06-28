@@ -355,7 +355,11 @@ module RWebSpec
     alias assert_element_exists assert_exists
 
     def assert_not_exists(tag, element_id)
-      perform_assertion {  assert_not(eval("#{tag}(:id, '#{element_id.to_s}').exists?"), "Unexpected element'#{tag}' + with id: '#{element_id}' found")}
+      if RWebSpec.framework == "Watir"			
+        perform_assertion {  assert_not(eval("#{tag}(:id, '#{element_id.to_s}').exists?"), "Unexpected element'#{tag}' + with id: '#{element_id}' found")}
+      else
+        perform_assertion { assert_not( @web_browser.driver.find_element(:tag_name => tag, :id => element_id))}				
+      end
     end
 
     alias assert_not_exists? assert_not_exists
