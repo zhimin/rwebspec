@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+4.2.1
+[Fixes] assert_not_exists for Selenium
 
 4.1.8
 [Fixes] assert

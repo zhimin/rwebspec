@@ -163,7 +163,6 @@ module RWebSpec
       # Example:
       #    begin_at("http://www.itest2.com")
       def begin_at(url)
-        # puts "[DEBUG] [SeleniumBrowser] begin_at #{url}"
         dump_caller_stack
         @web_browser.begin_at(url)
       end
