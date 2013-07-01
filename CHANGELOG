@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+4.3
+[TODO] RWebSpec.framework = "Auto", Watir for IE, Selenium for others.
+
 4.2.1
 [Fixes] assert_not_exists for Selenium
 
