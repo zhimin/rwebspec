@@ -25,12 +25,12 @@ module RWebSpec
       puts "[INFO] RWebSpec.Framework = #{RWebSpec.framework }"
 
       if RWebSpec.framework =~ /watir/i
-        extend RWebSpec::Driver        
+        self.class.send(:include, RWebSpec::Driver)
         return open_browser_by_watir(opts)
       end
 
       if RWebSpec.framework =~ /selenium/i    
-        extend RWebSpec::Driver
+        self.class.send(:include, RWebSpec::Driver)
         return open_browser_by_selenium(opts)
       end
 
@@ -40,13 +40,13 @@ module RWebSpec
           
           if opts[:browser] =~ /ie/i || opts[:browser] =~ /internet\sexplorer/i
             RWebSpec.framework = "Watir"
-            extend RWebSpec::Driver
+            self.class.send(:include, RWebSpec::Driver)
             return open_browser_by_watir(opts)   
           end
           
           # not IE, using selenium
           RWebSpec.framework = "Selenium"
-          extend RWebSpec::Driver          
+          self.class.send(:include, RWebSpec::Driver)
           return open_browser_by_selenium(opts)   
           
         end
@@ -56,12 +56,15 @@ module RWebSpec
       if RUBY_PLATFORM =~ /mingw/
         # if it is Windows, set to Watir
         RWebSpec.framework = "Watir"
-        extend RWebSpec::Driver
+        self.class.send(:include, RWebSpec::Driver)
         puts "[INFO] Extends of RWebSpec::Driver"        
         return open_browser_by_watir(opts) 
       else
         RWebSpec.framework = "Selenium"
-        extend RWebSpec::Driver          
+        self.class.send(:include, RWebSpec::Driver)
+        # using extend somehow does not work for RSpec
+        # extend RWebSpec::Driver          
+
         return open_browser_by_selenium(opts)   
       end
 
