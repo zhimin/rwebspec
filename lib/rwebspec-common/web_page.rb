@@ -22,7 +22,11 @@ module RWebSpec
   class AbstractWebPage
 
     include RWebSpec::Assert
-    # include RWebSpec::Driver
+    begin
+      include RWebSpec::Driver
+    rescue =>  e
+      puts "[WARN] Failed to load Driver, it will be reloaded. #{e.backtrace}"
+    end
     include RWebSpec::Core
 
     # browser: passed to do assertion within the page

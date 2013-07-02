@@ -2,6 +2,9 @@
 #* Copyright (c) 2006, Zhimin Zhan.
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
+
+=begin
+
 begin
   require 'watir'
   # require 'watir/contrib/enabled_popup'
@@ -19,6 +22,8 @@ end
 if RUBY_PLATFORM =~ /mingw/
 	raise "You have must at least Watir installed" unless $watir_loaded
 end
+
+=end
 
 module RWebSpec
 

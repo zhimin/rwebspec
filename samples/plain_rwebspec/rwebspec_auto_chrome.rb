@@ -9,7 +9,8 @@ require 'rwebspec'
 
 include RWebSpec::Core
 
-open_browser :base_url => "http://testwisely.com/demo", :browser => :chrome
+open_browser :base_url => "http://testwisely.com/demo", :browser => ENV['BROWSER_TYPE']
+
 click_link("NetBank")
 page_title.should == "NetBank"
 select_option("account", "Cheque")

@@ -58,14 +58,16 @@ module RWebSpec
 
     def load_watir
       # puts "Loading Watir"
+      require 'watir'
+      require 'watir-classic/ie'
       load(File.dirname(__FILE__) + "/rwebspec-watir/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-watir/driver.rb")
-
       require File.dirname(__FILE__) + "/extensions/watir_extensions"
       require File.dirname(__FILE__) + "/extensions/window_script_extensions"
     end
 
     def load_selenium
+      require 'selenium-webdriver'
       # puts "Loading Selenium"
       load(File.dirname(__FILE__) + "/rwebspec-webdriver/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-webdriver/driver.rb")

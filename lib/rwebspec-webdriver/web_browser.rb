@@ -3,11 +3,11 @@
 #* Distributed open-source, see full license in MIT-LICENSE
 #***********************************************************
 
-begin
-  require "selenium-webdriver"
-rescue LoadError => e
-  raise "You have must at least WebDriver installed"
-end
+# begin
+#   require "selenium-webdriver"
+# rescue LoadError => e
+#   raise "You have must at least WebDriver installed"
+# end
 
 require File.join(File.dirname(__FILE__), "element_locator.rb")
 
