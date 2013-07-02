@@ -29,7 +29,7 @@ module RWebSpec
       #
       # New Options:
       #    :browser => :ie | :firefox | :chrome
-      def open_browser(options = {})
+      def open_browser_by_selenium(options = {})
         # puts "[DEBUG] [SeleniumDriver] Callling open_browser #{options.inspect}"
 
         begin
@@ -99,7 +99,6 @@ module RWebSpec
         return @web_browser
       end
 
-      alias open_browser_with open_browser
 
       # return the underlying RWebSpec::WebDriver::Browser object
       def browser

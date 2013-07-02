@@ -29,7 +29,7 @@ module RWebSpec
     #   1. pass as first argument
     #   2. If running using TestWise, used as confiured
     #   3. Use default value set
-    def open_browser(options = {})
+    def open_browser_by_watir(options = {})
 
       begin
         support_unicode
@@ -83,7 +83,6 @@ module RWebSpec
       return @web_browser
     end
 
-    alias open_browser_with open_browser
 
     # return the underlying RWebSpec::Browser object
     def browser

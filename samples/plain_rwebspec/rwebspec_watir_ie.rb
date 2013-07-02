@@ -6,7 +6,7 @@ require 'rwebspec'
 
 RWebSpec.framework = "Watir"
 
-include RWebSpec::RSpecHelper
+include RWebSpec::Core
 
 open_browser "http://testwisely.com/demo"
 click_link("NetBank")

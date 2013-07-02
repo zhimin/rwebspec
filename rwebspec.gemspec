@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors = ["Zhimin Zhan"]
   s.date = %q{2011-10-14}
   s.email = %q{zhimin@agileway.net}
-  s.files = ["Rakefile", "README", "CHANGELOG", "MIT-LICENSE", "lib/extensions/rspec_extensions.rb", "lib/rwebspec", "lib/rwebspec/assert.rb", "lib/rwebspec/clickJSDialog.rb", "lib/rwebspec/context.rb", "lib/rwebspec/driver.rb", "lib/plugins/testwise_plugin.rb", "lib/rwebspec/matchers", "lib/rwebspec/matchers/contains_text.rb", "lib/rwebspec/popup.rb", "lib/rwebspec/rspec_helper.rb", "lib/rwebspec/test_script.rb", "lib/rwebspec/test_utils.rb", "lib/rwebspec/using_pages.rb", "lib/rwebspec/web_browser.rb", "lib/rwebspec/web_page.rb", "lib/rwebspec/web_testcase.rb", "lib/rwebspec.rb", "lib/extensions/watir_extensions.rb", "lib/rwebspec/load_test_helper.rb", "lib/rwebspec/database_checker.rb", "lib/extensions/window_script_extensions.rb"]
+  s.files = ["Rakefile", "README", "CHANGELOG", "MIT-LICENSE", "lib/extensions/rspec_extensions.rb", "lib/rwebspec", "lib/rwebspec/assert.rb", "lib/rwebspec/clickJSDialog.rb", "lib/rwebspec/context.rb", "lib/rwebspec/driver.rb", "lib/plugins/testwise_plugin.rb", "lib/rwebspec/matchers", "lib/rwebspec/matchers/contains_text.rb", "lib/rwebspec/popup.rb", "lib/rwebspec/rspec_helper.rb", "lib/rwebspec/test_script.rb", "lib/rwebspec/core.rb", "lib/rwebspec/using_pages.rb", "lib/rwebspec/web_browser.rb", "lib/rwebspec/web_page.rb", "lib/rwebspec/web_testcase.rb", "lib/rwebspec.rb", "lib/extensions/watir_extensions.rb", "lib/rwebspec/load_test_helper.rb", "lib/rwebspec/database_checker.rb", "lib/extensions/window_script_extensions.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/zhimin/rwebspec/tree/master}
   s.require_paths = ["lib"]

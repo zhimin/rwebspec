@@ -2,7 +2,7 @@
 module RWebSpec
   module LoadTestHelper
 
-    include RWebSpec::Utils
+    include RWebSpec::Core
     include RWebSpec::Assert
 
     MAX_VU = 1000

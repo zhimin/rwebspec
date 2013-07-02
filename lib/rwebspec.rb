@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.2.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.0"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -41,7 +41,8 @@ module RWebSpec
 
     def framework
       @_framework ||= begin
-        ENV["RWEBSPEC_FRAMEWORK"] ||= (RUBY_PLATFORM =~ /mingw/ ? "Watir" : "Selenium-WebDriver")
+        ENV["RWEBSPEC_FRAMEWORK"] 
+        # ||= (RUBY_PLATFORM =~ /mingw/ ? "Watir" : "Selenium-WebDriver")
       end
       @_framework
     end
@@ -59,6 +60,7 @@ module RWebSpec
       # puts "Loading Watir"
       load(File.dirname(__FILE__) + "/rwebspec-watir/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-watir/driver.rb")
+
       require File.dirname(__FILE__) + "/extensions/watir_extensions"
       require File.dirname(__FILE__) + "/extensions/window_script_extensions"
     end
@@ -74,7 +76,18 @@ module RWebSpec
       if @_framework.nil?
         framework
       end
-      RWebSpec.framework  == "Watir" ? load_watir : load_selenium
+
+      if RWebSpec.framework =~ /watir/i
+        load_watir
+        return
+      end
+
+      if RWebSpec.framework =~ /selenium/i
+         load_selenium
+         return
+      end
+
+      puts "[WARN] not framework loaded yet"
     end
 
   end
@@ -83,16 +96,17 @@ end
 # Watir 3 API Changes, no Watir/Container
 require File.dirname(__FILE__) + "/plugins/testwise_plugin.rb"
 
-RWebSpec.load_framework
+#RWebSpec.load_framework
 
 # Extra full path to load libraries
 require File.dirname(__FILE__) + "/rwebspec-common/using_pages"
-require File.dirname(__FILE__) + "/rwebspec-common/test_utils"
+require File.dirname(__FILE__) + "/rwebspec-common/core"
 require File.dirname(__FILE__) + "/rwebspec-common/web_page"
 require File.dirname(__FILE__) + "/rwebspec-common/assert"
-require File.dirname(__FILE__) + "/rwebspec-common/test_script"
 require File.dirname(__FILE__) + "/rwebspec-common/context"
-require File.dirname(__FILE__) + "/rwebspec-common/rspec_helper"
+require File.dirname(__FILE__) + "/rwebspec-common/test_script.rb"
+require File.dirname(__FILE__) + "/rwebspec-common/rspec_helper.rb"
+
 require File.dirname(__FILE__) + "/rwebspec-common/load_test_helper"
 require File.dirname(__FILE__) + "/rwebspec-common/matchers/contains_text"
 require File.dirname(__FILE__) + "/extensions/rspec_extensions"

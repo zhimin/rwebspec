@@ -17,8 +17,8 @@ end
 
 module RWebSpec
   module RSpecHelper
-    include RWebSpec::Driver
-    include RWebSpec::Utils
+
+    include RWebSpec::Core
     include RWebSpec::Assert
 
     # --

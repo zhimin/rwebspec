@@ -6,7 +6,7 @@ require 'rwebspec'
 
 RWebSpec.framework = "Selenium-WebDriver"
 
-include RWebSpec::RSpecHelper
+include RWebSpec::Core
 
 open_browser :base_url => "http://testwisely.com/demo", :browser => :chrome
 click_link("NetBank")

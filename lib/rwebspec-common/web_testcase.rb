@@ -14,7 +14,7 @@ module RWebSpec
   class WebTestCase < Test::Unit::TestCase
     include RWebSpec::Driver
     include RWebSpec::Assert
-    include RWebSpec::Utils
+    include RWebSpec::Core
 
     attr_reader :web_tester
 

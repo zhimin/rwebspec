@@ -22,8 +22,8 @@ module RWebSpec
   class AbstractWebPage
 
     include RWebSpec::Assert
-    include RWebSpec::Driver
-    include RWebSpec::Utils
+    # include RWebSpec::Driver
+    include RWebSpec::Core
 
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
