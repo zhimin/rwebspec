@@ -22,7 +22,7 @@ module RWebSpec
       # New Options:
       #    :browser => :ie | :firefox | :chrome
     def open_browser(opts = {})
-      puts "[INFO] RWebSpec.Framework = #{RWebSpec.framework }"
+      puts "[INFO] RWebSpec.Framework currently set to => #{RWebSpec.framework }"
 
       if RWebSpec.framework =~ /watir/i
         RWebSpec.load_watir
@@ -38,17 +38,19 @@ module RWebSpec
         return open_browser_by_selenium(opts)
       end
 
-      puts "[INFO] No underlying framework is set, try to determine browser"
+      puts "[INFO] No underlying framework is set, try to determine browser: #{opts.inspect}"
       if opts.class == Hash
         if opts[:browser] 
           
-          if opts[:browser] =~ /ie/i || opts[:browser] =~ /internet\sexplorer/i
+          if opts[:browser].to_s =~ /ie/i || opts[:browser].to_s =~ /internet\sexplorer/i
+            puts "[INFO] based on browser, set to Watir"
             RWebSpec.framework = "Watir"
             self.class.send(:include, RWebSpec::Driver)
             load(File.dirname(__FILE__) + "/web_page.rb")
             return open_browser_by_watir(opts)   
           end
           
+          puts "[INFO] based on browser, set to Selenium"          
           # not IE, using selenium
           RWebSpec.framework = "Selenium"
           self.class.send(:include, RWebSpec::Driver)
