@@ -23,7 +23,7 @@ module RWebSpec
       #    :browser => :ie | :firefox | :chrome
     def open_browser(opts = {})
       puts "[INFO] RWebSpec.Framework currently set to => #{RWebSpec.framework }"
-
+=begin      
       if RWebSpec.framework =~ /watir/i
         RWebSpec.load_watir
         self.class.send(:include, RWebSpec::Driver)
@@ -37,7 +37,7 @@ module RWebSpec
         load(File.dirname(__FILE__) + "/web_page.rb")
         return open_browser_by_selenium(opts)
       end
-
+=end
       puts "[INFO] No underlying framework is set, try to determine browser: #{opts.inspect}"
       if opts.class == Hash
         if opts[:browser] 
@@ -80,6 +80,26 @@ module RWebSpec
 
     end
 
+    def use_current_browser(how = :title, what = /.*/)
+      puts "[INFO] user current browser => #{RWebSpec.framework}"          
+      if RWebSpec.framework =~ /watir/i    
+        self.class.send(:include, RWebSpec::Driver)        
+        use_current_watir_browser(how, what)
+      elsif RWebSpec.framework =~ /selenium/i
+        self.class.send(:include, RWebSpec::Driver)        
+        use_current_selenium_browser(show, what)
+      else
+        # not specified, guess
+        if RUBY_PLATFORM =~ /mingw/i
+           self.class.send(:include, RWebSpec::Driver)        
+           use_current_watir_browser(how, what)
+        else
+          self.class.send(:include, RWebSpec::Driver)        
+          use_current_selenium_browser(show, what)   
+        end
+          
+      end
+    end
 
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
     # Error will be ignored until timeout

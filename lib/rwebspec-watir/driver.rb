@@ -213,9 +213,9 @@ module RWebSpec
 
     # Reuse current an opened browser window instead of opening a new one
     #	example:
-    #     use_current_browser(:title, /.*/) # use what ever browser window
-    #     use_current_browser(:title, "TestWise") # use browser window with title "TestWise"
-    def use_current_browser(how = :title, what = /.*/)
+    #     use_current_watir_browser(:title, /.*/) # use what ever browser window
+    #     use_current_watir_browser(:title, "TestWise") # use browser window with title "TestWise"    
+    def use_current_watir_browser(how = :title, what = /.*/)
       @web_browser = WebBrowser.attach_browser(how, what)
     end
 
@@ -784,7 +784,6 @@ module RWebSpec
       FileUtils.rm_f(screenshot_image_filepath) if File.exist?(screenshot_image_filepath)
     end
 
-    if RWebSpec.framework == "Watir"        
         begin       
           if is_firefox? then
             Win32::Screenshot::Take.of(:window, :title => /mozilla\sfirefox/i).write(screenshot_image_filepath)					
@@ -799,11 +798,7 @@ module RWebSpec
         rescue => e
           puts "error on taking screenshot: #{e}"
         end
-    else
-      # save screenshot with selenium
-      @web_browser.driver.save_screenshot(screenshot_image_filepath)
-      notify_screenshot_location(screenshot_image_filepath)
-    end  
+    
 
   end
 
