@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.0"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.1"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -24,7 +24,7 @@ $testwise_polling_interval = 1 # seconds
 $testwise_polling_timeout = 30 # seconds
 
 
-if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
+if RUBY_PLATFORM =~ /mingw/
  $screenshot_supported = false
  begin
    require 'win32/screenshot'
@@ -32,6 +32,22 @@ if RUBY_PLATFORM =~ /mswin/ or RUBY_PLATFORM =~ /mingw/
  rescue LoadError => no_screen_library_error
  end  
 end
+
+begin
+  require 'selenium-webdriver'
+rescue LoadError => e
+  $selenium_loaded = false
+end
+
+if RUBY_PLATFORM =~ /mingw/
+  begin
+    require 'watir'
+    require 'watir-classic/ie'
+  rescue LoadError => e
+    $watir_loaded = false
+  end
+end
+
 
 module RWebSpec
   class << self
