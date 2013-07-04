@@ -104,7 +104,8 @@ module RWebSpec
           
       end
     end
-
+    
+    
     # Try the operation up to specified timeout (in seconds), and sleep given interval (in seconds).
     # Error will be ignored until timeout
     # Example

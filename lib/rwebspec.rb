@@ -39,15 +39,6 @@ rescue LoadError => e
   $selenium_loaded = false
 end
 
-if RUBY_PLATFORM =~ /mingw/
-  begin
-    require 'watir'
-    require 'watir-classic/ie'
-  rescue LoadError => e
-    $watir_loaded = false
-  end
-end
-
 
 module RWebSpec
   class << self
