@@ -113,11 +113,7 @@ module RWebSpec
 
       # TODO resuse not working yet
       def self.reuse(base_url, options)
-        if self.is_windows? && $TESTWISE_BROWSER != "Firefox"
-          Watir::IE.each do |browser_window|
-            return WebBrowser.new(base_url, browser_window, options)
-          end
-          #puts "no browser instance found"
+        if self.is_windows?
           WebBrowser.new(base_url, nil, options)
         else
           WebBrowser.new(base_url, nil, options)
@@ -152,13 +148,9 @@ module RWebSpec
       alias check_box checkbox # seems watir doc is wrong, checkbox not check_box
       alias tr row
 
-      # Wrapp of Watir's area to support Firefox and Watir
+      # Wrapp of area to support Firefox and Watir
       def area(* args)
-        if is_firefox?
-          text_field(* args)
-        else
-          @browser.send("area", * args)
-        end
+        raise "not implemented for Selenium"
       end
 
       def modal_dialog(how=nil, what=nil)
@@ -684,32 +676,15 @@ module RWebSpec
       #    WebBrowser.attach_browser(:url, "http://www.itest2.com", {:browser => "Firefox", :base_url => "http://www.itest2.com"})
       #    WebBrowser.attach_browser(:title, /agileway\.com\.au\/attachment/)  # regular expression
       def self.attach_browser(how, what, options={})
-        default_options = {:browser => "IE"}
-        options = default_options.merge(options)
-        site_context = Context.new(options[:base_url]) if options[:base_url]
-        if (options[:browser].to_s == "firefox")
-          return WebBrowser.new_from_existing(ff, site_context)
-        else
-          return WebBrowser.new_from_existing(Watir::IE.attach(how, what), site_context)
-        end
+        raise "not implemented for Selenium"
       end
 
-      # Attach a Watir::IE instance to a popup window.
+      # Attach to a popup window, to be removed
       #
       # Typical usage
       #   new_popup_window(:url => "http://www.google.com/a.pdf")
       def new_popup_window(options, browser = "ie")
-        if is_firefox?
-          raise "not implemented"
-        else
-          if options[:url]
-            Watir::IE.attach(:url, options[:url])
-          elsif options[:title]
-            Watir::IE.attach(:title, options[:title])
-          else
-            raise 'Please specify title or url of new pop up window'
-          end
-        end
+        raise "not implemented"
       end
 
       # ---
