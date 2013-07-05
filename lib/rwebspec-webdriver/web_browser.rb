@@ -676,7 +676,7 @@ module RWebSpec
       #    WebBrowser.attach_browser(:url, "http://www.itest2.com", {:browser => "Firefox", :base_url => "http://www.itest2.com"})
       #    WebBrowser.attach_browser(:title, /agileway\.com\.au\/attachment/)  # regular expression
       def self.attach_browser(how, what, options={})
-        raise "not implemented for Selenium"
+        raise "Attach browser not implemented for Selenium, If you debug in TestWise, make sure running a test first to start browser, then you can attach."
       end
 
       # Attach to a popup window, to be removed
