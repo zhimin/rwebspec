@@ -87,7 +87,7 @@ module RWebSpec
         use_current_watir_browser(how, what)
       elsif RWebSpec.framework =~ /selenium/i
         self.class.send(:include, RWebSpec::Driver)        
-        use_current_selenium_browser(show, what)
+        use_current_selenium_browser(how, what)
       else
         # not specified, guess
         if RUBY_PLATFORM =~ /mingw/i
@@ -99,7 +99,7 @@ module RWebSpec
           RWebSpec.framework = "Selenium"                    
           self.class.send(:include, RWebSpec::Driver)  
           load(File.dirname(__FILE__) + "/web_page.rb")                
-          use_current_selenium_browser(show, what)   
+          use_current_selenium_browser(how, what)   
         end
           
       end
