@@ -78,7 +78,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "4.3.1"
+  s.version = "4.3.2"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 
@@ -97,10 +97,10 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" )
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
-  s.add_dependency(%q<rspec>, ["~> 2.13"])
-  s.add_dependency(%q<rspec-core>, ["~> 2.13.0"])
-  s.add_dependency(%q<rspec-mocks>, ["~> 2.13.0"])
-  s.add_dependency(%q<rspec-expectations>, ["~> 2.13"])
+  s.add_dependency(%q<rspec>, [">= 2.13"])
+  s.add_dependency(%q<rspec-core>, [">= 2.13.0"])
+  s.add_dependency(%q<rspec-mocks>, [">= 2.13.0"])
+  s.add_dependency(%q<rspec-expectations>, [">= 2.13"])
   s.add_dependency("commonwatir", ">= 4.0.0")
   unless RUBY_PLATFORM =~ /mingw/
     s.add_dependency("selenium-webdriver")
