@@ -46,6 +46,7 @@ module RWebSpec
             puts "[INFO] based on browser, set to Watir"
             RWebSpec.framework = "Watir"
             self.class.send(:include, RWebSpec::Driver)
+            # Reload abstract web page to load driver
             load(File.dirname(__FILE__) + "/web_page.rb")
             return open_browser_by_watir(opts)   
           end

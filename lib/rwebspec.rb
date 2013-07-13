@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.2"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -102,9 +102,9 @@ module RWebSpec
   end
 end
 
-# Watir 3 API Changes, no Watir/Container
 require File.dirname(__FILE__) + "/plugins/testwise_plugin.rb"
 
+# Changed in v4.3, the framework is loaded when initliating or reuse browser
 #RWebSpec.load_framework
 
 # Extra full path to load libraries

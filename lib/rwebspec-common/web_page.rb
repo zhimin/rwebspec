@@ -25,7 +25,8 @@ module RWebSpec
     begin
       include RWebSpec::Driver
     rescue =>  e
-      puts "[WARN] Failed to load Driver, it will be reloaded. #{e.backtrace}"
+      # Ignorable error, driver not set, but will get loaded after calling open_browser or use_current_browser
+      # puts "[WARN] Failed to load Driver, it will be reloaded. #{e.backtrace}"
     end
     include RWebSpec::Core
 

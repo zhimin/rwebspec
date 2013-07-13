@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+4.3.2
+[Fixes] typo on attaching browser for webdriver
+[Update] Change gemspec work with latest RSpec 2.14
+
 4.3
 [TODO] RWebSpec.framework = "Auto", Watir for IE, Selenium for others.
 
