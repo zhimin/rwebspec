@@ -141,22 +141,39 @@ module RWebSpec
     # select
     def assert_option_value_not_present(select_name, option_value)
       @web_browser.select_lists.each { |select|
-        continue unless select.name == select_name
-        select.options.each do |option| # items in the list
-          perform_assertion {  assert(!(option.value == option_value), "unexpected select option: #{option_value} for #{select_name} found") }
+        the_element_name = element_name(select)
+        next unless the_element_name == select_name
+        
+        if RWebSpec.framework =~ /watir/i        
+          select.options.each do |option| # items in the list
+            perform_assertion {  assert(!(option.value == option_value), "unexpected select option: #{option_value} for #{select_name} found") }
+          end
+        else
+          select.find_elements(:tag_name => "option" ).each do |option|
+    	      fail("unexpected option value: #{option_label} found") if option.value == option_value
+    			end          
         end
       }
     end
 
     alias assert_select_value_not_present assert_option_value_not_present
 
+
     def assert_option_not_present(select_name, option_label)
       @web_browser.select_lists.each { |select|
 				the_element_name = element_name(select)
         next unless the_element_name == select_name
-        select.options.each do |option| # items in the list
-          perform_assertion {  assert(!(option.text == option_label), "unexpected select option: #{option_label} for #{select_name} found") }
+        
+        if RWebSpec.framework =~ /watir/i
+          select.options.each do |option| # items in the list
+            perform_assertion {  assert(!(option.text == option_label), "unexpected select option: #{option_label} for #{select_name} found") }
+          end
+        else
+          select.find_elements(:tag_name => "option" ).each do |option|
+    	      fail("unexpected option label: #{option_label} found") if option.text == option_label
+    			end
         end
+        
       }
     end
 
