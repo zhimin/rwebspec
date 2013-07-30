@@ -375,7 +375,13 @@ module RWebSpec
       if RWebSpec.framework == "Watir"			
         perform_assertion {  assert_not(eval("#{tag}(:id, '#{element_id.to_s}').exists?"), "Unexpected element'#{tag}' + with id: '#{element_id}' found")}
       else
-        perform_assertion { assert_not( @web_browser.driver.find_element(:tag_name => tag, :id => element_id))}				
+        perform_assertion { 
+           begin
+             @web_browser.driver.find_element(:tag_name => tag, :id => element_id)
+             fail("the element #{tag}##{element_id} found")
+           rescue =>e  
+           end
+        }	
       end
     end
 
@@ -431,14 +437,16 @@ module RWebSpec
     # Examples
     #  assert_text_present_in_table("t1", ">A<")  # => true
     #  assert_text_present_in_table("t1", ">A<", :just_plain_text => true)  # => false        
-    def assert_text_present_in_table(table_id, text, options = { :just_plain_text => false })
-      perform_assertion { assert(table_source(table_id, options).include?(text), "the text #{text} not found in table #{table_id}") }
+    def assert_text_present_in_table(table_id, text, options = {})
+      options[:just_plain_text] ||= false
+      perform_assertion { assert(the_table_source(table_id, options).include?(text), "the text #{text} not found in table #{table_id}") }
     end
 
     alias assert_text_in_table assert_text_present_in_table
 
-    def assert_text_not_present_in_table(table_id, text, options = { :just_plain_text => false })
-      perform_assertion { assert_not(table_source(table_id, options).include?(text), "the text #{text} not found in table #{table_id}") }
+    def assert_text_not_present_in_table(table_id, text, options = {})
+      options[:just_plain_text] ||= false
+      perform_assertion { assert_not(the_table_source(table_id, options).include?(text), "the text #{text} not found in table #{table_id}") }
     end
 
     alias assert_text_not_in_table assert_text_not_present_in_table
@@ -486,7 +494,7 @@ module RWebSpec
     #    end
 
     private
-    def table_source(table_id, options)
+    def the_table_source(table_id, options)
       elem_table = RWebSpec.framework == "Watir" ? table(:id, table_id.to_s) : @web_browser.driver.find_element(:id => table_id)
       elem_table_text = elem_table.text
       elem_table_html = RWebSpec.framework == "Watir" ?  elem_table.html : elem_table["innerHTML"];

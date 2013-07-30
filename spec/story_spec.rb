@@ -8,7 +8,7 @@ test_suite "Test suite syntax" do
     @stack = Stack.new
   end
 
-  test "should complain when sent #peek" do
+  test_case "should complain when sent #peek" do
     lambda { @stack.peek }.should raise_error(StackUnderflowError)
   end
 

@@ -30,12 +30,12 @@ end
 specification "Page objects" do
   include RWebSpec::Driver
   include RWebSpec::Assert
-  include RWebSpec::Utils
+  include RWebSpec::Core
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
 		if RWebSpec.framework == "Selenium" || RUBY_PLATFORM =~ /darwin/
-    	@browser = open_browser(:base_url => test_page_file, :browser => :firefox)
+    	@browser = open_browser(:base_url => test_page_file, :browser => :chrome)
 		else
     	@browser = open_browser(test_page_file)			
 		end

@@ -9,7 +9,7 @@ require File.join(File.dirname(__FILE__), "spec_helper.rb")
 
 
 describe "Utils" do
-  include RWebSpec::Utils
+  include RWebSpec::Core
   include RWebSpec::Assert
 
   story "today" do

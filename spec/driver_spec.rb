@@ -19,9 +19,8 @@ require File.dirname(__FILE__) + "/stack"
 require File.dirname(__FILE__) + "/mock_page"
 
 specification "Driver" do
-  include RWebSpec::Driver
-  include RWebSpec::Assert
-  include RWebSpec::Utils
+  include RWebSpec::RSpecHelper
+
 
   before(:all) do
     test_page_file = "file://" + File.expand_path(File.join(File.dirname(__FILE__), "test_page.html"))
