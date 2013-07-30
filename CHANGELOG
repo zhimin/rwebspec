@@ -4,6 +4,7 @@ CHANGELOG
 [Fixes] assert_option_equals for Selenium
 [Fixes] assert_option_present for Selenium
 [Fixes] assert_text_present_in_table for Selenium
+[Enhancement] Add more UI tests and test project can be run in TestWise
 
 4.3.2
 [Fixes] typo on attaching browser for webdriver
