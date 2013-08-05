@@ -32,7 +32,7 @@ specification "Driver" do
   end
 
 	after(:all) do
-		close_browser
+		close_browser unless debugging?
 	end
 
   #ABC
@@ -147,5 +147,23 @@ specification "Driver" do
     assert_visible(:div, "for_link_1") 
   end
   
+  story "Check checkbox" do
+    check_checkbox("checkbox1")
+    assert_checkbox_selected("checkbox1")    
+    check_checkbox("checkbox2", "true")
+    assert_checkbox_selected("checkbox2")
+  end
+
+  
+  story "Uncheck checkbox" do
+    check_checkbox("checkbox1")
+    assert_checkbox_selected("checkbox1")
+    uncheck_checkbox("checkbox1")
+    assert_checkbox_not_selected("checkbox1")
+    
+    check_checkbox("checkbox2", "true")
+    uncheck_checkbox("checkbox2", "true")
+
+  end
 end
 #END

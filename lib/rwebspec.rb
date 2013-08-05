@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.3"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.4"
 end
 
 $testwise_polling_interval = 1 # seconds

@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+
+4.3.4
+[Fixes] check_checkbox and uncheck_checkbox handle when more than one matching element
+
 4.3.3
 [Fixes] assert_option_equals for Selenium
 [Fixes] assert_option_present for Selenium

@@ -582,7 +582,7 @@ module RWebSpec
         if values
           values.class == Array ? arys = values : arys = [values]
           elements = find_elements(:name, checkBoxName)
-          the_checkbox = elements[0] if elements.size == 1
+          the_checkbox = elements[0] if elements.size > 0
           if the_checkbox
             the_checkbox.click unless the_checkbox.selected?
             return
@@ -599,7 +599,7 @@ module RWebSpec
         end
       end
 
-      # Check a checkbox
+      # Uncheck a checkbox
       # Usage:
       #   uncheck_checkbox("agree")
       #   uncheck_checkbox("agree", "false")
@@ -607,7 +607,7 @@ module RWebSpec
         if values
           values.class == Array ? arys = values : arys = [values]
           elements = find_elements(:name, checkBoxName)
-          the_checkbox = elements[0] if elements.size == 1
+          the_checkbox = elements[0] if elements.size > 0
           if the_checkbox
             the_checkbox.click if the_checkbox.selected?
             return
@@ -615,7 +615,7 @@ module RWebSpec
 
           arys.each { |cbx_value|
             elements.each do |elem|
-              elem.click if elem.attribute('value') == cbx_value && the_checkbox && the_checkbox.selected?
+              elem.click if elem.attribute('value') == cbx_value && elem && elem.selected?
             end
           }
         else

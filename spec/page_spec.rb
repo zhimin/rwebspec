@@ -49,6 +49,7 @@ specification "Page objects" do
 	
   story "assert on page, title" do
     @test_page.assert_on_page
+    # Changed
     @test_page.page_specific_text.should == "iTest2/Watir Test Page"
     @test_page.title.should == "For Testing iTest2"
   end
