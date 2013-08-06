@@ -579,24 +579,25 @@ module RWebSpec
       #   check_checkbox("agree")
       #   check_checkbox("agree", "true")
       def check_checkbox(checkBoxName, values=nil)
+        elements = find_checkboxes_by_name(checkBoxName)
         if values
-          values.class == Array ? arys = values : arys = [values]
-          elements = find_elements(:name, checkBoxName)
-          the_checkbox = elements[0] if elements.size > 0
-          if the_checkbox
-            the_checkbox.click unless the_checkbox.selected?
-            return
-          end
-
+          values.class == Array ? arys = values : arys = [values]          
           arys.each { |cbx_value|
             elements.each do |elem|
               elem.click if elem.attribute('value') == cbx_value && !elem.selected?
             end
           }
         else
-          the_checkbox = find_element(:name, checkBoxName)
+          the_checkbox = elements[0] 
           the_checkbox.click unless the_checkbox.selected?
         end
+      end
+      
+      def find_checkboxes_by_name(checkBoxName)
+        elements = find_elements(:name, checkBoxName)
+        elements.reject! {|x| x.tag_name != "input" ||  x["type"] != "checkbox"} 
+        raise "No checkbox with name #{checkBoxName} found" if elements.empty?
+        return elements
       end
 
       # Uncheck a checkbox
@@ -604,22 +605,17 @@ module RWebSpec
       #   uncheck_checkbox("agree")
       #   uncheck_checkbox("agree", "false")
       def uncheck_checkbox(checkBoxName, values = nil)
+        elements = find_checkboxes_by_name(checkBoxName)
+        
         if values
-          values.class == Array ? arys = values : arys = [values]
-          elements = find_elements(:name, checkBoxName)
-          the_checkbox = elements[0] if elements.size > 0
-          if the_checkbox
-            the_checkbox.click if the_checkbox.selected?
-            return
-          end
-
+          values.class == Array ? arys = values : arys = [values]          
           arys.each { |cbx_value|
             elements.each do |elem|
-              elem.click if elem.attribute('value') == cbx_value && elem && elem.selected?
+              elem.click if elem.attribute('value') == cbx_value && elem.selected?
             end
           }
         else
-          the_checkbox = find_element(:name, checkBoxName)
+          the_checkbox = elements[0] 
           the_checkbox.click if the_checkbox.selected?
         end
       end

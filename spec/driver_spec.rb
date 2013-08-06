@@ -163,6 +163,7 @@ specification "Driver" do
     
     check_checkbox("checkbox2", "true")
     uncheck_checkbox("checkbox2", "true")
+    assert_checkbox_not_selected("checkbox2")
 
   end
 end

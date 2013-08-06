@@ -78,7 +78,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "4.3.4"
+  s.version = "4.3.5"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 
@@ -86,7 +86,8 @@ spec = Gem::Specification.new do |s|
   s.email   = "zhimin@agileway.com.au"
   s.homepage= "http://github.com/zhimin/rwebspec/tree/master"
   s.rubyforge_project = "rwebspec"
-
+  s.licenses = ["MIT"]
+  
   s.has_rdoc    = true
   s.requirements << 'none'
   s.require_path    = "lib"

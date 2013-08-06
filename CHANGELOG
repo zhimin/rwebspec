@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+4.3.5
+[Change] Add licence (MIT) into gemspec
+[Fixes] check_checkbox not working when there is hidden input with same name as checkbox
+
 4.3.4
 [Fixes] check_checkbox and uncheck_checkbox handle when more than one matching element
 
