@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+4.4
+[Enhancement] add enter_text_with_id to support HTML5 elements on IE10 (which fail to identify email field as text field)
 
 4.3.5
 [Change] Add licence (MIT) into gemspec

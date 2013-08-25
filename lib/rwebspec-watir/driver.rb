@@ -299,7 +299,7 @@ module RWebSpec
     # page.check_checkbox('bad_ones', 'Chicken Little')
     # page.check_checkbox('good_ones', ['Cars', 'Toy Story'])
     #
-    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :check_checkbox, :uncheck_checkbox, :select_option].each do |method|
+    [:set_form_element, :click_link_with_text, :click_link_with_id, :submit, :click_button_with_id, :click_button_with_name, :click_button_with_caption, :click_button_with_value, :click_radio_option, :clear_radio_option, :check_checkbox, :uncheck_checkbox, :select_option, :element].each do |method|
       define_method method do |* args|
         perform_operation { @web_browser.send(method, * args) if @web_browser }
       end
@@ -314,8 +314,24 @@ module RWebSpec
     alias clear_radio_button clear_radio_option
 
     # for text field can be easier to be identified by attribute "id" instead of "name", not recommended though
-    def enter_text_with_id(textfield_id, value)
-      perform_operation { text_field(:id, textfield_id).set(value) }
+    #
+    # params opts takes :appending => true or false, if true, won't clear the text field.
+    def enter_text_with_id(textfield_id, value, opts = {})
+      # For IE10, it seems unable to identify HTML5 elements
+      #
+      # However for IE10, the '.' is omitted.
+      perform_operation {
+        
+        begin
+          text_field(:id, textfield_id).set(value)
+        rescue => e
+          # However, this approach is not reliable with Watir (IE)
+          # for example, for entering email, the dot cannot be entered, try ["a@b", :decimal, "com"]
+          the_elem = element(:xpath, "//input[@id='#{textfield_id}']")        
+          the_elem.send_keys(:clear) unless opts[:appending]        
+          the_elem.send_keys(value)        
+        end
+      }
     end
 
     def perform_operation(& block)
