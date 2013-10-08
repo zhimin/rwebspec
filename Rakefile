@@ -78,7 +78,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "4.3.5"
+  s.version = "5.0"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 
@@ -103,8 +103,11 @@ spec = Gem::Specification.new do |s|
   s.add_dependency(%q<rspec-mocks>, [">= 2.13.0"])
   s.add_dependency(%q<rspec-expectations>, [">= 2.13"])
   s.add_dependency("commonwatir", ">= 4.0.0")
+    
   unless RUBY_PLATFORM =~ /mingw/
     s.add_dependency("selenium-webdriver")
+  else
+    s.add_dependency("watir-classic", ">= 4.0.0")
   end
 end
 

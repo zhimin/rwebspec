@@ -16,7 +16,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "4.3.5"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.0"
 end
 
 $testwise_polling_interval = 1 # seconds
@@ -66,7 +66,11 @@ module RWebSpec
     def load_watir
       # puts "Loading Watir"
       require 'watir'
-      require 'watir-classic/ie'
+      
+      if RUBY_PLATFORM =~ /mingw/i
+        require 'watir-classic'
+      end
+    
       load(File.dirname(__FILE__) + "/rwebspec-watir/web_browser.rb")
       load(File.dirname(__FILE__) + "/rwebspec-watir/driver.rb")
       require File.dirname(__FILE__) + "/extensions/watir_extensions"
