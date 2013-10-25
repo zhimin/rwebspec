@@ -442,13 +442,8 @@ module RWebSpec
       end
 
 
-      # <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
-      # '<script type="text/javascript" src="http://www.jeroenwijering.com/embed/swfobject.js"></script>'
-      # <script type="text/javascript" src="/javascripts/prototype.js"></script>
-      # <script type="text/javascript" src="/javascripts/scriptaculous.js?load=effects,builder"></script>
-      # <script type="text/javascript" src="/javascripts/extensions/gallery/lightbox.js"></script>
-      # <link href="/stylesheets/extensions/gallery/lightbox.css" rel="stylesheet" type="text/css" />
-      # <img src="images/mission_48.png" />
+      # Return page HTML with absolute references of images, stylesheets and javascripts
+      # 
       def absolutize_page(content, base_url, current_url_parent)
         modified_content = ""
         content.each_line do |line|
