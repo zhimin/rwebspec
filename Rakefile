@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rspec/core/rake_task'
-# require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rubygems/package_task'
 
 require 'rdoc' # require rdoc 2
@@ -40,15 +40,16 @@ end
 #   rdoc.rdoc_files.include('lib/rwebspec/*.rb')
 # }
 
-=begin
+
 # using DarkFish - http://deveiate.org/projects/Darkfish-Rdoc/
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title = 'RWebSpec'
   rdoc.rdoc_files.include('lib/rwebspec.rb')
   rdoc.rdoc_files.include('lib/rwebspec-common/*.rb')  
+  rdoc.rdoc_files.include('lib/rwebspec-common/matchers/*.rb')  
   rdoc.rdoc_files.include('lib/rwebspec-watir/*.rb')  
-  rdoc.rdoc_files.include('lib/rwebspec-selenium/*.rb')  
+  rdoc.rdoc_files.include('lib/rwebspec-webdriver/*.rb')  
   rdoc.rdoc_files.include('lib/extensions/*.rb')  
   rdoc.rdoc_files.delete("lib/rwebspec/web_testcase.rb")
   rdoc.rdoc_files.delete("lib/rwebspec/checkJSDialog.rb")
@@ -72,8 +73,6 @@ Rake::RDocTask.new("chm") do |rdoc|
         '-f', 'chm',  # This is the important bit
       ]
 end
-
-=end
 
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
