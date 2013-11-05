@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+5.0.1
+[New] browser.execute_script
+
 5.0
 [Change] Support Watir 5.0, watir-classic/ie no longer available
 

@@ -274,7 +274,7 @@ module RWebSpec
     alias img image
 
 
-    [:back, :forward, :refresh].each do |method|
+    [:back, :forward, :refresh, :execute_script].each do |method|
       define_method(method) do
         perform_operation { @web_browser.send(method) if @web_browser }
       end
