@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+5.0.2
+[Fixes] inconsistency enter_text_with_id() between Watir and Selenium
+
 5.0.1
 [New] browser.execute_script
 

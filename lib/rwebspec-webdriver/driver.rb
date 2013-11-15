@@ -321,14 +321,24 @@ module RWebSpec
       alias clear_radio_button clear_radio_option
 
       # for text field can be easier to be identified by attribute "id" instead of "name", not recommended though
-      def enter_text_with_id(textfield_id, value)
+      # params opts takes :appending => true or false, if true, won't clear the text field.
+      def enter_text_with_id(textfield_id, value, opts = {})
+        
+        if opts.nil? || opts.empty? 
+          opts[:appending] = true
+        end
+        
         perform_operation {
           elements = find_elements(:id, textfield_id)
           if elements.size == 1 then
-            elements[0].send_keys(value)
+            the_element = elements[0]
+            the_element.clear unless opts[:appending]
+            the_element.send_keys(value)            
           else
             smaller_set = elements.select {|x| x.tag_name == "textarea" || (x.tag_name == "input" &&  x.attribute("text")) }
-            smaller_set[0].send_keys(value)
+            the_element = smaller_set[0]
+            the_element.clear unless opts[:appending]
+            the_element.send_keys(value)
           end
         }
       end

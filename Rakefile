@@ -77,7 +77,7 @@ end
 spec = Gem::Specification.new do |s|
   s.platform= Gem::Platform::RUBY
   s.name = "rwebspec"
-  s.version = "5.0.1"
+  s.version = "5.0.2"
   s.summary = "Web application functional specification in Ruby"
   s.description = "Executable functional specification for web applications in RSpec syntax with Watir or Selenium"
 

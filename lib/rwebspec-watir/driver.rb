@@ -320,6 +320,11 @@ module RWebSpec
       # For IE10, it seems unable to identify HTML5 elements
       #
       # However for IE10, the '.' is omitted.
+      if opts.nil? || opts.empty?
+        # for Watir, default is clear 
+        opts[:appending] = false
+      end
+      
       perform_operation {
         
         begin
