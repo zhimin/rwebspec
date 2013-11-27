@@ -34,6 +34,8 @@ module RWebSpec
             initialize_firefox_browser(existing_browser, base_url, options)
           when "chrome"
             initialize_chrome_browser(existing_browser, base_url, options)
+          when "safari"
+            initialize_safari_browser(existing_browser, base_url, options)
           when "ie"
             initialize_ie_browser(existing_browser, options)
           when  "htmlunit"
@@ -68,9 +70,18 @@ module RWebSpec
         @browser = Selenium::WebDriver.for :chrome
         @browser.navigate.to base_url
       end
+      
+      def initialize_safari_browser(existing_browser, base_url, options)
+        if existing_browser then
+          @browser = existing_browser
+          return
+        end
+
+        @browser = Selenium::WebDriver.for :safari
+        @browser.navigate.to base_url
+      end
 
       def initialize_htmlunit_browser(base_url, options)
-        puts "XXXXX start HtmlUnit..."
         require 'json'
         caps = Selenium::WebDriver::Remote::Capabilities.htmlunit(:javascript_enabled => false)        
         client = Selenium::WebDriver::Remote::Http::Default.new

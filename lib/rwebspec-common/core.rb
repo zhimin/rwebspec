@@ -20,7 +20,7 @@ module RWebSpec
       #
       #
       # New Options:
-      #    :browser => :ie | :firefox | :chrome
+      #    :browser => :ie | :firefox | :chrome | :safari
     def open_browser(opts = {})
       puts "[INFO] RWebSpec.Framework currently set to => #{RWebSpec.framework }"
 =begin      
