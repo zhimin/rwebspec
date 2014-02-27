@@ -458,12 +458,18 @@ module RWebSpec
       def click_link_with_id(link_id, opts = {})
         if opts && opts[:index]
           elements = find_elements(:id, link_id)
+          focus_on_element(elements[opts[:index]-1])
           elements[opts[:index]-1].click
         else
+          focus_on_element(find_element(:id, link_id))
           find_element(:id, link_id).click
         end
       end
 
+      def focus_on_element(elem)
+        elem.send_keys("")          
+      end
+      
       ##
       # click_link_with_text("Login")
       # click_link_with_text("Show", :index => 2)
@@ -487,8 +493,10 @@ module RWebSpec
 					elements = find_elements(:id, id)
 					the_index = opts[:index].to_i() - 1          
           first_match = elements[the_index]
+          focus_on_element(first_match)
           first_match.click
 				else
+				  focus_on_element(find_element(:id, id))
 	        find_element(:id, id).click
         end
 		

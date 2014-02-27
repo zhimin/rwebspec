@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+5.0.4
+[Enhancement] click_button_with_id, click_link_with_id will focus on the element first (Selenium) to avoid unable to click when the browser window too small.
+
 5.0.2
 [Fixes] inconsistency enter_text_with_id() between Watir and Selenium
 
