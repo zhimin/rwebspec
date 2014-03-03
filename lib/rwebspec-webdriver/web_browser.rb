@@ -467,7 +467,11 @@ module RWebSpec
       end
 
       def focus_on_element(elem)
-        elem.send_keys("")          
+        begin 
+          elem.send_keys("")          
+        rescue => e
+          # ignore for example, an on hover table might not be ablet to send keys to 
+        end
       end
       
       ##
