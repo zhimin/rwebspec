@@ -1,15 +1,10 @@
-require 'test/unit/assertions'
 
 module RWebSpec
   module Assert
-    include Test::Unit::Assertions
+    include ::MiniTest::Assertions
 
     def assert_not(condition, msg = "")
       perform_assertion { assert(!condition, msg) }
-    end
-
-    def assert_nil(actual, msg="")
-      perform_assertion { assert(actual.nil?, msg) }
     end
 
     def assert_not_nil(actual, msg="")
@@ -509,6 +504,9 @@ module RWebSpec
         # puts "[DEBUG] Assertion error: #{e}"
         take_screenshot if $take_screenshot
         raise e
+      rescue MiniTest::Assertion => e2
+        take_screenshot if $take_screenshot
+        raise e2
       end
     end
 

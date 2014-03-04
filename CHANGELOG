@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.1
+[Feature] Use minitest 4 for assertion
+[Fixes] Handle assert_text_present in try_for{}
+[Change] Lock activesupport version 3.2.17
+
 5.0.4
 [Enhancement] click_button_with_id, click_link_with_id will focus on the element first (Selenium) to avoid unable to click when the browser window too small.
 

@@ -40,8 +40,9 @@ module RWebSpec
       begin
         snapshot if $TESTWISE_DUMP_PAGE || $TESTWISE_DUMP_PAGE 
         delay = $TESTWISE_PAGE_DELAY || $TESTWISE_PAGE_DELAY
-        sleep(delay)
+        sleep(delay) if delay
       rescue => e
+        puts e.backtrace
       end
       assert_on_page
     end

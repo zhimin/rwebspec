@@ -4,6 +4,11 @@
 #***********************************************************
 require "rubygems"
 
+gem "activesupport",  "~> 3.2.17"
+gem "minitest", "~> 4.0" # ver 5 return errors
+
+require 'minitest/autorun'
+
 # Load active_support, so that we can use 1.days.ago
 begin
   require 'active_support/basic_object'
@@ -16,7 +21,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.0.4"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.1.0"
 end
 
 $testwise_polling_interval = 1 # seconds

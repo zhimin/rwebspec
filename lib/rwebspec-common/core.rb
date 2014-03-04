@@ -122,6 +122,8 @@ module RWebSpec
           yield
           last_error = nil
 					return true 
+        rescue MiniTest::Assertion => e1
+          last_error = e1
         rescue => e
           last_error = e
         end
