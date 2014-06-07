@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+5.2.1
+[Fixes] add assertions attribute to RWebSpec::AbstractWebPage to support MiniTest 5
+        (for non-rwebspec projects, users need to handle themselves)
+
 5.2 
 [Support] minitest 5
 [Change] Support activesupport version
