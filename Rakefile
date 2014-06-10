@@ -104,7 +104,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("commonwatir", ">= 4.0.0")
   s.add_dependency("minitest", ">= 4.0")
   s.add_dependency("activesupport", ">= 3.2.17")
-  s.add_dependency("ci_reporter", "~> 1.9.2")
+  # s.add_dependency("ci_reporter", "~> 1.9.2")
     
   unless RUBY_PLATFORM =~ /mingw/
     s.add_dependency("selenium-webdriver", ">= 2.40")
