@@ -13,17 +13,25 @@ require 'minitest/autorun'
 
 # Load active_support, so that we can use 1.days.ago
 begin
-  require 'active_support/basic_object'
-  require 'active_support/duration'
-	require 'active_support/core_ext'
+  require 'active_support/core_ext'
+  require 'active_support/time'
 rescue LoadError => no_as1_err
-  # active_support 2.0 loaded error
+    puts "failed to load activesupport #{no_as1_err}"
 end
 
 require 'rspec'
 
+# For non-rwebspec project, need to add to the help to avoid deprecation warning
+if  ::RSpec::Version::STRING && ::RSpec::Version::STRING =~ /^3/
+  RSpec.configure do |config|
+    config.expect_with :rspec do |c|
+      c.syntax = :should
+    end
+  end
+end
+
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.2.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.3.0"
 end
 
 $testwise_polling_interval = 1 # seconds

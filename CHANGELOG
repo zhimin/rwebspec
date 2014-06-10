@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+5.3.0
+[New] Lock on RSpec 2.14
+[New] Support ActiveSupport 4
+[New] Part support of RSpec to use :should syntax
+
+
 5.2.1
 [Fixes] add assertions attribute to RWebSpec::AbstractWebPage to support MiniTest 5
         (for non-rwebspec projects, users need to handle themselves)
