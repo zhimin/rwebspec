@@ -97,16 +97,18 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" )
   s.files = s.files + Dir.glob( "sample/**/*")
   s.files = s.files + Dir.glob( "docs/**/*" )
+
   s.add_dependency(%q<rspec>, ["~> 3.0"])
   s.add_dependency(%q<rspec-core>, ["~> 3.0"])
   s.add_dependency(%q<rspec-mocks>, ["~> 3.0"])
   s.add_dependency(%q<rspec-expectations>, ["~> 3.0"])
   s.add_dependency("commonwatir", "~> 4.0.0")
-  # s.add_dependency("minitest", ">= 4.0")
+
   s.add_dependency("activesupport", ">= 3.2.17")
+  # s.add_dependency("ci_reporter", "~> 1.9.2")
     
   unless RUBY_PLATFORM =~ /mingw/
-    s.add_dependency("selenium-webdriver")
+    s.add_dependency("selenium-webdriver", "~> 2.42")
   else
     s.add_dependency("watir-classic", "~> 4.0.1")
   end
