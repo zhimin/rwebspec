@@ -6,6 +6,13 @@
 # useful hekoer methods for testing
 #
 module RWebSpec
+  
+  class Assertion < Exception 
+    def error
+      self
+    end
+  end
+  
   module Core
 
       # open a browser, and set base_url via hash, but does not acually
@@ -122,8 +129,12 @@ module RWebSpec
           yield
           last_error = nil
 					return true 
-        rescue MiniTest::Assertion => e1
+        rescue RWebSpec::Assertion => e1
           last_error = e1
+        rescue ArgumentError => ae
+          last_error = ae
+        rescue RSpec::Expectations::ExpectationNotMetError => ree
+          last_error = ree          
         rescue => e
           last_error = e
         end
@@ -134,18 +145,20 @@ module RWebSpec
       raise "Timeout after #{duration.to_i} seconds."
     end
 
-    alias try_upto  try_for
-    alias try_up_to try_for
-    alias try_until try_for
-
+    # Deprecated
+    # alias try_upto  try_for
+    # alias try_up_to try_for
+    # alias try_until try_for
+=begin
     def try(timeout = $testwise_polling_timeout, polling_interval = $testwise_polling_interval || 1, &block)
       puts "Warning: method 'try' is deprecated (won't support in RWebSpec 3), use try_for instead."
       try_for(timeout, polling_interval) {
         yield
       }
     end
+=end
     
-    
+=begin    
     # Try the operation up to specified times, and sleep given interval (in seconds)
     # Error will be ignored until timeout
     # Example
@@ -171,6 +184,7 @@ module RWebSpec
       end
       yield
     end
+=end
 
     
     ##
@@ -240,6 +254,9 @@ module RWebSpec
     def failsafe(& block)
       begin
         yield
+      rescue RWebSpec::Assertion => e1        
+      rescue ArgumentError => ae
+      rescue RSpec::Expectations::ExpectationNotMetError => ree
       rescue =>e
       end
     end

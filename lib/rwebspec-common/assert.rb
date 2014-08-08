@@ -1,8 +1,22 @@
 
 module RWebSpec
   module Assert
-    include ::MiniTest::Assertions
-
+    
+    # own assert method
+    def assert test, msg = nil
+      msg ||= "Failed assertion, no message given."
+      # comment out self.assertions += 1 to counting assertions
+      unless test then
+        msg = msg.call if Proc === msg
+        raise RWebSpec::Assertion, msg
+      end
+      true
+    end
+    
+    def fail(message)
+      perform_assertion { assert(false, message) }
+    end
+    
     def assert_not(condition, msg = "")
       perform_assertion { assert(!condition, msg) }
     end
@@ -11,11 +25,6 @@ module RWebSpec
       perform_assertion { assert(!actual.nil?, msg) }
     end
 
-    def fail(message)
-      perform_assertion { assert(false, message) }
-    end
-
-    # assertions
     def assert_title_equals(title)
       assert_equals(title, @web_browser.page_title)
     end

@@ -8,8 +8,12 @@ gem "activesupport" #,  "~> 3.2.17"
 require 'active_support'
 require 'active_support/deprecation'
 
-gem "minitest" #, "~> 4.0" # ver 5 return errors
-require 'minitest/autorun'
+# Using own assert
+# 
+# if user want to use testing library such as MiniTest, add require in your own helper and tests
+#
+# gem "minitest" #, "~> 4.0" # ver 5 return errors
+# require 'minitest/autorun'
 
 # Load active_support, so that we can use 1.days.ago
 begin
@@ -23,7 +27,7 @@ end
 require 'rspec'
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.2.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.99"
 end
 
 $testwise_polling_interval = 1 # seconds

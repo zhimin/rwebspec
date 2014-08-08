@@ -1,4 +1,8 @@
 
+=begin
+
+# Deprecated for RSpec 3
+
 module RSpec
   module Core
  		module DSL
@@ -8,11 +12,14 @@ module RSpec
 	end
 end
 
+=end
+
 module RSpec
   module Core
     class ExampleGroup
 
       class << self
+        # the following might not be used
         alias_method :specification, :describe
         alias_method :test_suite, :describe
                 

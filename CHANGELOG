@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+6.0
+[Feature] Support RSpec 3
+[Feature] Default to use RSpec 3 recommend expect syntax
+[Feature] Drop MiniTest (and its workaround), use own assert method
+[Deprecated] Drop "test_suite" and "specification", use stand RSpec's describe to group test cases.
+[Deprecated] 
+			alias try_upto  try_for
+			alias try_up_to try_for
+			alias try_until try_for
+[Deprecated] 
+		  try, use try_for
+[Deprecated] 
+      repeated_try, use try_for			
+
 5.2.1
 [Fixes] add assertions attribute to RWebSpec::AbstractWebPage to support MiniTest 5
         (for non-rwebspec projects, users need to handle themselves)

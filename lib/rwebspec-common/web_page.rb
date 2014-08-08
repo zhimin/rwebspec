@@ -33,10 +33,8 @@ module RWebSpec
     # browser: passed to do assertion within the page
     # page_text: text used to identify the page, title will be the first candidate
     attr_accessor :page_specific_text
-    attr_accessor :assertions  # for MiniTest 5: https://github.com/seattlerb/minitest/issues/286
     
     def initialize(the_browser, page_specific_text = nil)
-      self.assertions = 0    # MiniTest 5
       
       @web_browser = @browser =  @web_tester = the_browser
       @page_specific_text = page_specific_text
