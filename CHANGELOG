@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+
+ContainsText implements a legacy RSpec matcher
+protocol. For the current protocol you should expose the failure messages
+via the `failure_message` and `failure_message_when_negated` methods.
+(Used from /Users/zhimin/work/projects/clinicwise/test/acceptance/spec/../pages/abstract_page.rb:10:in `initialize')
+
 6.0
 [Feature] Support RSpec 3
 [Feature] Default to use RSpec 3 recommend expect syntax
