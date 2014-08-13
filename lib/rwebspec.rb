@@ -35,7 +35,7 @@ if  ::RSpec::Version::STRING && ::RSpec::Version::STRING =~ /^3/
 end
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "5.99"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "6.0"
 end
 
 $testwise_polling_interval = 1 # seconds
