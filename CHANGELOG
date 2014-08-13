@@ -13,7 +13,8 @@ CHANGELOG
 [Deprecated] 
 		  try, use try_for
 [Deprecated] 
-      repeated_try, use try_for			
+      repeated_try, use try_for	
+[Update] ContainsText matcher for RSpec 3
 
 5.3.0
 [New] Lock on RSpec 2.14

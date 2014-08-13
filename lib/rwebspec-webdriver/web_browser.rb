@@ -255,6 +255,7 @@ module RWebSpec
 				@browser.find_element(:tag_name, "body").text
       end
 
+=begin
 			# @deprecated
 			def text_with_sanitize				
 				begin
@@ -268,6 +269,7 @@ module RWebSpec
 					return @browser.html
 				end
 			end
+=end
 			
 			# :links => removed
 			# :checkboxes => removed
@@ -718,21 +720,7 @@ module RWebSpec
       # http://wiki.openqa.org/display/WTR/FAQ#FAQ-HowdoIattachtoapopupwindow%3F
       #
       def start_clicker(button, waitTime= 9, user_input=nil)
-        # get a handle if one exists
-        hwnd = @browser.enabled_popup(waitTime)
-        if (hwnd) # yes there is a popup
-          w = WinClicker.new
-          if (user_input)
-            w.setTextValueForFileNameField(hwnd, "#{user_input}")
-          end
-          # I put this in to see the text being input it is not necessary to work
-          sleep 3
-          # "OK" or whatever the name on the button is
-          w.clickWindowsButton_hwnd(hwnd, "#{button}")
-          #
-          # this is just cleanup
-          w = nil
-        end
+        raise "Not support when using Selenium WebDriver, try alternative approach."
       end
 
       # return underlying browser
