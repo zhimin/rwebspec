@@ -25,6 +25,9 @@ end
 
 require 'rspec'
 
+=begin
+# From RWebSpec 6 fully supports RSpec 3
+#
 # For non-rwebspec project, need to add to the help to avoid deprecation warning
 if  ::RSpec::Version::STRING && ::RSpec::Version::STRING =~ /^3/
   RSpec.configure do |config|
@@ -33,9 +36,10 @@ if  ::RSpec::Version::STRING && ::RSpec::Version::STRING =~ /^3/
     end
   end
 end
+=end
 
 unless defined? RWEBSPEC_VERSION
-  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "6.0.1"
+  RWEBSPEC_VERSION = RWEBUNIT_VERSION = "6.0.2"
 end
 
 $testwise_polling_interval = 1 # seconds
